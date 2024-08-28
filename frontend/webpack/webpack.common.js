@@ -1,75 +1,60 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); 
+const webpack = require('webpack');
 
-const isProduction = process.env.NODE_ENV === 'production';
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-	entry: {
-		main: './src/index.js'
-	},
-	output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: '[name].[contenthash].js', // Dynamic filenames for JS files
-    clean: true, // Clean the output directory before emit
+  entry: {
+    main: './src/main.js',
   },
-	module: {
+  output: {
+    path: path.resolve(__dirname, '../public'),
+    publicPath: '/',
+  },
+  module: {
     rules: [
-			{
-        test: /\.(scss|css)$/i,
+      {
+        test:/\.scss$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
-          "css-loader",
-          "sass-loader",
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  require('tailwindcss'),
-                  require('autoprefixer'),
-                ],
-              },
-            },
-          },
-        ],
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ]
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'images/[name].[hash][ext]', // Dynamic filenames for images
-        },
-      },
-			{
-        test: /\.(woff(2)?|eot|ttf|otf|)$/,
-        type: 'asset/inline',
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
-        },
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        }
       },
-    ],
+      {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "style-loader"],
+      },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline',
+      },
+    ]
   },
-	plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html', // Template for the main HTML file
-      filename: 'index.html', // Output filename for the main HTML file
-      chunks: ['main'], // Include only the 'app' chunk
-    }),
+  plugins: [
+    new MiniCssExtractPlugin(),
   ],
-	optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
   resolve: {
+    extensions: ['.js', '.jsx', '.scss',],
     alias: {
-      // Define aliases for image paths
-      '@images': path.resolve(__dirname, '../src/images'),
-    },
+    }
   },
 };
