@@ -1,6 +1,6 @@
-# Django + React + Tailwind CSS Setup
+# What2Study
 
-This repository provides a basic setup for a Django backend with a React frontend styled using Tailwind CSS. This setup is ideal for building modern web applications where Django handles the backend and API, and React manages the frontend UI.
+What2Study is a collaborative web application designed to help users create and share study materials. The platform enables users to work together to build comprehensive reviewers and educational resources. Additionally, users can join or create study groups, fostering a collaborative learning environment where they can share insights, discuss topics, and support each other in their learning journey.
 
 ## Prerequisites
 
