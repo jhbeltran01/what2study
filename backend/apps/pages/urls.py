@@ -5,7 +5,7 @@ from . import views
 app_name = 'pages'
 
 urlpatterns = [
-    path('', 
-            views.LandingPage.as_view(), 
-                name='landing-page'),
+    path("", views.home),
+    path("logout", views.logout_view),
+
 ]
