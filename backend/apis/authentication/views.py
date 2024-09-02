@@ -10,6 +10,15 @@ from .models import User
 from .serializers import UserInfoSerializer
 
 
+# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+# from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+# from dj_rest_auth.registration.views import SocialLoginView
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import RedirectView
+
+
+
 class LoginAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -86,3 +95,15 @@ class LogoutAPIView(APIView):
         response.delete_cookie('refresh')
         response.delete_cookie('isLoggedIn')
         return response
+    
+# class GoogleLoginView(SocialLoginView):
+#     adapter_class = GoogleOAuth2Adapter
+#     callback_url = GOOGLE_REDIRECT_URL
+#     client_class = OAuth2Client
+
+# class UserRedirectView(LoginRequiredMixin, RedirectView):
+#     permanent = False
+
+#     def get_redirect_url(self):
+#         return "redirect-url"
+
