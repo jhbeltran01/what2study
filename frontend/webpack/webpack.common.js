@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
+
 
 module.exports = {
   entry: {
@@ -10,6 +12,13 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../public'),
     publicPath: '/',
+  },
+  devServer: {
+    port: 8080,
+    writeToDisk: true,
+    proxy: {
+        '/': 'http://localhost:8080'
+    }
   },
   module: {
     rules: [
@@ -51,10 +60,16 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
+    new ESLintPlugin({
+      // Plugin options
+      extensions: ['js', 'jsx'],
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.scss',],
     alias: {
+      '@root': path.join(__dirname,  '../src'),
+      '@modules': path.join(__dirname,  '../src/modules')
     }
   },
 };
