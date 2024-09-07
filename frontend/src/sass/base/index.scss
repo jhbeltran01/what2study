@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
+@layer components {
+  .tab-highlight {
+    @apply h-1 bg-black;
+  }
+  .search-bar {
+    @apply border border-gray-300 rounded px-2 py-1;
+  }
+  .box {
+    @apply w-1/4 p-4 bg-white border rounded shadow;
+  }
+}

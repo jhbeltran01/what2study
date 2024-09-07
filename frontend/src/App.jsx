@@ -1,12 +1,10 @@
-import Router from "./routes/Router";
 import React from "react";
-import NavBar from "./modules/NavBar";
+import Auth from "./modules/authentication/Auth";
 
 const App = () => {
   return (
     <React.Fragment>
-      <NavBar />
-      <Router />
+      <Auth />
     </React.Fragment>
   );
 };
