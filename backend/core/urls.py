@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf import settings
+
+from apps.pages.views import serve_react
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +26,6 @@ urlpatterns = [
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
     path("accounts/", include("allauth.urls")),
-    path("/", include("apis.authentication.urls"))
+    path("/", include("apis.authentication.urls")),
+    re_path(r"^(?P<path>.*)$", serve_react, {"document_root": settings.REACT_APP_BUILD_PATH}),
 ]
