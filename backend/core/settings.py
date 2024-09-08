@@ -165,7 +165,7 @@ if DEBUG:
     STATIC_URL = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../frontend/public/'),
+    os.path.join(BASE_DIR, '../frontend/public'),
     os.path.join(BASE_DIR, '../frontend/src/images/'),
 ]
 
@@ -240,6 +240,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+REACT_APP_BUILD_PATH = os.path.join(BASE_DIR, '../frontend/build')
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
