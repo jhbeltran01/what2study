@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.0ac97e6d.css","mappings":";AAAA;;CAAA","sources":["sass/main.scss"],"sourcesContent":["@tailwind base;\r\n@tailwind components;\r\n@tailwind utilities;\r\n\r\n@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');\r\n\r\n"],"names":[],"sourceRoot":""}
