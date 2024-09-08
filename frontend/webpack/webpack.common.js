@@ -1,9 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
-
 
 module.exports = {
   entry: {
@@ -13,21 +10,16 @@ module.exports = {
     path: path.resolve(__dirname, '../public'),
     publicPath: '/',
   },
-  devServer: {
-    port: 8080,
-    writeToDisk: true,
-    proxy: {
-        '/': 'http://localhost:8080'
-    }
-  },
   module: {
     rules: [
       {
-        test:/\.scss$/,
+        test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader',
           'sass-loader',
+          'postcss-loader',
         ]
       },
       {
@@ -46,7 +38,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "style-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'style-loader', 'postcss-loader'],
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
@@ -61,15 +53,15 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
     new ESLintPlugin({
-      // Plugin options
       extensions: ['js', 'jsx'],
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.scss',],
+    extensions: ['.js', '.jsx', '.scss', '.css'],
     alias: {
-      '@root': path.join(__dirname,  '../src'),
-      '@modules': path.join(__dirname,  '../src/modules')
+      '@root': path.join(__dirname, '../src'),
+      '@modules': path.join(__dirname, '../src/modules'),
+      '@assets': path.resolve(__dirname, '..src/assets'),
     }
   },
 };
