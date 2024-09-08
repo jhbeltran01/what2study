@@ -1,6 +1,6 @@
-import emailIcon from '@assets/email.png';
-import passwordIcon from '@assets/password.png';
-import userIcon from '@assets/person.png';
+import emailIcon from '../../assets/email.png';
+import passwordIcon from '../../assets/password.png';
+import userIcon from '../../assets/person.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 

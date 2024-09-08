@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config ./webpack/webpack.prod.js",
+    "build": "react-scripts build",
     "start": "webpack --config ./webpack/webpack.dev.js",
     "dev-server": "webpack-dev-server --config ./webpack/webpack.dev.js",
     "tailwind": "tailwindcss -i ./src/sass/tailwind.css -o ./src/sass/vendors/_tailwind.scss --watch"
@@ -22,6 +22,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
+    "react-scripts": "^5.0.1",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
@@ -56,5 +57,17 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0",
     "webpack-merge": "^6.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
