@@ -3,6 +3,7 @@ const webpack = require('webpack');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = {
@@ -14,11 +15,12 @@ module.exports = {
     publicPath: '/',
   },
   devServer: {
-    port: 8080,
-    writeToDisk: true,
-    proxy: {
-        '/': 'http://localhost:8080'
-    }
+    static: path.join(__dirname, 'dist'), // Serve static files
+    compress: true, // Enable gzip compression for better performance
+    port: 9000, // Port to run the dev server on
+    hot: true, // Enable Hot Module Replacement (HMR)
+    open: true, // Automatically open the browser
+    historyApiFallback: true, // For SPAs, redirects all 404s to index.html
   },
   module: {
     rules: [
