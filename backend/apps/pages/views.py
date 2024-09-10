@@ -4,9 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 
 
-def home(request):
-    print("safsadf")
-    return render(request, "pages/home.html")
+class LandingPageView(TemplateView):
+    template_name = 'pages/landing-page.html'
 
 def logout_view(request):
     logout(request)

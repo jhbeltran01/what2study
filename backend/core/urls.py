@@ -22,6 +22,6 @@ urlpatterns = [
     path('auth/', include('apis.authentication.urls')),
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
-    path("accounts/", include("allauth.urls")),
-    path("/", include("apis.authentication.urls"))
+    # path("accounts/", include("allauth.urls")),
+    # path("/", include("apis.authentication.urls"))
 ]
