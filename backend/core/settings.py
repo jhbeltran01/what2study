@@ -89,7 +89,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    # 'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -247,7 +247,7 @@ CSRF_COOKIE_SECURE = True
 # ACCOUNT_EMAIL_VERIFICATION = "none"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend"
+    # "allauth.account.auth_backends.AuthenticationBackend"
 )
 
 LOGIN_REDIRECT_URL = "/dashboard/"
