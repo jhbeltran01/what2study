@@ -14,6 +14,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
+class LandingPageView(TemplateView):
+    template_name = 'pages/landing-page.html'
+
+def logout_view(request):
+    logout(request)
+    return redirect("/")
 def home(request):
     return render(request, "pages/home.html")
 
