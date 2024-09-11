@@ -22,10 +22,10 @@ from apps.pages.views import serve_react
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('apis.authentication.urls')),
+    path('apis/auth/', include('apis.authentication.urls')),
+    path('apis/reviewers/', include('apis.reviewers.urls')),
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
     path("accounts/", include("allauth.urls")),
-    path("/", include("apis.authentication.urls")),
-    re_path(r"^(?P<path>.*)$", serve_react, {"document_root": settings.REACT_APP_BUILD_PATH}),
+    
 ]

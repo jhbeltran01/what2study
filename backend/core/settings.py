@@ -53,7 +53,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'apis.authentication',
+    'apis.reviewers',
+    'apps.custom_auth',
     'apps.pages',
+    'common'
 ]
 load_dotenv()  # This will load variables from the .env file
 
@@ -89,7 +92,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware'
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -159,14 +162,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATIC_URL = os.path.join(BASE_DIR, 'staticfiles/')
+STATIC_URL = '/staticfiles/'
 
 if DEBUG:
-    STATIC_URL = os.path.join(BASE_DIR, 'static/')
+    STATIC_URL = os.path.join(BASE_DIR, '/static/')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../frontend/public'),
-    os.path.join(BASE_DIR, '../frontend/src/images/'),
+    os.path.join(BASE_DIR, '../frontend/src/assets/'),
+    os.path.join(BASE_DIR, '/static/'),
 ]
 
 # Default primary key field type
@@ -178,7 +182,8 @@ AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apis.authentication.authentications.CustomJWTAuthentication'
+        'apis.authentication.authentications.CustomJWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -247,9 +252,8 @@ CSRF_COOKIE_SECURE = True
 # ACCOUNT_EMAIL_VERIFICATION = "none"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    # "allauth.account.auth_backends.AuthenticationBackend"
+    "allauth.account.auth_backends.AuthenticationBackend"
 )
 
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
-DEBUG = True
