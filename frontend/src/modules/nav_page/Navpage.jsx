@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "../home_page/Home";
-import Reviewers from "../reviewer/Reviewer";
+import Home from "@modules/home_page/Home";
+import Reviewers from "@modules/reviewer/Reviewer";
 
 
 const Navpage = () => {

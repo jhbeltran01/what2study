@@ -10,6 +10,4 @@ urlpatterns = [
     path("logout", views.logout_view),
     path('dashboard/', views.DashboardPageView.as_view(), name='dashboard'),
     path('reviewer/', check_user_exists),
-
-
 ]

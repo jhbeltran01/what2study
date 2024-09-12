@@ -8,13 +8,15 @@ import './sass/main.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Auth from './modules/authentication/Auth';
-
-// main app
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
-    <Auth />
+    <BrowserRouter basename='app'>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );

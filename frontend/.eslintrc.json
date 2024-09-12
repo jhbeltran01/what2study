@@ -13,7 +13,8 @@
     },
     "plugins": ["react", "react-hooks"],
     "rules": {
-      //add customize rules here as per your project's needs
+        // "indent": ["error", 2], 
+        // "no-mixed-spaces-and-tabs": "error"
     },
     "settings": {
         "react": {

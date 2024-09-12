@@ -1,10 +1,10 @@
 import React from "react";
-import Auth from "./modules/authentication/Auth";
+import Router from "./routes/Router";
 
 const App = () => {
   return (
     <React.Fragment>
-      <Auth />
+      <Router />
     </React.Fragment>
   );
 };
