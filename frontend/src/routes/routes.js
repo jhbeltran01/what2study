@@ -1,24 +1,36 @@
-// import Home from "@modules/home_page/Home";
 import React from "react";
 import Homepage from "@modules/home_page/Homepage";
 import Home from '@modules/home_page/Home'
 import Reviewer from '@modules/reviewer/Reviewer'
+import StudyPod from '@modules/study_pod/components/study_pods/Main'
+import JoinCall from '@modules/study_pod/components/join_call/Main'
+import * as routes from "./constants";
 
 const pagesData = [
   {
-    path: "/",
+    path: routes.ROUTES.HOME_PAGE,
     element: <Homepage />,
-    title: "home-page",
+    title: routes.HOME_PAGE,
     nested: [
       {
-        path: "/",
+        path: routes.ROUTES.HOME_SCREEN,
         element: <Home />,
-        title: "home-screen"
+        title: routes.HOME_SCREEN
       },
       {
-        path: "/reviewers",
+        path: routes.ROUTES.REVIEWERS,
         element: <Reviewer />,
-        title: "reviewers",
+        title: routes.REVIEWERS,
+      },
+      {
+        path: routes.ROUTES.STUDYPODS,
+        element: <StudyPod />,
+        title: routes.STUDYPODS,
+      },
+      {
+        path: routes.ROUTES.JOIN_CALL,
+        element: <JoinCall />,
+        title: routes.JOIN_CALL,
       }
     ]
   },

@@ -7,12 +7,12 @@ export const generatePageRoutes = (pagesData) => {
       const nestedRoutes = generatePageRoutes(nested);
       
       return(
-        <Route key={title} path={`${path}`} element={element}>
+        <Route key={title} path={path} element={element}>
           {nestedRoutes}
         </Route>
       );
     }
 
-    return <Route key={title} path={`${path}`} element={element} />;
+    return <Route key={title} path={path} element={element} />;
   })
 }
