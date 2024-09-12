@@ -28,7 +28,7 @@ export const SidebarData = [
     },
     {
         title: "Study Pod",
-        path: "/study-pod",
+        path: "/study-pods",
         icon: studypodIcon,
     },
     {

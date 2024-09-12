@@ -43,6 +43,7 @@ ALLOWED_HOSTS = []
 SITE_ID=1
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,8 +60,10 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.google',
     'apis.authentication',
     'apis.reviewers',
+    'apis.studypods',
     'apps.custom_auth',
     'apps.pages',
+    'asgi.asgi_auth',
     'common'
 ]
 
@@ -189,8 +192,8 @@ AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apis.authentication.authentications.CustomJWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'apis.authentication.authentications.CustomJWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -262,3 +265,18 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+
+ASGI_APPLICATION = "core.asgi.applications"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+INTERNAL_IPS = [
+    '127.0.0.1'
+]

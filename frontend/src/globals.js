@@ -1,3 +1,4 @@
 const rootPath = ''
+const apiRootURl = '/apis'
 
-export { rootPath }
+export { rootPath, apiRootURl }

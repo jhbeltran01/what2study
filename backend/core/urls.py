@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('apis/auth/', include('apis.authentication.urls')),
     path('apis/reviewers/', include('apis.reviewers.urls')),
+    path('apis/studypods/', include('apis.studypods.urls')),
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
     # path("accounts/", include("allauth.urls")),
