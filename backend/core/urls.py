@@ -16,9 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.conf import settings
 
-from apps.pages.views import serve_react
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +24,5 @@ urlpatterns = [
     path('apis/reviewers/', include('apis.reviewers.urls')),
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
-    path("accounts/", include("allauth.urls")),
-    
+    # path("accounts/", include("allauth.urls")),
 ]

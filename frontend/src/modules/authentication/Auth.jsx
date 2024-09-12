@@ -1,7 +1,7 @@
-import robotIcon from '../../assets/robot.png';
+import robotIcon from '@assets/robot.png';
 import React, { useState } from 'react';
 import Login from './Login';
-import Signup from './SignUp';
+import Signup from './Signup';
 
 const Auth = () => {
     const [action, setAction] = useState("Sign Up");

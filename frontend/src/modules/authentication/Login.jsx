@@ -1,5 +1,5 @@
-import emailIcon from '../../assets/email.png';
-import passwordIcon from '../../assets/password.png';
+import emailIcon from '@assets/email.png';
+import passwordIcon from '@assets/password.png';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import axios from 'axios';

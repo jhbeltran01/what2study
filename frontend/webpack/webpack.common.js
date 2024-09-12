@@ -8,8 +8,7 @@ module.exports = {
     main: './src/main.js',
   },
   output: {
-    path: path.resolve(__dirname, '../public'),
-    publicPath: '/',
+    path: path.resolve(__dirname, '../public/'),
   },
   module: {
     rules: [
@@ -17,10 +16,8 @@ module.exports = {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'style-loader',
           'css-loader',
           'sass-loader',
-          'postcss-loader',
         ]
       },
       {
@@ -36,10 +33,6 @@ module.exports = {
       {
         test: /\.html$/i,
         loader: "html-loader",
-      },
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'style-loader', 'postcss-loader'],
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
@@ -62,7 +55,7 @@ module.exports = {
     alias: {
       '@root': path.join(__dirname, '../src'),
       '@modules': path.join(__dirname, '../src/modules'),
-      '@assets': path.resolve(__dirname, '..src/assets'),
+      '@assets': path.resolve(__dirname, '../src/assets'),
     }
   },
 };

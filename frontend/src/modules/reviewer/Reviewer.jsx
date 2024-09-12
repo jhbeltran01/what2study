@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import blueIcon from '../../assets/blue.png';
-import createIcon from '../../assets/create.png'; // Import the create icon
-import floralIcon from '../../assets/floral.png';
-import pinkIcon from '../../assets/pink.png';
-import searchIcon from '../../assets/search.png';
-import skyIcon from '../../assets/sky.png';
-import '../../sass/pages/reviewer.scss';
+import blueIcon from '@assets/blue.png';
+import createIcon from '@assets/create.png'; // Import the create icon
+import floralIcon from '@assets/floral.png';
+import pinkIcon from '@assets/pink.png';
+import searchIcon from '@assets/search.png';
+import skyIcon from '@assets/sky.png';
 
 
 const Reviewers = () => {

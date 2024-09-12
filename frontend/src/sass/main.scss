@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
-
+@use './abstract/' as *;
+@use './vendors/' as  *;
+@use './base' as *;
+@use './layouts/' as *;
+@use './components/' as *;
+@use './pages/' as *;
+@use './themes/' as *;

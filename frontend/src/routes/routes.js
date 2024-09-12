@@ -1,6 +1,8 @@
-import Home from "@modules/home_page/Home";
+// import Home from "@modules/home_page/Home";
 import React from "react";
-import Homepage from "../modules/home_page/Homepage";
+import Homepage from "@modules/home_page/Homepage";
+import Home from '@modules/home_page/Home'
+import Reviewer from '@modules/reviewer/Reviewer'
 
 const pagesData = [
   {
@@ -8,39 +10,18 @@ const pagesData = [
     element: <Homepage />,
     title: "home-page",
     nested: [
+      {
+        path: "/",
+        element: <Home />,
+        title: "home-screen"
+      },
+      {
+        path: "/reviewers",
+        element: <Reviewer />,
+        title: "reviewers",
+      }
     ]
   },
-  {
-    path: `/reviewer`,
-    element: <Home />,
-    title: "home-page",
-    nested: [
-    ]
-  },
-  {
-    path: "/reviewers/create-reviewer/review",
-    element: <Home />,
-    title: "home-page",
-    nested: [
-    ]
-  },
-  // {
-  //   path: "page3",
-  //   element: <Page3 />,
-  //   title: "page3",
-  //   nested: [
-  //     {
-  //       path: "page4",
-  //       element: <Page4 />,
-  //       title: "page4"
-  //     },
-  //     {
-  //       path: "page5",
-  //       element: <Page5 />,
-  //       title: "page5"
-  //     },
-  //   ]
-  // }
 ];
 
 export default pagesData;

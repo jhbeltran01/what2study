@@ -14,12 +14,17 @@ from datetime import timedelta
 from pathlib import Path
 
 import os
-import requests
-from dotenv import load_dotenv # type: ignore
+from decouple import (
+    config,
+    AutoConfig
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ENVIRONMENT = config('ENVIRONMENT', default='dev')
+
+config = AutoConfig(search_path=os.path.join(BASE_DIR, '.env.{}'.format(ENVIRONMENT)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -48,39 +53,38 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
     'apis.authentication',
     'apis.reviewers',
     'apps.custom_auth',
     'apps.pages',
     'common'
 ]
-load_dotenv()  # This will load variables from the .env file
 
-# Retrieve environment variables
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-API_KEY = os.getenv('API_KEY')
-
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email'
-        ],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'OAUTH_PKCE_ENABLED': True,
-        'APP': {
-            'client_id': CLIENT_ID,
-            'secret': CLIENT_SECRET,
-            'key': API_KEY,
-        }
-    }
-}
+# # Retrieve environment variables
+# CLIENT_ID = config('CLIENT_ID')
+# CLIENT_SECRET = config('CLIENT_SECRET')
+# API_KEY = config('API_KEY')
+#
+#
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': [
+#             'profile',
+#             'email'
+#         ],
+#         'AUTH_PARAMS': {'access_type': 'online'},
+#         'OAUTH_PKCE_ENABLED': True,
+#         'APP': {
+#             'client_id': CLIENT_ID,
+#             'secret': CLIENT_SECRET,
+#             'key': API_KEY,
+#         }
+#     }
+# }
 
 
 MIDDLEWARE = [
@@ -92,7 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    # 'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -121,8 +125,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'what2study',
+        'USER': 'admin',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -165,12 +173,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATIC_URL = '/staticfiles/'
 
 if DEBUG:
-    STATIC_URL = os.path.join(BASE_DIR, '/static/')
+    STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../frontend/public'),
     os.path.join(BASE_DIR, '../frontend/src/assets/'),
-    os.path.join(BASE_DIR, '/static/'),
 ]
 
 # Default primary key field type
@@ -245,14 +252,12 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-REACT_APP_BUILD_PATH = os.path.join(BASE_DIR, '../frontend/build')
-
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 # ACCOUNT_EMAIL_VERIFICATION = "none"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend"
+    # "allauth.account.auth_backends.AuthenticationBackend"
 )
 
 LOGIN_REDIRECT_URL = "/dashboard/"

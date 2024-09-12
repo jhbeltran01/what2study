@@ -1,9 +1,9 @@
-import classesIcon from '../../assets/sidebar/classes.png';
-import homeIcon from '../../assets/sidebar/home.png';
-import notesIcon from '../../assets/sidebar/notes.png';
-import reviewerIcon from '../../assets/sidebar/reviewer.png';
-import settingsIcon from '../../assets/sidebar/settings.png';
-import studypodIcon from '../../assets/sidebar/studypod.png';
+import classesIcon from '@assets/sidebar/classes.png';
+import homeIcon from '@assets/sidebar/home.png';
+import notesIcon from '@assets/sidebar/notes.png';
+import reviewerIcon from '@assets/sidebar/reviewer.png';
+import settingsIcon from '@assets/sidebar/settings.png';
+import studypodIcon from '@assets/sidebar/studypod.png';
 
 export const SidebarData = [
     {
@@ -13,27 +13,27 @@ export const SidebarData = [
     },
     {
         title: "Reviewers",
-        path: "/Reviewer",
+        path: "/reviewers",
         icon: reviewerIcon,
     },
     {
         title: "Notes",
-        path: "/Notes",
+        path: "/notes",
         icon: notesIcon,
     },
     {
         title: "Classes",
-        path: "/Classes",
+        path: "/classes",
         icon: classesIcon,
     },
     {
         title: "Study Pod",
-        path: "/Study Pod",
+        path: "/study-pod",
         icon: studypodIcon,
     },
     {
         title: "Settings",
-        path: "/Settings",
+        path: "/settings",
         icon: settingsIcon,
     },
     // Add more items as needed
