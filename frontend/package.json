@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "react-scripts build",
-    "start": "webpack --config ./webpack/webpack.dev.js",
-    "dev-server": "webpack-dev-server --config ./webpack/webpack.dev.js",
+    "build": "webpack --config ./webpack/webpack.prod.js",
+    "start": "webpack --config ./webpack/webpack.dev.js --watch",
+    "dev-server": "webpack-dev-server --config ./webpack/webpack.server.js",
     "tailwind": "tailwindcss -i ./src/sass/tailwind.css -o ./src/sass/vendors/_tailwind.scss --watch"
   },
   "keywords": [],

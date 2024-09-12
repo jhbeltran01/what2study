@@ -1,10 +1,8 @@
 from django.urls import path
-
-
+from . import views
 
 app_name = 'api_authentication'
-from django.urls import path
-from . import views
+
 
 urlpatterns = [
     path('login/', views.LoginAPIView.as_view(), name='login'),

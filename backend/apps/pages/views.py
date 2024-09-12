@@ -36,7 +36,7 @@ def serve_react(request, path, document_root=None):
         return static_serve(request, "index.html", document_root)
 
 
-class dashboard(TemplateView):
+class DashboardPageView(TemplateView):
     print("efhlwknschi")
     template_name = 'dashboard'
     def get(self, request):
