@@ -1,3 +1,3 @@
-const rootPath = 'app'
+const rootPath = ''
 
 export { rootPath }
