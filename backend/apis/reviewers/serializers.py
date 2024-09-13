@@ -22,7 +22,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
     def validate_name(self, value):
-        return value
         slug = slugify('{}-{}'.format(value, self.owner.id))
         reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
 
