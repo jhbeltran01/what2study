@@ -19,6 +19,9 @@ hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
 Markdown==3.5.1
+pdfminer.six==20231228
+pdfplumber==0.11.4
+pillow==10.4.0
 psycopg2==2.9.9
 pyactiveresource==2.2.2
 pyasn1==0.6.1
@@ -26,6 +29,8 @@ pyasn1_modules==0.4.1
 pycparser==2.22
 PyJWT==2.9.0
 pyOpenSSL==24.2.1
+PyPDF2==3.0.1
+pypdfium2==4.30.0
 python-decouple==3.8
 pytz==2023.3.post1
 PyYAML==6.0.2

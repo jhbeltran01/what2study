@@ -64,7 +64,7 @@ class CustomJWTAuthentication(JWTAuthentication):
             token,
             settings.SECRET_KEY,
             algorithms='HS256',
-            verify=False
+            options={"verify_signature": False}
         )
         return User.objects.get(id=payload['user_id'])
 

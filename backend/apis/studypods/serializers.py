@@ -13,12 +13,7 @@ class StudyPodSerializer(ModelSerializer):
             'owner',
             'name',
             'size',
-            'bg_color',
             'access_code',
             'members',
             'slug',
-        ]
-
-    def get_members(self, instance):
-        print(instance.members)
-        return instance.members
+        ]       

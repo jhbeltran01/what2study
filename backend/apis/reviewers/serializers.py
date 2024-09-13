@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from common.models import Reviewer
 
+from django.utils.text import slugify
+
 
 class ReviewerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,12 +15,17 @@ class ReviewerSerializer(serializers.ModelSerializer):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.context['owner'] is not None:
-                self.owner = self.context['owner']
+        self.owner = self.context['owner']
+
+    def create(self, validated_data):
+        validated_data.pop('files', None)
+        return super().create(validated_data)
     
     def validate_name(self, value):
-        reviewer_exists = Reviewer.objects.filter(slug='{}-{}'.format(value, self.owner)).first() is not None
+        return value
+        slug = slugify('{}-{}'.format(value, self.owner.id))
+        reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
 
         if reviewer_exists:
-            raise serializers.ValidationError("A reviewer with this slug already exists.")
+            raise serializers.ValidationError("Reviewer exists.")
         return value
