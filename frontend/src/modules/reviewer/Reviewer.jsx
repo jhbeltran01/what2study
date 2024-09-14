@@ -1,76 +1,74 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import blueIcon from '@assets/blue.png';
-import createIcon from '@assets/create.png'; // Import the create icon
-import floralIcon from '@assets/floral.png';
-import pinkIcon from '@assets/pink.png';
 import searchIcon from '@assets/search.png';
-import skyIcon from '@assets/sky.png';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Ensure this is imported correctly
+import '../../sass/pages/_reviewer.scss';
 
-
-const Reviewers = () => {
-  const [active, setActive] = useState('my-reviewers');
+const Reviewer = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleClick = (section) => {
-    setActive(section);
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    console.log('Search term:', searchTerm);
+    // Handle the search logic here
   };
 
   const handleCreateClick = () => {
-    navigate('/Reviewers2'); // Redirect to /Reviewers2
+    navigate('/reviewers/create-reviewer');
   };
 
-  const images = [floralIcon, pinkIcon, blueIcon, skyIcon];
+  const handleTitleClick = () => {
+    navigate('/reviewers'); // Redirect to Reviewer page
+  };
 
   return (
-    <React.Fragment>
-      <section className="h-screen p-4 flex flex-col">
-        <div className="header mb-4">
-          <div className="header-buttons">
-            <button
-              onClick={() => handleClick('my-reviewers')}
-              className={active === 'my-reviewers' ? 'active' : ''}
-            >
-              My Reviewers
-            </button>
-          </div>
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="search-bar"
-            />
+    <section className="homepage-section p-4 flex flex-col">
+      <div className="header mb-4">
+        <button className="header-title" onClick={handleTitleClick}>
+          My Reviewers
+        </button>
+
+        <form className="search-container" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="search-bar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit" className="search-button">
             <img src={searchIcon} alt="Search" className="search-icon" />
+          </button>
+        </form>
+
+        <button className="create-button" onClick={handleCreateClick}>
+          Create
+        </button>
+      </div>
+
+      {/* Reviewer content section */}
+      <div className="reviewer-content">
+        {/* Example reviewer entry */}
+        <div className="reviewer-entry">
+          <div className="reviewer-header">
+            <h2 className="reviewer-title">Reviewer Title</h2>
+            <div className="reviewer-info">
+              <span className="reviewer-type">Enumeration</span>
+              <span className="reviewer-date">2024-09-15</span>
+            </div>
+            <button className="more-options">⋮</button>
           </div>
+          <p className="reviewer-created-by">Created by: User Name</p>
+          <a href="#" className="view-link">View</a>
         </div>
 
-        <div className="content-container">
-          {Array.from({ length: 12 }).map((_, index) => (
-            <div
-              key={index}
-              className={`content-box ${index === 0 ? 'first-box' : ''}`}
-              onClick={index === 0 ? handleCreateClick : undefined} // Add onClick handler
-            >
-              <div className="icon">
-                {index === 0 ? (
-                  <>
-                    <img src={createIcon} alt="Create Icon" className="create-icon" />
-                    <div className="create-text">Create</div> {/* Ensure this is included */}
-                  </>
-                ) : (
-                  <img src={images[index % images.length]} alt="Icon" />
-                )}
-              </div>
-              <div className="content-text">
-                {/* Text for non-first boxes */}
-                {index !== 0 && <p>{`Subject ${index + 1}`}</p>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </React.Fragment>
+        {/* Divider */}
+        <hr className="divider" />
+
+        {/* Add more reviewer entries here */}
+      </div>
+    </section>
   );
 };
 
-export default Reviewers;
+export default Reviewer;
