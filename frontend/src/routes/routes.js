@@ -4,24 +4,24 @@ import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
-import React, { useState } from "react";
-import Auth from "../modules/authentication/Auth";
+import React from "react";
+// import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
-const AppRoutes = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+// const AppRoutes = () => {
+//   const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
-  return isAuthenticated ? (
-    <Homepage />
-  ) : (
-    <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
-  );
-};
+//   return isAuthenticated ? (
+//     <Homepage />
+//   ) : (
+//     <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
+//   );
+// };
 
 const pagesData = [
   {
     path: routes.ROUTES.HOME_PAGE,
-    element: <AppRoutes />, 
+    element: <Homepage />, 
     title: routes.HOME_PAGE,
     nested: [
       {
