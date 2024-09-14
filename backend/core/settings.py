@@ -54,10 +54,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'apis.authentication',
     'apis.reviewers',
     'apis.studypods',
@@ -68,26 +68,26 @@ INSTALLED_APPS = [
 ]
 
 # # Retrieve environment variables
-# CLIENT_ID = config('CLIENT_ID')
-# CLIENT_SECRET = config('CLIENT_SECRET')
-# API_KEY = config('API_KEY')
-#
-#
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'SCOPE': [
-#             'profile',
-#             'email'
-#         ],
-#         'AUTH_PARAMS': {'access_type': 'online'},
-#         'OAUTH_PKCE_ENABLED': True,
-#         'APP': {
-#             'client_id': CLIENT_ID,
-#             'secret': CLIENT_SECRET,
-#             'key': API_KEY,
-#         }
-#     }
-# }
+CLIENT_ID = config('CLIENT_ID')
+CLIENT_SECRET = config('CLIENT_SECRET')
+API_KEY = config('API_KEY')
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email'
+        ],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'OAUTH_PKCE_ENABLED': True,
+        'APP': {
+            'client_id': CLIENT_ID,
+            'secret': CLIENT_SECRET,
+            'key': API_KEY,
+        }
+    }
+}
 
 
 MIDDLEWARE = [
@@ -99,7 +99,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware'
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
