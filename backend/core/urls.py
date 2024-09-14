@@ -25,5 +25,5 @@ urlpatterns = [
     path('apis/studypods/', include('apis.studypods.urls')),
     path('', include('apps.pages.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),
-    # path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth.urls")),
 ]

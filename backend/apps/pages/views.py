@@ -8,7 +8,8 @@ from rest_framework import status
 
 
 class LandingPageView(TemplateView):
-    template_name = 'pages/landing-page.html'
+    # template_name = 'pages/landing-page.html'
+    template_name = 'pages/home.html'
 
 
 def logout_view(request):
