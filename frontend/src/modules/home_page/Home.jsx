@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
-import blueIcon from '@assets/blue.png';
-import floralIcon from '@assets/floral.png';
-import pinkIcon from '@assets/pink.png';
 import searchIcon from '@assets/search.png';
-import skyIcon from '@assets/sky.png';
+import React, { useState } from 'react';
+import '../../sass/pages/_homepage.scss';
+
 
 const Home = () => {
   const [active, setActive] = useState('public-reviewers');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleClick = (section) => {
     setActive(section);
   };
 
-  const images = [floralIcon, pinkIcon, blueIcon, skyIcon];
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    // Handle the search logic here
+    console.log('Search term:', searchTerm);
+  };
 
   return (
-    <section className="h-screen p-4 flex flex-col">
-      <div className="header mb-4">
+    <section className="homepage-section p-4 flex flex-col">
+      <div className="header mb-4 flex justify-between items-center">
         <div className="header-buttons">
           <button
             onClick={() => handleClick('public-reviewers')}
@@ -37,31 +40,24 @@ const Home = () => {
             Bookmarks
           </button>
         </div>
-        <div className="search-container">
+        
+        <form className="search-container" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search..."
             className="search-bar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <img src={searchIcon} alt="Search" className="search-icon" />
-        </div>
-      </div>
-      <div className={`underline ${active}`} />
+          <button type="submit" className="search-button">
+            <img src={searchIcon} alt="Search" className="search-icon" />
+          </button>
+        </form>
 
-      <div className="content-container">
-        {Array.from({ length: 12 }).map((_, index) => (
-          <div
-            key={index}
-            className="content-box"
-          >
-            <div className="icon">
-              <img src={images[index % images.length]} alt="Icon" />
-            </div>
-            <div className="content-text">
-              <p>Subject {index + 1}</p>
-            </div>
-          </div>
-        ))}
+        <div className="content">
+
+
+        </div>
       </div>
     </section>
   );

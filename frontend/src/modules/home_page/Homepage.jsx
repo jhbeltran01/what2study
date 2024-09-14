@@ -1,5 +1,5 @@
-import React from "react";
 import Sidebar from '@modules/sidebar/Sidebar';
+import React from "react";
 import { Outlet } from "react-router-dom";
 
 const Homepage = () => {
