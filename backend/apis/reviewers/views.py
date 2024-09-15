@@ -2,11 +2,12 @@ from rest_framework.mixins import (
     CreateModelMixin,
     ListModelMixin,
     RetrieveModelMixin,
+    UpdateModelMixin,
     DestroyModelMixin,
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from rest_framework.response import Response
 from .serializers import ReviewerSerializer
 from common.models import Reviewer
 from .services import Document
@@ -16,6 +17,7 @@ class ReviewersAPIView(
     CreateModelMixin,
     ListModelMixin,
     RetrieveModelMixin,
+    UpdateModelMixin,
     DestroyModelMixin,
     GenericAPIView
 ):
@@ -58,6 +60,8 @@ class ReviewersAPIView(
         )
         document.convert_text_to_content(reviewer)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
     
     def get_queryset(self):
         return Reviewer.reviewers.filter(owner=self.request.user)
