@@ -1,97 +1,108 @@
-/* Sidebar.css */
-
-/* Default styles for mobile */
-
-/* Container for the sidebar links */
-.sidebar-section {
-    color: black;
-    font-family: 'Josefin Sans', sans-serif;
-    padding: 1rem; /* Padding for mobile */
+.app-name {
+    font-family: 'Josefin Sans', sans-serif; 
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center; 
+    margin-bottom: 1rem;
+    color: black; 
 }
 
-/* Style for active sidebar link */
+.sidebar-section {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+    color: black;
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 1rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Fixed width for sidebar */
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
 .sidebar-link-active {
-    background-color: #e2e8f0; /* Light gray background for active link */
-    margin-top: 0.5rem; /* Smaller margin to reduce space usage */
-    padding: 0.5rem 1rem; /* Padding for mobile, adjusted for better spacing */
-    width: 85%; /* Full width for mobile */
-    height: 40px; /* Fixed height */
-    display: flex; /* Flexbox for alignment */
-    justify-content: start; /* Align items to start */
-    align-items: center; /* Align items to center */
-    color: black; /* Text color */
-    font-size: 0.875rem; /* Font size for mobile */
-    font-weight: bold; /* Font weight */
-    border-radius: 0.75rem; /* Rounded corners */
-    box-sizing: border-box; /* Include padding and border in element total width and height */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+    background-color: #e2e8f0;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    width: 85%;
+    height: 40px;
+    display: flex;
+    justify-content: start;
+    align-items: center; 
+    color: black; 
+    font-size: 0.875rem; 
+    font-weight: bold;
+    border-radius: 0.75rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-link-normal {
     background-color: transparent; 
-    margin-top: 0.5rem; /* Smaller margin for mobile */
-    padding: 0.5rem 1rem; /* Padding for mobile */
-    width: 85%; /* Full width for mobile */
-    height: 40px; /* Fixed height */
-    display: flex; 
-    justify-content: start; 
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    width: 85%;
+    height: 40px;
+    display: flex;
+    justify-content: start;
     align-items: center; 
-    color: black; 
-    font-size: 0.875rem; /* Font size for mobile */
-    font-weight: bold; 
-    border-radius: 0.75rem; /* Rounded corners */
-    box-sizing: border-box; /* Include padding and border in element’s total width and height */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+    color: black;
+    font-size: 0.875rem;
+    font-weight: bold;
+    border-radius: 0.75rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar-link-hover:hover {
-    background-color: #e2e8f0; /* Light gray on hover */
+    background-color: #e2e8f0;
 }
 
 .sidebar-icon {
-    width: 1.5rem; /* Responsive icon size */
-    height: 1.5rem; 
-    margin-right: 0.75rem; /* Space between icon and text */
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
 }
 
-/* Styles for larger screens (tablets and desktops) */
+/* Styles for larger screens */
 @media (min-width: 768px) {
     .sidebar-section {
-        padding: 1.5rem; /* More padding for larger screens */
+        width: 250px; /* Keep the fixed width for larger screens */
     }
 
     .sidebar-link-active, 
     .sidebar-link-normal {
-        margin-top: 1.25rem; /* Increased margin for larger screens */
-        padding-left: 1.75rem; /* Increased padding */
-        width: 200px; /* Fixed width for larger screens */
-        height: 50px; /* Height for larger screens */
-        font-size: 1rem; /* Font size for larger screens */
-        border-radius: 1rem; /* Rounded corners for larger screens */
+        margin-top: 1.25rem;
+        padding-left: 1.75rem;
+        width: 100%; /* Allow the links to take full width */
+        height: 50px;
+        font-size: 1rem;
+        border-radius: 1rem;
     }
 
     .sidebar-icon {
-        width: 1.75rem; /* Larger icon size for tablets and desktops */
+        width: 1.75rem;
         height: 1.75rem;
-        margin-right: 1rem; /* More space between icon and text */
+        margin-right: 1rem;
     }
 }
 
-/* Styles for very large screens (desktops) */
+/* Styles for very large screens */
 @media (min-width: 1024px) {
     .sidebar-section {
-        padding: 2rem; /* Additional padding for very large screens */
+        padding: 2rem;
     }
 
     .sidebar-link-active, 
     .sidebar-link-normal {
-        width: 190px; /* Wider links for very large screens */
-        font-size: 1.125rem; /* Larger font size for very large screens */
-        border-radius: 1.25rem; /* Larger rounded corners for very large screens */
+        width: 190px; /* Wider links for larger screens */
+        font-size: 1.125rem;
+        border-radius: 1.25rem;
     }
 
     .sidebar-icon {
-        width: 2rem; /* Even larger icon size */
+        width: 2rem;
         height: 2rem;
     }
 }
