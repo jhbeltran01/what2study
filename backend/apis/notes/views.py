@@ -8,12 +8,12 @@ from rest_framework.mixins import (
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from .serializers import ReviewerSerializer
-from common.models import Reviewer
-from .services import Document
+from .serializers import NotesSerializer
+from common.models import Note
+# from reviewers.services import Document
 
 
-class ReviewersAPIView(
+class NotesAPIView(
     CreateModelMixin,
     ListModelMixin,
     RetrieveModelMixin,
@@ -21,14 +21,15 @@ class ReviewersAPIView(
     DestroyModelMixin,
     GenericAPIView
 ):
-    serializer_class = ReviewerSerializer
-    lookup_field = 'slug'
+    
+    serializer_class = NotesSerializer
+    lookup_field = 'slug' 
     parser_classes = (MultiPartParser, FormParser)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.slug = ''
-        self.is_get_reviewer = ''
+        self.is_get_note = ''
         self.files = ''
 
     def dispatch(self, request, *args, **kwargs):
@@ -39,36 +40,26 @@ class ReviewersAPIView(
         self.files = request.FILES.getlist('files')
         return self.create(request, *args, **kwargs)
     
+    
+    
     def get(self, request, *args, **kwargs):
-        self.is_get_reviewer = self.slug is not None
+        self.is_get_note = self.slug is not None
 
-        if self.is_get_reviewer:
+        if self.is_get_note:
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        document = Document(
-            files=self.files,
-            owner=self.request.user,
-        )
-        reviewer = serializer.save(
-            owner=self.request.user,
-            content=document.generate_text(),
-        )
-        document.convert_text_to_content(reviewer)
-
+    
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
     
     def get_queryset(self):
-        return Reviewer.reviewers.filter(owner=self.request.user)
+        return Note.note.filter(owner=self.request.user)
     
     def get_object(self):
-        return Reviewer.reviewers.get(slug=self.slug)
+        return Note.note.get(slug=self.slug)
     
     def get_serializer_context(self):
-        # Add additional context if needed
         return {'owner': self.request.user}

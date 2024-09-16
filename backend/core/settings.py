@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'apis.authentication',
     'apis.reviewers',
     'apis.studypods',
+    'apis.notes',
     'apps.custom_auth',
     'apps.pages',
     'asgi.asgi_auth',
@@ -68,6 +69,7 @@ INSTALLED_APPS = [
 ]
 
 # # Retrieve environment variables
+
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
 API_KEY = config('API_KEY')

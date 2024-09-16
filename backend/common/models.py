@@ -144,3 +144,21 @@ class Definition(Timestamp):
 
     def __str__(self):
         return self.text
+    
+class Note(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        editable=False,
+    )
+    name = models.TextField(max_length=50)
+    content = models.TextField(default='')
+
+    note = models.Manager()
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, **kwargs):
+        self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+        super().save(**kwargs)
