@@ -72,7 +72,6 @@ INSTALLED_APPS = [
 
 
 
-
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
 API_KEY = config('API_KEY')
