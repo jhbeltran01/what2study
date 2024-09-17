@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'apis.reviewers',
     'apis.studypods',
     'apis.notes',
+    'apis.todo',
     'apps.custom_auth',
     'apps.pages',
     'asgi.asgi_auth',
