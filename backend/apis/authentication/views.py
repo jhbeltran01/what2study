@@ -5,10 +5,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 from .models import User
 from .serializers import UserInfoSerializer
 
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
+import os
 
 # from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 # from allauth.socialaccount.providers.oauth2.client import OAuth2Client
@@ -17,6 +23,8 @@ from .serializers import UserInfoSerializer
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import RedirectView
 
+from .services import ResponseWithCookies
+from ..studypods.services import decrypt_data
 
 
 class LoginAPIView(TokenObtainPairView):
@@ -38,7 +46,11 @@ class LoginAPIView(TokenObtainPairView):
         Blacklist refresh token when the user perform multiple request on login without requesting logout
         """
         if refresh_token is not None:
-            RefreshToken(refresh_token).blacklist()
+            try:
+                RefreshToken(refresh_token).blacklist()
+            except Exception as err:
+                pass
+
 
     def _get_response(self, serializer):
         """
@@ -70,7 +82,9 @@ class LoginAPIView(TokenObtainPairView):
             key=key,
             value=value,
             httponly=True,
-            max_age=60 * 24 * 60 * 60
+            max_age=60 * 24 * 60 * 60,
+            samesite='None',
+            secure=True,
         )
 
     def _add_logged_in_cookie(self):
@@ -78,11 +92,15 @@ class LoginAPIView(TokenObtainPairView):
         self.response.set_cookie(
             key='isLoggedIn',
             value=True,
-            max_age=60 * 24 * 60 * 60
+            max_age=60 * 24 * 60 * 60,
+            samesite='None',
+            secure=True,
         )
 
 
 class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         token = request.COOKIES.get('refresh')
         RefreshToken(token).blacklist()
@@ -95,7 +113,23 @@ class LogoutAPIView(APIView):
         response.delete_cookie('refresh')
         response.delete_cookie('isLoggedIn')
         return response
+
+
+class LoginUsingUserID(APIView):
+    authentication_classes = []
+    permission_classes = []
     
+    def post(self, request, *args, **kwargs):
+        user_id = decrypt_data(request.data.get('data'))
+        response = ResponseWithCookies(user_id)
+        return response.get()
+
+
+class AuthenticatedUserDetail(APIView):
+    def get(self, request, *args, **kwargs):
+        data = UserInfoSerializer(request.user).data
+        return Response(data, status=status.HTTP_200_OK)
+        
 # class GoogleLoginView(SocialLoginView):
 #     adapter_class = GoogleOAuth2Adapter
 #     callback_url = GOOGLE_REDIRECT_URL

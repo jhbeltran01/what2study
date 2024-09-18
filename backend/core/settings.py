@@ -14,17 +14,14 @@ from datetime import timedelta
 from pathlib import Path
 
 import os
-from decouple import (
-    config,
-    AutoConfig
-)
+from decouple import Config, RepositoryEnv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ENVIRONMENT = config('ENVIRONMENT', default='dev')
-
-config = AutoConfig(search_path=os.path.join(BASE_DIR, '.env.{}'.format(ENVIRONMENT)))
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+ENV_FILE = os.path.join(BASE_DIR, '.env.{}'.format(ENVIRONMENT))
+config = Config(RepositoryEnv(ENV_FILE))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -70,16 +67,11 @@ INSTALLED_APPS = [
 ]
 
 # # Retrieve environment variables
-
-
+FERNET_KEY = config('FERNET_KEY')
 
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
 API_KEY = config('API_KEY')
-
-
-
-
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -214,6 +206,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:9000',
+    'https://localhost:8081',
 ]
 
 JWT_AUTH = {
@@ -263,8 +256,11 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
+
 # ACCOUNT_EMAIL_VERIFICATION = "none"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -286,5 +282,6 @@ CHANNEL_LAYERS = {
 }
 
 INTERNAL_IPS = [
-    '127.0.0.1'
+    '127.0.0.1',
+    '127.0.0.1:8081'
 ]

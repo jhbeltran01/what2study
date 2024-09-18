@@ -56,6 +56,8 @@ module.exports = {
       '@root': path.join(__dirname, '../src'),
       '@modules': path.join(__dirname, '../src/modules'),
       '@assets': path.resolve(__dirname, '../src/assets'),
+      '@redux': path.resolve(__dirname, '../src/redux'),
+      '@services': path.resolve(__dirname, '../src/services'),
     }
   },
 };

@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block main-content %}
+  <input hidden="hidden" type="text" value="{{ csrf_token }}" id="csrf-token-412" />
   <div id="root"></div>
 {% endblock main-content %}
 
