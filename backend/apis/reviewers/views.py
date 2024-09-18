@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.mixins import (
     CreateModelMixin,
     ListModelMixin,
@@ -7,7 +9,6 @@ from rest_framework.mixins import (
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
 from .serializers import ReviewerSerializer
 from common.models import Reviewer
 from .services import Document
@@ -59,6 +60,8 @@ class ReviewersAPIView(
             content=document.generate_text(),
         )
         document.convert_text_to_content(reviewer)
+        reviewer.available_question_types = document.question_types
+        reviewer.save()
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

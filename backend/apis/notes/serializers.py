@@ -20,8 +20,6 @@ class NotesSerializer(serializers.ModelSerializer):
         
         # Manually assign the owner since it is not in the request data
         validated_data['owner'] = self.owner
-        
-        print(validated_data)
         return super().create(validated_data)
     
     def validate_name(self, value):

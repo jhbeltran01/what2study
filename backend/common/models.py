@@ -25,6 +25,11 @@ class SlugField(Timestamp):
 
 
 class Reviewer(SlugField):
+    class QuestionType(models.TextChoices):
+        IDENTIFICATION = ('I', 'Identification')
+        ENUMERATION = ('E', 'Enumeration')
+        MULTIPLE_CHOICE = ('M', 'Multiple_Choice')
+
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -32,6 +37,10 @@ class Reviewer(SlugField):
     )
     name = models.TextField(max_length=50)
     content = models.TextField(default='')
+    available_question_types = models.JSONField(
+        default=list,
+        editable=True,
+    )
 
     reviewers = models.Manager()
 
