@@ -7,5 +7,8 @@ app_name = 'apis_studypods'
 urlpatterns = [
     path('',
             views.StudyPodAPIView.as_view(),
-                name='studypod')
+                name='studypod'),
+    path('get-encrypted-id/',
+            views.StudyPodGenerateEncryptedUserID.as_view(),
+                name='studypod-encrypted-id'),
 ]
