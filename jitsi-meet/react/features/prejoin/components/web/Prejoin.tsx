@@ -260,6 +260,7 @@ const Prejoin = ({
             )
             .then(response => {
                 setName(response.data.username)
+                joinConference()
             })
             .catch(err => {
                 console.log(err)
