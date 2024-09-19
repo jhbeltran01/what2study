@@ -42,6 +42,8 @@ import type { AbstractProps } from '../AbstractConference';
 
 import ConferenceInfo from './ConferenceInfo';
 import { default as Notice } from './Notice';
+import Question from './Question'
+
 
 /**
  * DOM events for when full screen mode has changed. Different browsers need
@@ -234,7 +236,10 @@ class Conference extends AbstractConference<IProps, any> {
                     <div
                         id = 'videospace'
                         onTouchStart = { this._onVidespaceTouchStart }>
-                        <LargeVideo />
+                        <div className='hide'>
+                            <LargeVideo />
+                        </div>
+                        <Question />    
                         {_showPrejoin || _showLobby || (<>
                                 <StageFilmstrip />
                                 <ScreenshareFilmstrip />
@@ -270,6 +275,7 @@ class Conference extends AbstractConference<IProps, any> {
                 </div>
                 <ParticipantsPane />
                 <ReactionAnimations />
+
             </div>
         );
     }

@@ -78,3 +78,84 @@ $flagsImagePath: "../images/";
 @import 'plan-limit';
 
 /* Modules END */
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+$josefin: "Josefin Sans", system-ui;
+$fs-1: 0.938rem; // 15
+$fs-2: 1.25rem; // 20
+
+$gray-1: rgba(55, 55, 55, 0.14);
+
+
+.question {
+  background-color: rgba(248, 249, 253, 1);
+  min-height: 100vh;
+  color: #000000;
+
+  &__content {
+    border: 1px solid $gray-1;
+    padding: 2em;
+    box-shadow: 0 4px 8px rgba(254, 214, 93, 1);
+  }
+
+  &__number {
+    font: {
+      family: $josefin;
+      size: $fs-1;
+    }
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__text {
+    font: {
+      family: $josefin;
+      size: $fs-2;
+      weight: 700;
+    }
+    margin: 0 auto 2rem auto;
+    max-width: 600px;
+    text-align: center;
+  }
+}
+
+.choice {
+  margin-bottom: 1rem;
+
+  &__marker {
+    border-radius: 100px;
+    background: linear-gradient(rgba(254, 166, 31, 1), rgba(254, 214, 93, 1));
+    height: 50px;
+    width: 50px;
+  }
+
+  &__text {
+    font: {
+      family: $josefin;
+      size: $fs-2;
+      weight: 500;
+    }
+    margin-bottom: -2px;
+  }
+}
+
+.grid { display: grid; }
+
+.grid-2-column {
+  grid-template-columns: 50px 1fr;
+  gap: 20px;
+}
+
+.place-center {
+  display: grid;
+  place-items: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.mb-1 {
+  margin-bottom: 2rem;
+}
