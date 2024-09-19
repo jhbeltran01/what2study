@@ -266,12 +266,12 @@ const Prejoin = ({
             })
 
         function capitalizeFirstLetters(sentence) {
-            if (!sentence) return sentence; // Handle empty or undefined sentence
+            if (!sentence) return sentence;
             
             return sentence
-                .split(' ') // Split the sentence into words
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-                .join(' '); // Join the words back into a sentence
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
         }
 
         document.title = `${capitalizeFirstLetters(room)} | StudyHive`

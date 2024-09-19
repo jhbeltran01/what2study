@@ -3,6 +3,10 @@ body.welcome-page {
     overflow: auto;
 }
 
+.hide {
+    display: none;
+}
+
 .welcome {
     background-image: $welcomePageBackground;
     background-color: #fff;
