@@ -68,6 +68,7 @@ class Document:
                     title_type=Title.Type.ENUMERATION_TITLE,
                     enum_title=self.new_enum_title
                 )
+                self.number_of_title += 1
             case _:
                 self.new_title = self._create_title(title_type=Title.Type.DEFINITION)
                 self.number_of_title += 1
