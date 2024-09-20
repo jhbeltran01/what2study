@@ -1,47 +1,42 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../../../sass/pages/_createreviewer.scss';
 
-const CreateReviewer = () => {
-  // State variables
-  const [reviewerName, setReviewerName] = useState('');
-  const [reviewerType, setReviewerType] = useState('Enumeration');
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [description, setDescription] = useState('');
+const EditReviewer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { reviewer } = location.state; // Get reviewer data from state
+
+  // State variables, initialized with reviewer data
+  const [reviewerName, setReviewerName] = useState(reviewer.name);
+  const [reviewerType, setReviewerType] = useState(reviewer.type);
+  const [numQuestions, setNumQuestions] = useState(reviewer.numQuestions);
+  const [description, setDescription] = useState(reviewer.description);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
-  const [visibility, setVisibility] = useState('Private');
+  const [visibility, setVisibility] = useState(reviewer.visibility);
   const [showVisibilityDropdown, setShowVisibilityDropdown] = useState(false);
-  const navigate = useNavigate();
 
   // Constants for dropdowns
   const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type'];
   const visibilityOptions = ['Private', 'Public'];
 
   // Handlers
-
-  const handleCreateClick = () => {
-    const reviewer = {
+  const handleUpdateClick = () => {
+    const updatedReviewer = {
+      ...reviewer,
       name: reviewerName,
       type: reviewerType,
       numQuestions,
-      date: new Date().toLocaleDateString(),
       description,
-      createdBy: 'User Name',
-      file: uploadedFile ? uploadedFile.name : 'No file uploaded',
+      file: uploadedFile ? uploadedFile.name : reviewer.file,
       visibility
     };
 
-    if (visibility === 'Public') {
-      const publicReviewers = JSON.parse(localStorage.getItem('publicReviewers')) || [];
-      publicReviewers.push(reviewer);
-      localStorage.setItem('publicReviewers', JSON.stringify(publicReviewers));
-    }
-
     const reviewers = JSON.parse(localStorage.getItem('reviewers')) || [];
-    reviewers.push(reviewer);
-    localStorage.setItem('reviewers', JSON.stringify(reviewers));
+    const updatedReviewers = reviewers.map((r) => (r.name === reviewer.name ? updatedReviewer : r));
 
+    localStorage.setItem('reviewers', JSON.stringify(updatedReviewers));
     navigate('/reviewers');
   };
 
@@ -157,8 +152,7 @@ const CreateReviewer = () => {
                   ))}
                 </ul>
               )}
-</div>
-
+            </div>
 
             <div className="form-group">
               <label htmlFor="uploadFile">Upload Content:</label>
@@ -170,8 +164,8 @@ const CreateReviewer = () => {
               />
             </div>
 
-            <button type="button" className="submit-button" onClick={handleCreateClick}>
-              Create
+            <button type="button" className="submit-button" onClick={handleUpdateClick}>
+              Update
             </button>
           </form>
         </div>
@@ -180,4 +174,4 @@ const CreateReviewer = () => {
   );
 };
 
-export default CreateReviewer;
+export default EditReviewer;

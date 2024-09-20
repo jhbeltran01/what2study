@@ -5,6 +5,9 @@ import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
 import React from "react";
+import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
+import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
+
 // import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
@@ -38,6 +41,16 @@ const pagesData = [
         path: routes.ROUTES.CREATE_REVIEWER, 
         element: <CreateReviewer />,
         title: routes.CREATE_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.EDIT_REVIEWER, 
+        element: <EditReviewer />,
+        title: routes.EDIT_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.VIEW_REVIEWER, 
+        element: <ViewReviewer />,
+        title: routes.VIEW_REVIEWER, 
       },
       {
         path: routes.ROUTES.STUDYPODS,

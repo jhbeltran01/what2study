@@ -1,10 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
 html, body {
-  background-color: #ffffff; /* Set the background color to white */
+  font-family: 'Josefin Sans', sans-serif;
+  height: 100%;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  overflow: hidden; /* Prevent double scrolling on the body */
 }
+
+.homepage-section {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* This makes the section scrollable on the y-axis */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  padding-right: 1rem; /* Ensure space for the scrollbar */}
+
+.reviewer-content {
+  flex-grow: 1;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 80%;
+  box-shadow: inset 0 -1px 0 #d1d5db;
+}
+
 
 .header {
   display: flex;
@@ -52,7 +74,7 @@ html, body {
 }
 
 .create-button {
-  background-color: #3b82f6;
+  background: linear-gradient(180deg, #FEA61F, #FED65D);
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -64,17 +86,8 @@ html, body {
 }
 
 .create-button:hover {
-  background-color: #2563eb;
-}
+  background-color: linear-gradient(180deg, #FEA61F, #FED65D);
 
-.reviewer-content {
-  flex: 1; /* Ensure this section takes up remaining space */
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  overflow-y: auto; /* Enable vertical scrolling if content overflows */
-  max-width: 80%; /* Set maximum width to make it smaller */
-  margin: 0 auto; /* Center the content horizontally */
 }
 
 .reviewer-entry {
@@ -94,23 +107,23 @@ html, body {
 }
 
 
-.reviewer-info {
-  display: flex;
-  flex-direction: column; /* Stack type and date vertically */
-  gap: 0.25rem; /* Space between type and date */
-  margin-top: 0; /* Remove top margin */
-}
-
 .reviewer-title {
   font-weight: bold;
   margin-bottom: 0; /* Ensure no extra margin below title */
 }
 
+.reviewer-info {
+  display: flex;
+  align-items: center; /* Align items vertically center */
+  gap: 1rem; /* Space between type and date */
+  margin-top: 0.5rem; /* Add some spacing above */
+}
+
 .reviewer-type {
   background-color: #ff8c00; /* Orange background */
   color: #ffffff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
+  padding: 0.150rem 0.5rem;
+  border-radius: 10px;
   font-size: 0.875rem;
 }
 
@@ -151,3 +164,28 @@ html, body {
   border: 0;
   border-top: 1px solid #d1d5db;
 }
+
+.dropdown-menu {
+  position: absolute;
+  top: 2rem; /* Adjust according to your layout */
+  right: 0;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
+}
+

@@ -1,0 +1,93 @@
+.header-title {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #4a4a4a;
+    cursor: pointer;
+  
+    /* Adjust the position to move it to the left */
+    margin-left: -10px; /* Moves the title 10px to the left */
+    
+    /* You can adjust the value based on how much you want it moved */
+    
+    &:hover {
+      text-decoration: underline; /* Adds a hover effect for better UX */
+    }
+  }
+    
+    reviewer-entry {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+  }
+  
+  .reviewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  
+  .reviewer-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .reviewer-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .reviewer-description {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .reviewer-created-by {
+    margin-top: 10px;
+    font-style: italic;
+  }
+  
+  .back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .divider {
+    margin: 20px 0;
+    border-top: 1px solid #ddd;
+  }
+  
+  .grade-container {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr; /* 1px width for the vertical line */
+    gap: 20px; /* Adjust gap as needed */
+    align-items: center; /* Align items vertically */
+    padding: 10px 0;
+  }
+  
+  .grade-description-wrapper {
+    text-align: left; /* Align text to the left */
+  }
+  
+  .grade-title-wrapper {
+    text-align: right; /* Align text to the right */
+  }
+  
+  .vertical-line {
+    width: 1px; /* Vertical line width */
+    height: 100%; /* Full height within the container */
+    background-color: #000; /* Black vertical line */
+    justify-self: center; /* Center the line horizontally */
+  }

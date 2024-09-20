@@ -1,8 +1,12 @@
-.homepage-section {
-    height: 100vh; 
-    background-color: #ffffff; 
+
+  .homepage-section {
+    min-height: 100vh;  /* Allow the section to expand as needed */
+    background-color: #ffffff;
     background-image: none;
+    display: flex;
+    flex-direction: column;  /* To ensure content flows vertically */
   }
+
   
   .homepage-grid {
     display: flex;
@@ -89,6 +93,25 @@
     width: 16px;
     height: 16px;
     pointer-events: none;
+  }
+
+  .clickable-texts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  
+    button {
+      background: none;
+      border: none;
+      color: #3b82f6;
+      cursor: pointer;
+      text-decoration: underline;
+  
+      &:hover {
+        text-decoration: underline;
+        color: #2563eb; // Darker shade on hover
+      }
+    }
   }
   
   @media (min-width: 768px) {

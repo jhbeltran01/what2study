@@ -1,200 +1,154 @@
+html, body {
+  overflow: hidden; // Prevent scrolling
+}
+
 .create-section {
-    background-color: #ffffff;
-    padding: 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.create {
+  display: flex;
+  flex-direction: column;
+  height: 900px;
+
+  .header {
     display: flex;
-    flex-direction: column;
-    height: 100%;
+    align-items: center;
+    justify-content: space-between;
 
-    .create {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
+    .header-title {
+      font-size: 1.125rem;
+      font-weight: bold;
+      color: #4a4a4a;
+    }
 
-    .header {
+    .search-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-  
-      .header-title {
-        font-size: 1.125rem;
-        font-weight: bold;
-        color: #4a4a4a;
-      }
-  
-      .search-container {
-        display: flex;
-        align-items: center;
-        width: 40%;
-        position: relative;
-        
-        .search-bar {
-          padding: 0.5rem 1rem;
-          border-radius: 999px;
-          width: 100%;
-          border: 1px solid #d1d5db;
-          outline: none;
-          padding-right: 3rem;
-        }
-  
-        .search-icon {
-          position: absolute;
-          right: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-    }
-  
-      .create-button {
-        background-color: #3b82f6;
-        color: white;
-        border-radius: 999px;
+      width: 40%;
+      position: relative;
+
+      .search-bar {
         padding: 0.5rem 1rem;
-        font-size: 1rem;
+        border-radius: 999px;
+        width: 100%;
+        border: 1px solid #d1d5db;
+        padding-right: 3rem;
+      }
+
+      .search-icon {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
       }
     }
-  
-    .reviewer-content {
-        background-color: #f9f9f9;
-    padding: 2rem; /* More padding for a spacious look */
+
+    .create-button {
+      background: linear-gradient(180deg, #fea61f, #fed65d);
+      color: white;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  .reviewer-content {
+    background-color: #f9f9f9;
+    padding: 2rem;
     border-radius: 8px;
     width: 100%;
-    max-width: 600px; /* Limit the max width for better readability */
+    max-width: 800px;
     margin: 0 auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern feel */
-    overflow-y: auto; /* Enable scrolling if content overflows */
-    max-height: 400px; /* Set a maximum height for the content */
-      
-        .reviewer-form {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem; /* Consistent spacing between form groups */
-      
-          .form-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-      
-            label {
-              font-size: 1rem;
-              font-weight: 600; /* Slightly bolder labels */
-              color: #333;
-              margin-bottom: 0.5rem;
-            }
-      
-            .input-field {
-              padding: 0.75rem;
-              width: 100%;
-              border: 1px solid #d1d5db;
-              border-radius: 6px;
-              font-size: 1rem;
-              background-color: #ffffff;
-              transition: border-color 0.3s ease;
-      
-              &:focus {
-                border-color: #3b82f6; /* Blue border on focus */
-                outline: none;
-              }
-            }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .reviewer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        label {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+          padding: 0.75rem;
+          width: 100%;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          font-size: 1rem;
+          background-color: #ffffff;
+
+          &:focus {
+            border-color: #3b82f6;
+            outline: none;
           }
+        }
+      }
+
+      .dropdown-wrapper {
+        position: relative;
+
+        .dropdown-toggle-button {
+          padding: 0.75rem;
+          width: 100%;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          background-color: #ffffff;
+          cursor: pointer;
+          display: flex; /* Added flexbox */
+          justify-content: space-between; /* Ensure content and arrow are on opposite sides */
+          align-items: center; /* Vertically center the content */
+          text-align: left;
       
-          .input-toggle-wrapper {
-            display: flex;
-            align-items: center;
-      
-            .input-field {
-              flex-grow: 1;
-              margin-right: 1rem; /* Space between input and button */
-            }
-      
-            .toggle-button {
-              padding: 0.5rem 1rem;
-              background-color: #f0f0f0;
-              border: 1px solid #d1d5db;
-              border-radius: 6px;
-              cursor: pointer;
-              transition: background-color 0.3s ease;
-      
-              &:hover {
-                background-color: #e2e2e2;
-              }
-            }
+          .dropdown-icon {
+            font-size: 1rem; /* Adjust size if needed */
           }
-      
-          .dropdown-wrapper {
-            position: relative;
-      
-            .dropdown-toggle-button {
-              padding: 0.75rem;
-              width: 100%;
-              border: 1px solid #d1d5db;
-              border-radius: 6px;
-              background-color: #ffffff;
-              cursor: pointer;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              font-size: 1rem;
-      
-              &:hover {
-                background-color: #f7f7f7;
-              }
-            }
-      
-            .dropdown-list {
-              position: absolute;
-              top: 100%;
-              left: 0;
-              width: 100%;
-              background-color: #ffffff;
-              border: 1px solid #d1d5db;
-              border-radius: 6px;
-              margin-top: 0.5rem;
-              z-index: 100;
-      
-              .dropdown-item {
-                padding: 0.75rem;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-      
-                &:hover {
-                  background-color: #f1f1f1;
-                }
-              }
-            }
-          }
-      
-          .upload-field {
-            display: flex;
-            align-items: center;
-      
-            .upload-link {
-              color: #3b82f6;
-              margin-left: 0.5rem;
-              cursor: pointer;
-              font-weight: 500;
-      
-              &:hover {
-                text-decoration: underline;
-              }
-            }
-          }
-      
-          .submit-button {
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            font-size: 1rem;
+        }
+
+        .dropdown-list {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background-color: white;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+
+          .dropdown-item {
+            padding: 0.75rem;
             cursor: pointer;
-            align-self: flex-end;
-            transition: background-color 0.3s ease;
-      
+
             &:hover {
-              background-color: #2563eb;
+              background-color: #f3f4f6;
             }
           }
         }
       }
-    }      
+
+      .submit-button {
+        background: linear-gradient(180deg, #fea61f, #fed65d);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
