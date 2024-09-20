@@ -160,4 +160,44 @@
     }
   
   }
+
+  .reviewer-entry {
+    position: relative; /* Required for absolute positioning of the bookmark icon */
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .bookmarks-icon {
+    width: 20px; /* Adjust the size of the icon */
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.3s;
+  }
+  
+  .bookmark-button {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Aligns the bookmark icon to the upper rightmost part */
+    background: transparent;
+    border: none;
+  }
+  
+  .bookmark-button.bookmarked .bookmarks-icon {
+    filter: brightness(1.5) hue-rotate(30deg) saturate(300%) sepia(80%) hue-rotate(-30deg);
+    /* Yellow color for bookmarked state */
+  }
+  
+  .bookmark-button:hover .bookmarks-icon {
+    transform: scale(1.1); /* Slight zoom on hover */
+  }
+  
+  .bookmark-button.bookmarked .bookmarks-icon {
+    filter: hue-rotate(40deg) saturate(300%) sepia(100%) brightness(1.1);
+  }
+  
+  
   

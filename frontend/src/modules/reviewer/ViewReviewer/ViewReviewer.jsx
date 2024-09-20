@@ -20,6 +20,12 @@ const ViewReviewer = () => {
     navigate('/reviewers');
   };
 
+    // Function to handle Start button click
+    const handleStartClick = () => {
+      // Navigate to a specific route, e.g., start reviewing
+      navigate('/start-review');
+    };
+
   return (
     <section className="homepage-section p-4 flex flex-col">
       <div className="reviewer-content">
@@ -46,6 +52,12 @@ const ViewReviewer = () => {
           <p className="reviewer-created-by">
             Created by: {reviewer.createdBy}
           </p>
+
+          <div className="start-button-container">
+            <button className="start-button" onClick={handleStartClick}>
+              Start
+            </button>
+          </div>
 
           <hr className="divider" />
 

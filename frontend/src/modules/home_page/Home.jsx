@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import searchIcon from '@assets/search.png';
+import bookmarksIcon from '@assets/bookmark.png'; // Default unbookmarked icon
+import bookmarkedIcon from '@assets/bookmarked.png'; // Default bookmarked icon
 import '../../sass/pages/_homepage.scss';
 
 const Home = () => {
@@ -10,16 +13,17 @@ const Home = () => {
   const [bookmarks, setBookmarks] = useState([]);
 
   useEffect(() => {
-    // Fetch data based on active tab
+    const storedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    setBookmarks(storedBookmarks);
+  }, []);
+
+  useEffect(() => {
     if (active === 'public-reviewers') {
       const storedPublicReviewers = JSON.parse(localStorage.getItem('publicReviewers')) || [];
       setPublicReviewers(storedPublicReviewers);
     } else if (active === 'recently-viewed') {
       const storedRecentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
       setRecentlyViewed(storedRecentlyViewed);
-    } else if (active === 'bookmarks') {
-      const storedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-      setBookmarks(storedBookmarks);
     }
   }, [active]);
 
@@ -32,12 +36,36 @@ const Home = () => {
     console.log('Search term:', searchTerm);
   };
 
+  const handleBookmarkClick = (reviewer) => {
+    const isBookmarked = bookmarks.some((b) => b.id === reviewer.id);
+    let updatedBookmarks;
+
+    if (isBookmarked) {
+      updatedBookmarks = bookmarks.filter((b) => b.id !== reviewer.id);
+    } else {
+      updatedBookmarks = [...bookmarks, reviewer];
+    }
+
+    setBookmarks(updatedBookmarks);
+    localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+    console.log(`Toggled bookmark for ${reviewer.name}. Current bookmarks:`, updatedBookmarks);
+  };
+
+  const isBookmarked = (reviewerId) => bookmarks.some((b) => b.id === reviewerId);
+
+  const renderBookmarkIcon = (reviewerId) => {
+    if (active === 'bookmarks') {
+      return isBookmarked(reviewerId) ? bookmarkedIcon : bookmarksIcon;
+    }
+    return bookmarksIcon; // Always use the unbookmarked icon in public reviewers
+  };
+
   const renderContent = (data) => (
     <div className="reviewer-content">
       <ul>
         {data.length > 0 ? (
-          data.map((item, index) => (
-            <li key={index} className="reviewer-entry">
+          data.map((item) => (
+            <li key={item.id} className="reviewer-entry">
               <div className="reviewer-header">
                 <h3 className="reviewer-title">{item.name}</h3>
                 <div className="reviewer-info">
@@ -46,8 +74,19 @@ const Home = () => {
                   <p className="reviewer-date">Date: {item.date}</p>
                 </div>
               </div>
-              <button className="more-options">...</button>
-              <a href={`/view/${item.id}`} className="view-link">View Details</a>
+              <button 
+                className="bookmark-button"
+                onClick={() => handleBookmarkClick(item)}
+              >
+                <img 
+                  src={renderBookmarkIcon(item.id)} 
+                  alt="Bookmark" 
+                  className="bookmarks-icon" 
+                />
+              </button>
+              <Link to={`/view/${item.id}`} className="view-link">
+                View Details
+              </Link>
             </li>
           ))
         ) : (
