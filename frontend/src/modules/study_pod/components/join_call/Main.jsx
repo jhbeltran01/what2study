@@ -15,7 +15,7 @@ function Main() {
       .catch(err => {
         console.log(err)
       })
-  }, [])
+  }, [room.name])
 
   return (
     <div>
