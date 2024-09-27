@@ -60,10 +60,11 @@ INSTALLED_APPS = [
     'apis.studypods',
     'apis.notes',
     'apis.todo',
+    'apis.questions',
     'apps.custom_auth',
     'apps.pages',
     'asgi.asgi_auth',
-    'common'
+    'common',
 ]
 
 # # Retrieve environment variables

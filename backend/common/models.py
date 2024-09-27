@@ -91,7 +91,8 @@ class Title(Timestamp):
     reviewer = models.ForeignKey(
         Reviewer,
         on_delete=models.CASCADE,
-        editable=False
+        editable=False,
+        related_name='titles'
     )
     enum_title = models.ForeignKey(
         'self',
@@ -100,6 +101,7 @@ class Title(Timestamp):
         default=None,
         null=True,
         blank=True,
+        related_name='answers'
     )
     text = models.TextField()
     type = models.CharField(
@@ -120,6 +122,7 @@ class EnumerationTitle(Timestamp):
         Title,
         on_delete=models.CASCADE,
         editable=False,
+        related_name='enum'
     )
     is_answered_correctly = models.BooleanField(default=False)
     is_in_order = models.BooleanField(default=False)
@@ -153,6 +156,12 @@ class Definition(Timestamp):
 
     def __str__(self):
         return self.text
+
+    @property
+    def answer(self):
+        return self.title.text
+
+
     
 class Note(SlugField):
     owner = models.ForeignKey(
