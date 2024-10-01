@@ -1,28 +1,23 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../../sass/pages/_reviewer.scss';
+//import '../../../sass/pages/_reviewer.scss';
 
 const ViewReviewer = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Extract reviewer from the passed state
   const { reviewer } = location.state || {};
 
-  // If reviewer is null, redirect back to the reviewers list
   if (!reviewer) {
     navigate('/reviewers');
     //return null;
   }
 
-  // Function to navigate back to the reviewers list
   const handleTitleClick = () => {
     navigate('/reviewers');
   };
 
-    // Function to handle Start button click
     const handleStartClick = () => {
-      // Navigate to a specific route, e.g., start reviewing
       navigate('/start-review');
     };
 
@@ -53,12 +48,6 @@ const ViewReviewer = () => {
             Created by: {reviewer.createdBy}
           </p>
 
-          <div className="start-button-container">
-            <button className="start-button" onClick={handleStartClick}>
-              Start
-            </button>
-          </div>
-
           <hr className="divider" />
 
           <div className="grade-container">
@@ -73,6 +62,12 @@ const ViewReviewer = () => {
               <div className="grade-title">Your Grade</div>
               <p className="grade-info">-</p>
             </div>
+
+            <div className="start-button-container">
+            <button className="start-button" onClick={handleStartClick}>
+              Start
+            </button>
+          </div>
           </div>
             <hr className="divider" />
         </div>

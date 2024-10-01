@@ -1,9 +1,8 @@
+//import '../../../sass/pages/_createreviewer.scss';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../../sass/pages/_createreviewer.scss';
 
 const CreateReviewer = () => {
-  // State variables
   const [reviewerName, setReviewerName] = useState('');
   const [reviewerType, setReviewerType] = useState('Enumeration');
   const [numQuestions, setNumQuestions] = useState(10);
@@ -14,11 +13,8 @@ const CreateReviewer = () => {
   const [showVisibilityDropdown, setShowVisibilityDropdown] = useState(false);
   const navigate = useNavigate();
 
-  // Constants for dropdowns
   const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type'];
   const visibilityOptions = ['Private', 'Public'];
-
-  // Handlers
 
   const handleCreateClick = () => {
     const reviewer = {

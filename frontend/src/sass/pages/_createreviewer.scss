@@ -24,28 +24,8 @@ html, body {
       font-size: 1.125rem;
       font-weight: bold;
       color: #4a4a4a;
-    }
-
-    .search-container {
-      display: flex;
-      align-items: center;
-      width: 40%;
-      position: relative;
-
-      .search-bar {
-        padding: 0.5rem 1rem;
-        border-radius: 999px;
-        width: 100%;
-        border: 1px solid #d1d5db;
-        padding-right: 3rem;
-      }
-
-      .search-icon {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-      }
+      margin-right: auto;
+      padding: 2rem 2rem;
     }
 
     .create-button {
@@ -152,3 +132,38 @@ html, body {
     }
   }
 }
+
+.update-button {
+  background: linear-gradient(180deg, #FEA61F, #FED65D);
+  color: #ffffff;
+  padding: 8px 16px; /* Reduced padding for a smaller button */
+  border: none;
+  border-radius: 30px;
+  font-size: 0.875rem; /* Reduced font size */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+  display: inline-block; /* Ensure the button is not full width */
+  
+  &:hover {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+    transform: translateY(1px);
+  }
+}
+
+.notification {
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 15px;
+  margin: 15px 0;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  text-align: center;
+}
+

@@ -1,203 +1,240 @@
 
-  .homepage-section {
-    min-height: 100vh;  /* Allow the section to expand as needed */
-    background-color: #ffffff;
-    background-image: none;
-    display: flex;
-    flex-direction: column;  /* To ensure content flows vertically */
-  }
+.homepage-section {
+  min-height: 100vh;  /* Allow the section to expand as needed */
+  background-color: #ffffff;
+  background-image: none;
+  display: flex;
+  flex-direction: column;  /* To ensure content flows vertically */
+}
 
-  
-  .homepage-grid {
-    display: flex;
-    grid-template-columns: 1fr 3fr;
-    height: 100%;
-    margin: 0; 
-    padding: 0; 
+
+.homepage-grid {
+  display: flex;
+  grid-template-columns: 1fr 3fr;
+  height: 100%;
+  margin: 0; 
+  padding: 0; 
+}
+
+.sidebar-container {
+  flex: 0 0 250px;
+  background-color: #ffffff;
+  height: 100vh;
+  padding: 0; 
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #e5e7eb;
+}
+
+.navpage-container {
+  flex: 1;
+  height: 100vh;
+  padding-left: 0; 
+  padding-right: 0; 
+  margin: 0; 
+  overflow-y: auto;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  justify-content: space-between; 
+  padding-top: 1rem;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+  padding: 2rem 2rem;
+}
+
+.header-buttons button {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #4a4a4a;
+}
+
+.header-buttons button.active {
+  font-weight: bold;
+  color: #000000;
+  border-bottom: 2px solid black;
+}
+
+.header-buttons button:hover {
+  font-weight: bold;
+}
+
+
+.home-search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  margin-right: 5rem;
+  margin-top: 1rem;
+}
+
+.home-search-bar {
+  max-width: 100%;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  box-sizing: border-box;
+  outline: none;
+  padding-right: 3rem;
+}
+
+.home-search-icon {
+  position: absolute;
+  right: 1.3rem;
+  top: 68%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+
+}
+
+.clickable-texts {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: underline;
+      color: #2563eb; // Darker shade on hover
+    }
   }
-  
+}
+
+@media (min-width: 768px) {
   .sidebar-container {
-    flex: 0 0 250px;
-    background-color: #ffffff;
+    grid-column: span 3 / span 3;
     height: 100vh;
-    padding: 0; 
-    position: sticky;
-    top: 0;
-    border-right: 1px solid #e5e7eb;
-  }
-  
-  .navpage-container {
-    flex: 1;
-    background-color: #FDF6E3;
-    height: 100vh;
-    padding-left: 0; 
-    padding-right: 0; 
-    margin: 0; 
-    overflow-y: auto;
   }
 
-  body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+  .navpage-container {
+    grid-column: span 9 / span 9;
   }
-  
+}
+
+@media (min-width: 1024px) {
+  .sidebar-container {
+    grid-column: span 2 / span 2;
+  }
+
+  .navpage-container {
+    grid-column: span 10 / span 10;
+  }
+}
+
+@media (min-width: 768px) {
+
   .header {
-    display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-    justify-content: space-between; 
+    align-items: center;
   }
 
   .header-buttons {
-    display: flex;
+    flex-direction: row;
     gap: 1rem;
-    margin-right: auto;
-    padding: 2rem 2rem;
   }
-  
+
   .header-buttons button {
-    font-size: 1.125rem;
-    font-weight: bold;
-    color: #4a4a4a;
+    font-size: 1rem;
   }
-  
-  .header-buttons button.active {
-    color: #3b82f6;
+  .content-container {
+    gap: 1rem;
   }
 
-  .search-container {
-    position: relative;
-    width: 40%;
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 2rem;
-  }
-  
-  .search-bar {
-    padding: 0.5rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 999px;
-    width: 100%;
-    box-sizing: border-box;
-    outline: none;
-  }
-  
-  .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    pointer-events: none;
+  .content-box {
+    width: calc(25% - 1.5rem);
+    padding-bottom: calc(25% - 1.5rem);
   }
 
-  .clickable-texts {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  
-    button {
-      background: none;
-      border: none;
-      color: #3b82f6;
-      cursor: pointer;
-      text-decoration: underline;
-  
-      &:hover {
-        text-decoration: underline;
-        color: #2563eb; // Darker shade on hover
-      }
-    }
-  }
-  
-  @media (min-width: 768px) {
-    .sidebar-container {
-      grid-column: span 3 / span 3;
-      height: 100vh;
-    }
-  
-    .navpage-container {
-      grid-column: span 9 / span 9;
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    .sidebar-container {
-      grid-column: span 2 / span 2;
-    }
-  
-    .navpage-container {
-      grid-column: span 10 / span 10;
-    }
-  }
-  
-  @media (min-width: 768px) {
+}
 
-    .header {
-      flex-direction: row;
-      align-items: center;
-    }
-  
-    .header-buttons {
-      flex-direction: row;
-      gap: 1rem;
-    }
-  
-    .header-buttons button {
-      font-size: 1rem;
-    }
-    .content-container {
-      gap: 1rem;
-    }
-  
-    .content-box {
-      width: calc(25% - 1.5rem);
-      padding-bottom: calc(25% - 1.5rem);
-    }
-  
-  }
+.reviewer-entry {
+  position: relative; 
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
 
-  .reviewer-entry {
-    position: relative; /* Required for absolute positioning of the bookmark icon */
-    padding: 10px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .bookmarks-icon {
-    width: 20px; /* Adjust the size of the icon */
-    height: 20px;
-    cursor: pointer;
-    transition: transform 0.2s, filter 0.3s;
-  }
-  
-  .bookmark-button {
-    position: absolute;
-    top: 10px;
-    right: 10px; /* Aligns the bookmark icon to the upper rightmost part */
-    background: transparent;
-    border: none;
-  }
-  
-  .bookmark-button.bookmarked .bookmarks-icon {
-    filter: brightness(1.5) hue-rotate(30deg) saturate(300%) sepia(80%) hue-rotate(-30deg);
-    /* Yellow color for bookmarked state */
-  }
-  
-  .bookmark-button:hover .bookmarks-icon {
-    transform: scale(1.1); /* Slight zoom on hover */
-  }
-  
-  .bookmark-button.bookmarked .bookmarks-icon {
-    filter: hue-rotate(40deg) saturate(300%) sepia(100%) brightness(1.1);
-  }
-  
-  
-  
+.bookmarks-icon {
+  width: 20px; /* Adjust the size of the icon */
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.3s;
+}
+
+.bookmark-button {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Aligns the bookmark icon to the upper rightmost part */
+  background: transparent;
+  border: none;
+}
+
+.bookmark-button.bookmarked .bookmarks-icon {
+  filter: brightness(1.5) hue-rotate(30deg) saturate(300%) sepia(80%) hue-rotate(-30deg);
+  /* Yellow color for bookmarked state */
+}
+
+.bookmark-button:hover .bookmarks-icon {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.bookmark-button.bookmarked .bookmarks-icon {
+  filter: hue-rotate(40deg) saturate(300%) sepia(100%) brightness(1.1);
+}
+
+.notification-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  text-align: center;
+  z-index: 1000; 
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+

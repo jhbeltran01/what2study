@@ -1,13 +1,13 @@
+//import '../../../sass/pages/_createreviewer.scss';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../../sass/pages/_createreviewer.scss';
 
 const EditReviewer = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { reviewer } = location.state; // Get reviewer data from state
+  const { reviewer } = location.state;
 
-  // State variables, initialized with reviewer data
+  // State variables
   const [reviewerName, setReviewerName] = useState(reviewer.name);
   const [reviewerType, setReviewerType] = useState(reviewer.type);
   const [numQuestions, setNumQuestions] = useState(reviewer.numQuestions);
@@ -16,6 +16,7 @@ const EditReviewer = () => {
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [visibility, setVisibility] = useState(reviewer.visibility);
   const [showVisibilityDropdown, setShowVisibilityDropdown] = useState(false);
+  const [notification, setNotification] = useState('');
 
   // Constants for dropdowns
   const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type'];
@@ -30,13 +31,22 @@ const EditReviewer = () => {
       numQuestions,
       description,
       file: uploadedFile ? uploadedFile.name : reviewer.file,
-      visibility
+      visibility,
     };
 
     const reviewers = JSON.parse(localStorage.getItem('reviewers')) || [];
     const updatedReviewers = reviewers.map((r) => (r.name === reviewer.name ? updatedReviewer : r));
 
     localStorage.setItem('reviewers', JSON.stringify(updatedReviewers));
+    
+    // Set notification message
+    setNotification('Reviewer updated successfully!');
+    
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
+
     navigate('/reviewers');
   };
 
@@ -66,6 +76,12 @@ const EditReviewer = () => {
             {'← Back to Reviewers'}
           </button>
         </div>
+
+        {notification && (
+          <div className="notification">
+            {notification}
+          </div>
+        )}
 
         <div className="reviewer-content">
           <form className="reviewer-form">
@@ -112,7 +128,7 @@ const EditReviewer = () => {
                 onClick={() => toggleDropdown('type')}
               >
                 {reviewerType}
-                <span className="dropdown-icon">&#x25BC;</span> {/* Dropdown arrow */}
+                <span className="dropdown-icon">&#x25BC;</span>
               </button>
               {showTypeDropdown && (
                 <ul className="dropdown-list">
@@ -137,7 +153,7 @@ const EditReviewer = () => {
                 onClick={() => toggleDropdown('visibility')}
               >
                 {visibility}
-                <span className="dropdown-icon">&#x25BC;</span> {/* Dropdown arrow */}
+                <span className="dropdown-icon">&#x25BC;</span>
               </button>
               {showVisibilityDropdown && (
                 <ul className="dropdown-list">
@@ -164,7 +180,7 @@ const EditReviewer = () => {
               />
             </div>
 
-            <button type="button" className="submit-button" onClick={handleUpdateClick}>
+            <button type="button" className="update-button" onClick={handleUpdateClick}>
               Update
             </button>
           </form>

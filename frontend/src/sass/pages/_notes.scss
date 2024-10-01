@@ -1,0 +1,101 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+
+  .header-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .header-buttons button {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #4a4a4a;
+  }
+
+  .header-buttons button.active {
+    font-weight: bold;
+    color: #000000;
+    border-bottom: 2px solid black;
+  }
+
+  .header-buttons button:hover {
+    font-weight: bold;
+  }
+
+  .notes-search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .notes-search-bar {
+    max-width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  .notes-search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+  }
+}
+
+.hexagon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+.hexagon-row {
+  display: flex;
+  justify-content: center; /* Center items */
+}
+
+.hexagon-row--offset {
+  margin-left: 30px; /* Adjust this value for more/less offset */
+}
+    .hexagon {
+      width: 180px;
+      height: 180px;
+      background-color: #ffa300; 
+      margin-left: 15px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      color: #fff;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      // Media queries for responsiveness
+      @media (max-width: 1200px) {
+        width: 150px;
+        height: 150px;
+      }
+
+      @media (max-width: 900px) {
+        width: 120px;
+        height: 120px;
+      }
+
+      @media (max-width: 600px) {
+        width: 90px;
+        height: 90px;
+      }
+    }
+  }

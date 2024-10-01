@@ -10,13 +10,12 @@
     align-items: center; /* Center the container vertically */
     height: 100vh; /* Full viewport height */
     width: 100vw;  /* Full viewport width */
+
   }
   
   .auth-page .container {
-    width: 100%;
-    max-width: 600px; /* Adjust as needed */
+    width: 500px;
     padding: 20px;
-    background: white; /* Background for the container */
     border-radius: 8px; /* Rounded corners */
   }
 

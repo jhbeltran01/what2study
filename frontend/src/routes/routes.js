@@ -7,6 +7,8 @@ import StudyPod from '@modules/study_pod/components/study_pods/Main';
 import React from "react";
 import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
+import Notes from '../modules/notes/Notes';
+import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
 
 // import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
@@ -51,6 +53,16 @@ const pagesData = [
         path: routes.ROUTES.VIEW_REVIEWER, 
         element: <ViewReviewer />,
         title: routes.VIEW_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.NOTES, 
+        element: <Notes />,
+        title: routes.NOTES, 
+      },
+      {
+        path: routes.ROUTES.CREATE_NOTES, 
+        element: <CreateNotes />,
+        title: routes.CREATE_NOTES, 
       },
       {
         path: routes.ROUTES.STUDYPODS,

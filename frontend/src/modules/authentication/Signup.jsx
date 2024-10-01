@@ -1,3 +1,6 @@
+/* Nicole B. Castillo
+  [STUD-001] Signup Page */
+
 import emailIcon from '@assets/email.png';
 import googleIcon from '@assets/google.png'; // Import the Google icon
 import passwordIcon from '@assets/password.png';
@@ -10,7 +13,7 @@ const validateUsername = (username) => /^[a-zA-Z0-9]{3,20}$/.test(username);
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 const validatePassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
-const Signup = ({ onToggle, onAuthSuccess}) => {
+const Signup = ({ onToggle, onAuthSuccess }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,7 +32,7 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
         
         let isValid = true;
 
-        // Validation checks
+        // Validation checks for username, email, and password
         if (!validateUsername(username)) {
             setUsernameError(' must be 3-20 characters long and contain only letters and numbers.');
             isValid = false;
@@ -48,13 +51,14 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
         if (!isValid) return;
 
         try {
+            // Attempt to send form data to backend via axios
             await axios.post('http://localhost:8000/signup/', {
                 username,
                 email,
                 password
             });
             onAuthSuccess();
-            // Redirect to homepage or handle successful signup
+            // Redirect to homepage on successful signup
             window.location.href = '/homepage'; // Replace with your homepage route
         } catch (error) {
             setError('An error occurred while creating the account.');
@@ -71,9 +75,14 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
 
     return (
         <div className="signup-container">
+            {/* Widget 1: Greeting Text */}
             <div className="greeting">Create an Account</div>
+
+            {/* Signup Form */}
             <form onSubmit={handleSubmit}>
                 <div className="inputs">
+                    
+                    {/* Widget 2: Username Input Field */}
                     <div className="input">
                         <label>
                             Username
@@ -88,6 +97,8 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
                             />
                         </div>
                     </div>
+                    
+                    {/* Widget 3: Email Input Field */}
                     <div className="input">
                         <label>
                             Email
@@ -103,6 +114,8 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
                             />
                         </div>
                     </div>
+
+                    {/* Widget 4: Password Input Field */}
                     <div className="input">
                         <label>
                             Password
@@ -119,21 +132,31 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
                         </div>
                     </div>
                 </div>
+
+                {/* Widget 5: Sign Up Button */}
                 <div className="submit-container">
                     <button type="submit" className="submit">
                         Sign Up
                     </button>
                 </div>
+
+                {/* Divider for separating Google signup */}
                 <hr className="divider" />
+
+                {/* Widget 6: Google Sign Up Button */}
                 <div className="signup-google" onClick={handleGoogleSignup}>
                     <img src={googleIcon} alt="Google Icon" className="google-icon" />
                     <span>Sign up with Google</span>
                 </div>
+
+                {/* Widget 7: Toggle Text (Link to Login) */}
                 <div className="toggle-text">
                     <span className="text">Already have an account? </span>
                     <span className="link" onClick={onToggle}>Login here</span>
                 </div>
             </form>
+
+            {/* Error Message Widget */}
             {error && <p>{error}</p>}
         </div>
     );
@@ -143,7 +166,6 @@ const Signup = ({ onToggle, onAuthSuccess}) => {
 Signup.propTypes = {
     onToggle: PropTypes.func.isRequired,  // Validate that onToggle is a function and required
     onAuthSuccess: PropTypes.func.isRequired,  // Validate that onAuthSuccess is a function and required
-
 };
 
 export default Signup;

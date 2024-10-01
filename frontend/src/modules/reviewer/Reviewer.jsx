@@ -1,12 +1,17 @@
+import '../../sass/pages/_reviewer.scss';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import searchIcon from '@assets/search.png';
-import '../../sass/pages/_reviewer.scss';
+
 
 const Reviewer = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [reviewers, setReviewers] = useState([]);
   const [dropdownIndex, setDropdownIndex] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,12 +48,17 @@ const Reviewer = () => {
   };
 
   const handleDeleteClick = (index) => {
-    const confirmation = window.confirm("Are you sure you want to delete the reviewer?");
-    if (confirmation) {
-      const reviewerToDelete = reviewers[index];
+    setDeleteIndex(index);
+    setShowDeleteModal(true);
+    setDropdownIndex(null);
+  };
+
+  const confirmDelete = () => {
+    if (deleteIndex !== null) {
+      const reviewerToDelete = reviewers[deleteIndex];
       
       // Delete from main reviewers
-      const updatedReviewers = reviewers.filter((_, i) => i !== index);
+      const updatedReviewers = reviewers.filter((_, i) => i !== deleteIndex);
       setReviewers(updatedReviewers);
       localStorage.setItem('reviewers', JSON.stringify(updatedReviewers));
 
@@ -57,16 +67,20 @@ const Reviewer = () => {
       const updatedBookmarks = existingBookmarks.filter(bookmark => bookmark.name !== reviewerToDelete.name);
       localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
 
-      setDropdownIndex(null);
+      setNotificationMessage('Successfully deleted!');
+      setShowNotification(true);
+      setShowDeleteModal(false);
+      setDeleteIndex(null);
+      
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 2000);
     }
   };
 
-  const handleBookmarkClick = (index) => {
-    const reviewer = reviewers[index];
-    const existingBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-    const updatedBookmarks = [...existingBookmarks, reviewer];
-    localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
-    alert(`${reviewer.name} has been added to bookmarks.`);
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeleteIndex(null);
   };
 
   return (
@@ -76,16 +90,16 @@ const Reviewer = () => {
           My Reviewers
         </button>
 
-        <form className="search-container" onSubmit={handleSearchSubmit}>
+        <form className="reviewer-search-container" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search..."
-            className="search-bar"
+            className="reviewer-search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="search-button">
-            <img src={searchIcon} alt="Search" className="search-icon" />
+          <button type="submit" className="reviewer-search-button">
+            <img src={searchIcon} alt="Search" className="reviewer-search-icon" />
           </button>
         </form>
 
@@ -111,7 +125,6 @@ const Reviewer = () => {
                 <div className="dropdown-menu">
                   <button onClick={() => handleEditClick(index)}>Edit</button>
                   <button onClick={() => handleDeleteClick(index)}>Delete</button>
-                  <button onClick={() => handleBookmarkClick(index)}>Add Bookmark</button>
                 </div>
               )}
             </div>
@@ -123,6 +136,29 @@ const Reviewer = () => {
           </div>
         ))}
       </div>
+
+            {/* Toast Notification */}
+            {showNotification && (
+        <div className="notification-container">
+          <p>{notificationMessage}</p>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <p>Are you sure you want to delete this reviewer?</p>
+            <button className="modal-confirm-button" onClick={confirmDelete}>
+              Yes
+            </button>
+            <button className="modal-cancel-button" onClick={cancelDelete}>
+              No
+            </button>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };

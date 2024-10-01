@@ -1,18 +1,10 @@
 .header-title {
-    font-size: 1.125rem;
-    font-weight: bold;
-    color: #4a4a4a;
-    cursor: pointer;
-  
-    /* Adjust the position to move it to the left */
-    margin-left: -10px; /* Moves the title 10px to the left */
-    
-    /* You can adjust the value based on how much you want it moved */
-    
-    &:hover {
-      text-decoration: underline; /* Adds a hover effect for better UX */
-    }
-  }
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #4a4a4a;
+  margin-right: auto;
+  padding: 2rem 2rem;
+}
     
     reviewer-entry {
     border: 1px solid #ccc;
@@ -91,3 +83,4 @@
     background-color: #000; /* Black vertical line */
     justify-self: center; /* Center the line horizontally */
   }
+
