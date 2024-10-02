@@ -1,86 +1,115 @@
-import '../../sass/pages/_reviewer.scss';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import searchIcon from '@assets/search.png';
+/**********************************************************************************************************************
+  Subject: ITMC311: Integrative Programming 2
+  Mentor: Sir Kevin Vega
+  App Name: StudyHive
+  Company Name: BCDP
 
+  Company Members:
+  Nicole B. Castillo
+  Marie Angeline Pelausa
+  Joy Milangela Dacuba
+  Harold Beltran
+  ____________________________________________________________________________________________________________________
+
+  Ticket Information: [STUD-011] Reviewer Page
+  Purpose: Handles Main Reviewer Features
+
+***********************************************************************************************************************/
+
+import React, { useState, useEffect } from 'react'; // Importing React and hooks
+import { useNavigate } from 'react-router-dom'; // Importing navigation hook from react-router-dom
+import searchIcon from '@assets/search.png'; // Importing the search icon image
+import '../../sass/pages/_reviewer.scss'; // Importing the stylesheet for this page
 
 const Reviewer = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [reviewers, setReviewers] = useState([]);
-  const [dropdownIndex, setDropdownIndex] = useState(null);
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(null);
-  const navigate = useNavigate();
+  // State variables
+  const [searchTerm, setSearchTerm] = useState(''); // Holds the search term
+  const [reviewers, setReviewers] = useState([]); // Holds the list of reviewers
+  const [dropdownIndex, setDropdownIndex] = useState(null); // Index of the dropdown menu to show
+  const [showNotification, setShowNotification] = useState(false); // Controls the visibility of notifications
+  const [notificationMessage, setNotificationMessage] = useState(''); // Message to show in the notification
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // Controls the visibility of the delete confirmation modal
+  const [deleteIndex, setDeleteIndex] = useState(null); // Index of the reviewer to delete
+  const navigate = useNavigate(); // Hook for navigation
 
+  // Effect to load stored reviewers from local storage
   useEffect(() => {
     const storedReviewers = JSON.parse(localStorage.getItem('reviewers')) || [];
     setReviewers(storedReviewers);
   }, []);
 
+  // Handle search submission
   const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    console.log('Search term:', searchTerm);
+    event.preventDefault(); // Prevents page reload
+    console.log('Search term:', searchTerm); // Logs the search term to the console
   };
 
+  // Navigate to create a new reviewer
   const handleCreateClick = () => {
-    navigate('/reviewers/create-reviewer');
+    navigate('/reviewers/create-reviewer'); // Navigates to the create reviewer page
   };
 
+  // Navigate back to the list of reviewers
   const handleTitleClick = () => {
-    navigate('/reviewers');
+    navigate('/reviewers'); // Navigates to the reviewers list page
   };
 
+  // Navigate to view details of a specific reviewer
   const handleViewClick = (index) => {
-    const reviewer = reviewers[index];
-    navigate('/reviewers/view-reviewer', { state: { reviewer } });
+    const reviewer = reviewers[index]; // Get the reviewer data based on index
+    navigate('/reviewers/view-reviewer', { state: { reviewer } }); // Navigates to the view reviewer page with state
   };
 
+  // Toggle the dropdown menu for a specific reviewer
   const handleMoreOptionsClick = (index) => {
-    setDropdownIndex(dropdownIndex === index ? null : index);
+    setDropdownIndex(dropdownIndex === index ? null : index); // Toggles dropdown index
   };
 
+  // Navigate to edit a specific reviewer
   const handleEditClick = (index) => {
-    const reviewer = reviewers[index];
-    navigate('/reviewers/edit-reviewer', { state: { reviewer } });
-    setDropdownIndex(null);
+    const reviewer = reviewers[index]; // Get the reviewer data
+    navigate('/reviewers/edit-reviewer', { state: { reviewer } }); // Navigates to the edit reviewer page
+    setDropdownIndex(null); // Closes the dropdown menu
   };
 
+  // Show delete confirmation modal
   const handleDeleteClick = (index) => {
-    setDeleteIndex(index);
-    setShowDeleteModal(true);
-    setDropdownIndex(null);
+    setDeleteIndex(index); // Sets the index of the reviewer to delete
+    setShowDeleteModal(true); // Opens the delete confirmation modal
+    setDropdownIndex(null); // Closes the dropdown menu
   };
 
+  // Confirm deletion of the reviewer
   const confirmDelete = () => {
     if (deleteIndex !== null) {
-      const reviewerToDelete = reviewers[deleteIndex];
+      const reviewerToDelete = reviewers[deleteIndex]; // Get the reviewer to delete
       
-      // Delete from main reviewers
-      const updatedReviewers = reviewers.filter((_, i) => i !== deleteIndex);
-      setReviewers(updatedReviewers);
-      localStorage.setItem('reviewers', JSON.stringify(updatedReviewers));
+      // Delete from the main reviewers array
+      const updatedReviewers = reviewers.filter((_, i) => i !== deleteIndex); // Remove the reviewer
+      setReviewers(updatedReviewers); // Update state with the new reviewers list
+      localStorage.setItem('reviewers', JSON.stringify(updatedReviewers)); // Update local storage
 
-      // Remove from bookmarks
-      const existingBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-      const updatedBookmarks = existingBookmarks.filter(bookmark => bookmark.name !== reviewerToDelete.name);
-      localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+      // Remove from bookmarks if it exists
+      const existingBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || []; // Get existing bookmarks
+      const updatedBookmarks = existingBookmarks.filter(bookmark => bookmark.name !== reviewerToDelete.name); // Remove the deleted reviewer from bookmarks
+      localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks)); // Update bookmarks in local storage
 
-      setNotificationMessage('Successfully deleted!');
-      setShowNotification(true);
-      setShowDeleteModal(false);
-      setDeleteIndex(null);
+      setNotificationMessage('Successfully deleted!'); // Set success message
+      setShowNotification(true); // Show the notification
+      setShowDeleteModal(false); // Close the delete modal
+      setDeleteIndex(null); // Reset delete index
       
+      // Hide the notification after 2 seconds
       setTimeout(() => {
         setShowNotification(false);
       }, 2000);
     }
   };
 
+  // Cancel the deletion action
   const cancelDelete = () => {
-    setShowDeleteModal(false);
-    setDeleteIndex(null);
+    setShowDeleteModal(false); // Close the delete modal
+    setDeleteIndex(null); // Reset delete index
   };
 
   return (
@@ -96,7 +125,7 @@ const Reviewer = () => {
             placeholder="Search..."
             className="reviewer-search-bar"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)} // Update search term on input change
           />
           <button type="submit" className="reviewer-search-button">
             <img src={searchIcon} alt="Search" className="reviewer-search-icon" />
@@ -137,8 +166,8 @@ const Reviewer = () => {
         ))}
       </div>
 
-            {/* Toast Notification */}
-            {showNotification && (
+      {/* Toast Notification */}
+      {showNotification && (
         <div className="notification-container">
           <p>{notificationMessage}</p>
         </div>
@@ -158,7 +187,6 @@ const Reviewer = () => {
           </div>
         </div>
       )}
-
     </section>
   );
 };

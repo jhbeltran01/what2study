@@ -1,75 +1,106 @@
-//import '../../../sass/pages/_createreviewer.scss';
+/**********************************************************************************************************************
+  Subject: ITMC311: Integrative Programming 2
+  Mentor: Sir Kevin Vega
+  App Name: StudyHive
+  Company Name: BCDP
+
+  Company Members:
+  Nicole B. Castillo
+  Marie Angeline Pelausa
+  Joy Milangela Dacuba
+  Harold Beltran
+  ____________________________________________________________________________________________________________________
+
+  Ticket Information: Extension of [STUD-011] Reviewer Page -> Create Reviewer Page
+  Purpose: Handles Creation of Reviewer
+
+***********************************************************************************************************************/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CreateReviewer = () => {
-  const [reviewerName, setReviewerName] = useState('');
-  const [reviewerType, setReviewerType] = useState('Enumeration');
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [description, setDescription] = useState('');
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
-  const [visibility, setVisibility] = useState('Private');
-  const [showVisibilityDropdown, setShowVisibilityDropdown] = useState(false);
-  const navigate = useNavigate();
+  // State variables to hold form input values
+  const [reviewerName, setReviewerName] = useState(''); // Reviewer name input
+  const [reviewerType, setReviewerType] = useState('Enumeration'); // Default type of question
+  const [numQuestions, setNumQuestions] = useState(10); // Default number of questions
+  const [description, setDescription] = useState(''); // Reviewer description input
+  const [uploadedFile, setUploadedFile] = useState(null); // Uploaded file (if any)
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false); // Toggle dropdown for question types
+  const [visibility, setVisibility] = useState('Private'); // Reviewer visibility setting
+  const [showVisibilityDropdown, setShowVisibilityDropdown] = useState(false); // Toggle dropdown for visibility
+  const navigate = useNavigate(); // Navigation hook to handle page redirects
 
-  const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type'];
-  const visibilityOptions = ['Private', 'Public'];
+  // Arrays to define options for question types and visibility settings
+  const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type']; // Question types
+  const visibilityOptions = ['Private', 'Public']; // Reviewer visibility options
 
+  // Handle the click to create a reviewer object
   const handleCreateClick = () => {
     const reviewer = {
-      name: reviewerName,
-      type: reviewerType,
-      numQuestions,
-      date: new Date().toLocaleDateString(),
-      description,
-      createdBy: 'User Name',
-      file: uploadedFile ? uploadedFile.name : 'No file uploaded',
-      visibility
+      name: reviewerName, // Reviewer name
+      type: reviewerType, // Type of question selected
+      numQuestions, // Number of questions
+      date: new Date().toLocaleDateString(), // Current date
+      description, // Reviewer description
+      createdBy: 'User Name', // Default creator (static for now)
+      file: uploadedFile ? uploadedFile.name : 'No file uploaded', // Uploaded file name or default message
+      visibility // Visibility (Private/Public)
     };
 
+    // If visibility is 'Public', store the reviewer in a public collection
     if (visibility === 'Public') {
       const publicReviewers = JSON.parse(localStorage.getItem('publicReviewers')) || [];
       publicReviewers.push(reviewer);
       localStorage.setItem('publicReviewers', JSON.stringify(publicReviewers));
     }
 
+    // Store the reviewer in the local 'reviewers' collection
     const reviewers = JSON.parse(localStorage.getItem('reviewers')) || [];
     reviewers.push(reviewer);
     localStorage.setItem('reviewers', JSON.stringify(reviewers));
 
+    // Redirect user to the reviewers page after creation
     navigate('/reviewers');
   };
 
+  // Handle click on the 'Back to Reviewers' button
   const handleTitleClick = () => navigate('/reviewers');
+
+  // Handle file upload for the reviewer
   const handleFileUpload = (event) => setUploadedFile(event.target.files[0]);
 
+  // Toggle dropdown display for question type or visibility
   const toggleDropdown = (type) => {
-    if (type === 'type') setShowTypeDropdown(!showTypeDropdown);
-    else if (type === 'visibility') setShowVisibilityDropdown(!showVisibilityDropdown);
+    if (type === 'type') setShowTypeDropdown(!showTypeDropdown); // Toggle question type dropdown
+    else if (type === 'visibility') setShowVisibilityDropdown(!showVisibilityDropdown); // Toggle visibility dropdown
   };
 
+  // Handle selection of question type or visibility
   const handleSelection = (type, selection) => {
     if (type === 'reviewerType') {
-      setReviewerType(selection);
-      setShowTypeDropdown(false);
+      setReviewerType(selection); // Set the selected question type
+      setShowTypeDropdown(false); // Close the dropdown
     } else if (type === 'visibility') {
-      setVisibility(selection);
-      setShowVisibilityDropdown(false);
+      setVisibility(selection); // Set the selected visibility option
+      setShowVisibilityDropdown(false); // Close the dropdown
     }
   };
 
   return (
     <section className="create-section">
       <div className="create">
+        {/* Header section with 'Back to Reviewers' button */}
         <div className="header">
           <button className="header-title" onClick={handleTitleClick}>
             {'← Back to Reviewers'}
           </button>
         </div>
 
+        {/* Main content for creating a reviewer */}
         <div className="reviewer-content">
           <form className="reviewer-form">
+            {/* Form input for reviewer name */}
             <div className="form-group">
               <label htmlFor="reviewerName">Reviewer Name:</label>
               <input
@@ -82,6 +113,7 @@ const CreateReviewer = () => {
               />
             </div>
 
+            {/* Form input for description */}
             <div className="form-group">
               <label htmlFor="description">Description:</label>
               <input
@@ -94,6 +126,7 @@ const CreateReviewer = () => {
               />
             </div>
 
+            {/* Form input for number of questions */}
             <div className="form-group">
               <label htmlFor="numQuestions">No. of Questions:</label>
               <input
@@ -105,6 +138,7 @@ const CreateReviewer = () => {
               />
             </div>
 
+            {/* Dropdown for selecting type of question */}
             <div className="form-group dropdown-wrapper">
               <label>Type of Question:</label>
               <button
@@ -130,6 +164,7 @@ const CreateReviewer = () => {
               )}
             </div>
 
+            {/* Dropdown for selecting visibility */}
             <div className="form-group dropdown-wrapper">
               <label>Visibility:</label>
               <button
@@ -153,9 +188,9 @@ const CreateReviewer = () => {
                   ))}
                 </ul>
               )}
-</div>
+            </div>
 
-
+            {/* Form input for file upload */}
             <div className="form-group">
               <label htmlFor="uploadFile">Upload Content:</label>
               <input
@@ -166,6 +201,7 @@ const CreateReviewer = () => {
               />
             </div>
 
+            {/* Button to create the reviewer */}
             <button type="button" className="submit-button" onClick={handleCreateClick}>
               Create
             </button>

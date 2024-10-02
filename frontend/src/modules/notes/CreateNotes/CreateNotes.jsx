@@ -1,4 +1,4 @@
-/*import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CreateNotes = () => {
@@ -59,4 +59,4 @@ const CreateNotes = () => {
   );
 };
 
-export default CreateNotes;*/
+export default CreateNotes;

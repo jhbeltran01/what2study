@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import '../../sass/pages/_authentication.scss';
+//import '../../sass/pages/_authentication.scss';
 import Login from './Login';
 import Signup from './Signup';
 

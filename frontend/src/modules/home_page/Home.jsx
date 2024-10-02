@@ -1,6 +1,22 @@
-/* Nicole B. Castillo
-  [STUD-006] Homepage
-  Handles Public Reviewer and Bookmark features. */
+/**********************************************************************************************************************
+  Subject: ITMC311: Integrative Programming 2
+  Mentor: Sir Kevin Vega
+  App Name: StudyHive
+  Company Name: BCDP
+
+  Company Members:
+  Nicole B. Castillo
+  Marie Angeline Pelausa
+  Joy Milangela Dacuba
+  Harold Beltran
+  ____________________________________________________________________________________________________________________
+
+  Ticket Information: [STUD-006] Homepage
+  Purpose: Handles Public Reviewer and Bookmark Features
+  Note: Recently Viewed Feature is not working yet.
+
+***********************************************************************************************************************/
+
 
 import React, { useEffect, useState } from 'react'; // Import necessary React components and hooks
 import { Link } from 'react-router-dom'; // Import Link for navigation

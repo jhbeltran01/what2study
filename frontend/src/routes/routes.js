@@ -10,23 +10,24 @@ import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
 import Notes from '../modules/notes/Notes';
 import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
 
-// import Auth from "@modules/authentication/Auth";
+import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
-// const AppRoutes = () => {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false); 
+ const AppRoutes = () => {
+   const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
-//   return isAuthenticated ? (
-//     <Homepage />
-//   ) : (
-//     <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
-//   );
-// };
+   return isAuthenticated ? (
+     <Homepage />
+   ) : (
+     <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
+   );
+ };
 
 const pagesData = [
   {
     path: routes.ROUTES.HOME_PAGE,
     element: <Homepage />, 
+    element: <AppRoutes />, 
     title: routes.HOME_PAGE,
     nested: [
       {
