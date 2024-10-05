@@ -1,5 +1,19 @@
-/* Nicole B. Castillo
-  [STUD-001] Signup Page */
+/***********************************************************************************************************************************
+Subject: ITMC311 Integrative Programming 2
+Mentor: Sir Kevin G. Vega
+App Name: StudyHive
+Company Name: BCDP
+
+Company Members:
+Nicole B. Castillo
+Marie Angeline Pelausa
+Joy Milangela Dacuba
+Harold Beltran
+___________________________________________________________________________________________________________________________________
+
+Ticket Information: [STUD-001] Signup Page UI
+Purpose: Allows users to create StudyHive accounts by providing their emails, usernames and passwords.
+***********************************************************************************************************************************/
 
 import emailIcon from '@assets/email.png';
 import googleIcon from '@assets/google.png'; // Import the Google icon

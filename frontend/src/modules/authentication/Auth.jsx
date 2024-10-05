@@ -1,6 +1,39 @@
+/***********************************************************************************************************************************
+Subject: ITMC311 Integrative Programming 2
+Mentor: Sir Kevin G. Vega
+App Name: StudyHive
+Company Name: BCDP
+
+Company Members:
+Nicole B. Castillo
+Marie Angeline Pelausa
+Joy Milangela Dacuba
+Harold Beltran
+___________________________________________________________________________________________________________________________________
+
+File Information: Auth.jsx
+Purpose: Handles Signup and Login Pages Autehntication
+***********************************************************************************************************************************/
+
+/***********************************************************************************************************************************
+Subject: ITMC311 Integrative Programming 2
+Mentor: Sir Kevin G. Vega
+App Name: StudyHive
+Company Name: BCDP
+
+Company Members:
+Nicole B. Castillo
+Marie Angeline Pelausa
+Joy Milangela Dacuba
+Harold Beltran
+___________________________________________________________________________________________________________________________________
+
+File Information: Auth.jsx
+Purpose: Handles Signup and Login Pages Autehntication
+***********************************************************************************************************************************/
+
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-//import '../../sass/pages/_authentication.scss';
 import Login from './Login';
 import Signup from './Signup';
 
@@ -8,7 +41,7 @@ const Auth = ({ onAuthSuccess }) => {
     const [action, setAction] = useState("Sign Up");
 
     return (
-        <div className='auth-page'> {/* Apply the scoped class */}
+        <div className='auth-page'>
             <div className="container">
                 <div className="header">
                     {action === "Sign Up" ? (
@@ -22,9 +55,9 @@ const Auth = ({ onAuthSuccess }) => {
     );
 };
 
-// Define the prop types
 Auth.propTypes = {
-    onAuthSuccess: PropTypes.func.isRequired,  // Validate that onAuthSuccess is a function and required
+    onAuthSuccess: PropTypes.func.isRequired,  // Ensures that onAuthSuccess is passed as a function
 };
 
 export default Auth;
+

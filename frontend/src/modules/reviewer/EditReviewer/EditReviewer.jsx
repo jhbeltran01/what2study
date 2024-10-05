@@ -1,20 +1,19 @@
-/**********************************************************************************************************************
-  Subject: ITMC311: Integrative Programming 2
-  Mentor: Sir Kevin Vega
-  App Name: StudyHive
-  Company Name: BCDP
+/***********************************************************************************************************************************
+Subject: ITMC311 Integrative Programming 2
+Mentor: Sir Kevin G. Vega
+App Name: StudyHive
+Company Name: BCDP
 
-  Company Members:
-  Nicole B. Castillo
-  Marie Angeline Pelausa
-  Joy Milangela Dacuba
-  Harold Beltran
-  ____________________________________________________________________________________________________________________
+Company Members:
+Nicole B. Castillo
+Marie Angeline Pelausa
+Joy Milangela Dacuba
+Harold Beltran
+___________________________________________________________________________________________________________________________________
 
-  Ticket Information: Extension of [STUD-011] Reviewer Page -> View Reviewer Page
-  Purpose: Handles Modification of Reviewer
-
-***********************************************************************************************************************/
+Ticket Information: [STUD-010] Reviewer Page Extension -> Edit Reviewer Page
+Purpose: Allows users to edit and update a reviewer.
+***********************************************************************************************************************************/
 
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

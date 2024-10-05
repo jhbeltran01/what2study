@@ -4,7 +4,8 @@ import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
-import React from "react";
+import React from 'react';
+import { useState } from 'react';
 import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
 import Notes from '../modules/notes/Notes';
@@ -13,20 +14,27 @@ import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
 import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
- const AppRoutes = () => {
-   const [isAuthenticated, setIsAuthenticated] = useState(false); 
+const AppRoutes = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-   return isAuthenticated ? (
-     <Homepage />
-   ) : (
-     <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
-   );
- };
+  // Function to be triggered when authentication is successful
+  const handleAuthSuccess = () => {
+     console.log("Auth Success!"); // Add a console log to confirm it runs
+     setIsAuthenticated(true);
+  };
+
+  return isAuthenticated ? (
+    <Homepage />
+  ) : (
+    // Use the handleAuthSuccess function here
+    <Auth onAuthSuccess={handleAuthSuccess} />
+  );
+};
 
 const pagesData = [
   {
     path: routes.ROUTES.HOME_PAGE,
-    element: <Homepage />, 
+    //element: <Homepage />, 
     element: <AppRoutes />, 
     title: routes.HOME_PAGE,
     nested: [
