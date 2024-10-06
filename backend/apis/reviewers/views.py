@@ -1,5 +1,5 @@
 import json
-
+from rest_framework.permissions import AllowAny
 from rest_framework.mixins import (
     CreateModelMixin,
     ListModelMixin,
@@ -12,7 +12,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import ReviewerSerializer
 from common.models import Reviewer
 from .services import Document
-
+import requests
 
 class ReviewersAPIView(
     CreateModelMixin,
@@ -51,6 +51,8 @@ class ReviewersAPIView(
         return self.destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        api_key = request.headers.get('x-api-key')
+        print(api_key)
         document = Document(
             files=self.files,
             owner=self.request.user,
@@ -73,5 +75,4 @@ class ReviewersAPIView(
         return Reviewer.reviewers.get(slug=self.slug)
     
     def get_serializer_context(self):
-        # Add additional context if needed
         return {'owner': self.request.user}
