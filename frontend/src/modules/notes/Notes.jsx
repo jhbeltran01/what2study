@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+/*import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../sass/pages/_notes.scss';
 import searchIcon from '../../assets/search.png';
@@ -118,4 +118,4 @@ const Notes = () => {
   );
 };
 
-export default Notes;
+export default Notes;*/
