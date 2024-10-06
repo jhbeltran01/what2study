@@ -22,8 +22,8 @@ export const SidebarData = [
         icon: notesIcon,
     },
     {
-        title: "Classes",
-        path: "/classes",
+        title: "Subjects",
+        path: "/subjects",
         icon: classesIcon,
     },
     {

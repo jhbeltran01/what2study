@@ -4,6 +4,8 @@ import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
+import Notes from '@modules/notes/Notes';
+import CreateNotes from '@modules/notes/Create/CreateNotes'; 
 import React from "react";
 // import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
@@ -38,6 +40,16 @@ const pagesData = [
         path: routes.ROUTES.CREATE_REVIEWER, 
         element: <CreateReviewer />,
         title: routes.CREATE_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.NOTES, 
+        element: <Notes />, 
+        title: routes.NOTES, 
+      },
+      {
+        path: routes.ROUTES.CREATE_NOTE,
+        element: <CreateNotes />,
+        title: routes.CREATE_NOTE, 
       },
       {
         path: routes.ROUTES.STUDYPODS,
