@@ -14,24 +14,6 @@ ________________________________________________________________________________
 File Information: Auth.jsx
 Purpose: Handles Signup and Login Pages Autehntication
 ***********************************************************************************************************************************/
-
-/***********************************************************************************************************************************
-Subject: ITMC311 Integrative Programming 2
-Mentor: Sir Kevin G. Vega
-App Name: StudyHive
-Company Name: BCDP
-
-Company Members:
-Nicole B. Castillo
-Marie Angeline Pelausa
-Joy Milangela Dacuba
-Harold Beltran
-___________________________________________________________________________________________________________________________________
-
-File Information: Auth.jsx
-Purpose: Handles Signup and Login Pages Autehntication
-***********************************************************************************************************************************/
-
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Login from './Login';

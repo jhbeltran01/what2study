@@ -12,13 +12,9 @@ Harold Beltran
 ___________________________________________________________________________________________________________________________________
 
 Ticket Information: [STUD-001] Signup Page UI
-Purpose: Allows users to create StudyHive accounts by providing their emails, usernames and passwords.
+Purpose: Allows users to create StudyHive accounts by providing their emails, usernames, and passwords.
 ***********************************************************************************************************************************/
-
-import emailIcon from '@assets/email.png';
-import googleIcon from '@assets/google.png'; // Import the Google icon
-import passwordIcon from '@assets/password.png';
-import axios from 'axios';
+import googleIcon from '@assets/google.png';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -34,69 +30,49 @@ const Signup = ({ onToggle, onAuthSuccess }) => {
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [error, setError] = useState(null);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         // Reset errors
         setUsernameError('');
         setEmailError('');
         setPasswordError('');
-        
+
         let isValid = true;
 
-        // Validation checks for username, email, and password
+        // Validation checks
         if (!validateUsername(username)) {
-            setUsernameError(' must be 3-20 characters long and contain only letters and numbers.');
+            setUsernameError('Username must be 3-20 characters long and contain only letters and numbers.');
             isValid = false;
         }
-
         if (!validateEmail(email)) {
-            setEmailError(' must be in a valid format');
+            setEmailError('Email must be in a valid format.');
             isValid = false;
         }
-
         if (!validatePassword(password)) {
-            setPasswordError(' must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
+            setPasswordError('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
             isValid = false;
         }
 
         if (!isValid) return;
 
-        try {
-            // Attempt to send form data to backend via axios
-            await axios.post('http://localhost:8000/signup/', {
-                username,
-                email,
-                password
-            });
-            onAuthSuccess();
-            // Redirect to homepage on successful signup
-            window.location.href = '/homepage'; // Replace with your homepage route
-        } catch (error) {
-            setError('An error occurred while creating the account.');
-            console.error(error);
-        }
+        // Save signup data to localStorage
+        localStorage.setItem('user', JSON.stringify({
+            username,
+            email,
+            password,
+        }));
 
-        onAuthSuccess();
-    };
-
-    const handleGoogleSignup = () => {
-        // Handle Google signup logic
-        console.log('Google signup clicked');
+        alert('Signup successful!');
+        onAuthSuccess(); // Call the success handler
     };
 
     return (
         <div className="signup-container">
-            {/* Widget 1: Greeting Text */}
             <div className="greeting">Create an Account</div>
-
-            {/* Signup Form */}
             <form onSubmit={handleSubmit}>
                 <div className="inputs">
-                    
-                    {/* Widget 2: Username Input Field */}
                     <div className="input">
                         <label>
                             Username
@@ -111,15 +87,12 @@ const Signup = ({ onToggle, onAuthSuccess }) => {
                             />
                         </div>
                     </div>
-                    
-                    {/* Widget 3: Email Input Field */}
                     <div className="input">
                         <label>
                             Email
                             {emailError && <span className="error">{emailError}</span>}
                         </label>
                         <div className={`input-field ${emailError ? 'error-border' : ''}`}>
-                            <img src={emailIcon} alt="Email Icon" />
                             <input
                                 type="email"
                                 placeholder="Enter your email"
@@ -128,15 +101,12 @@ const Signup = ({ onToggle, onAuthSuccess }) => {
                             />
                         </div>
                     </div>
-
-                    {/* Widget 4: Password Input Field */}
                     <div className="input">
                         <label>
                             Password
                             {passwordError && <span className="error">{passwordError}</span>}
                         </label>
                         <div className={`input-field ${passwordError ? 'error-border' : ''}`}>
-                            <img src={passwordIcon} alt="Password Icon" />
                             <input
                                 type="password"
                                 placeholder="Create a password"
@@ -146,40 +116,28 @@ const Signup = ({ onToggle, onAuthSuccess }) => {
                         </div>
                     </div>
                 </div>
-
-                {/* Widget 5: Sign Up Button */}
                 <div className="submit-container">
                     <button type="submit" className="submit">
                         Sign Up
                     </button>
                 </div>
-
-                {/* Divider for separating Google signup */}
                 <hr className="divider" />
-
-                {/* Widget 6: Google Sign Up Button */}
-                <div className="signup-google" onClick={handleGoogleSignup}>
+                <div className="signup-google" onClick={() => console.log('Google signup clicked')}>
                     <img src={googleIcon} alt="Google Icon" className="google-icon" />
                     <span>Sign up with Google</span>
                 </div>
-
-                {/* Widget 7: Toggle Text (Link to Login) */}
                 <div className="toggle-text">
                     <span className="text">Already have an account? </span>
                     <span className="link" onClick={onToggle}>Login here</span>
                 </div>
             </form>
-
-            {/* Error Message Widget */}
-            {error && <p>{error}</p>}
         </div>
     );
 };
 
-// Define the prop types
 Signup.propTypes = {
-    onToggle: PropTypes.func.isRequired,  // Validate that onToggle is a function and required
-    onAuthSuccess: PropTypes.func.isRequired,  // Validate that onAuthSuccess is a function and required
+    onToggle: PropTypes.func.isRequired,
+    onAuthSuccess: PropTypes.func.isRequired,
 };
 
 export default Signup;
