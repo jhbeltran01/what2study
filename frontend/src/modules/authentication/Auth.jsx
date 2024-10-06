@@ -12,7 +12,7 @@ Harold Beltran
 ___________________________________________________________________________________________________________________________________
 
 File Information: Auth.jsx
-Purpose: Handles Signup and Login Pages Autehntication
+Purpose: Handles Signup and Login Pages Authentication
 ***********************************************************************************************************************************/
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';

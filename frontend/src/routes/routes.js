@@ -5,16 +5,15 @@ import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
 import React from 'react';
-//import { useState } from 'react';
+import { useState } from 'react';
 import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
-import Notes from '../modules/notes/Notes';
-import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
-
-//import Auth from "@modules/authentication/Auth";
+//import Notes from '../modules/notes/Notes';
+//import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
+import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
-/*const AppRoutes = () => {
+const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const handleAuthSuccess = () => {
      console.log("Auth Success!"); // Add a console log to confirm it runs
@@ -26,13 +25,13 @@ import * as routes from "./constants";
   ) : (
     <Auth onAuthSuccess={handleAuthSuccess} />
   );
-};*/
+};
 
 const pagesData = [
   {
     path: routes.ROUTES.HOME_PAGE,
-    element: <Homepage />, 
-    //element: <AppRoutes />, 
+    //element: <Homepage />, 
+    element: <AppRoutes />, 
     title: routes.HOME_PAGE,
     nested: [
       {
@@ -59,16 +58,6 @@ const pagesData = [
         path: routes.ROUTES.VIEW_REVIEWER, 
         element: <ViewReviewer />,
         title: routes.VIEW_REVIEWER, 
-      },
-      {
-        path: routes.ROUTES.NOTES, 
-        element: <Notes />,
-        title: routes.NOTES, 
-      },
-      {
-        path: routes.ROUTES.CREATE_NOTES, 
-        element: <CreateNotes />,
-        title: routes.CREATE_NOTES, 
       },
       {
         path: routes.ROUTES.STUDYPODS,

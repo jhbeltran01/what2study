@@ -17,7 +17,7 @@ Purpose: Allows users to log into their StudyHive accounts by providing their us
 import googleIcon from '@assets/google.png';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 
 const validateUsernameOrEmail = (usernameOrEmail) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail) || usernameOrEmail.trim().length > 0;
 const validatePassword = (password) => password.trim().length > 0;
@@ -28,23 +28,25 @@ const Login = ({ onToggle, onAuthSuccess }) => {
     const [usernameOrEmailError, setUsernameOrEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        // Reset errors
         setUsernameOrEmailError('');
         setPasswordError('');
         setError(null);
 
         let isValid = true;
 
+        // Validation checks
         if (!validateUsernameOrEmail(usernameOrEmail)) {
-            setUsernameOrEmailError('Invalid email format or empty username.');
+            setUsernameOrEmailError(' cannot be empty.');
             isValid = false;
         }
         if (!validatePassword(password)) {
-            setPasswordError('Password cannot be empty.');
+            setPasswordError(' cannot be empty.');
             isValid = false;
         }
 
@@ -54,10 +56,10 @@ const Login = ({ onToggle, onAuthSuccess }) => {
 
         // Check if user exists in local storage
         if (savedUser && (savedUser.username === usernameOrEmail || savedUser.email === usernameOrEmail) && savedUser.password === password) {
-            onAuthSuccess();
-            navigate('/');
+            onAuthSuccess(); // Call the success handler
+            //navigate('/homepage'); // Navigate to the homepage upon successful login
         } else {
-            setError('Invalid credentials.');
+            setError('Invalid credentials.'); // Display error if credentials are invalid
         }
     };
 
@@ -115,7 +117,7 @@ const Login = ({ onToggle, onAuthSuccess }) => {
                     <span className="link" onClick={onToggle}>Sign Up here</span>
                 </div>
             </form>
-            {error && <p>{error}</p>}
+            {error && <p className="error-message">{error}</p>} {/* Display error message if credentials are invalid */}
         </div>
     );
 };
