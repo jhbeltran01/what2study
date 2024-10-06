@@ -16,16 +16,15 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 import os
 
-# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-# from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-# from dj_rest_auth.registration.views import SocialLoginView
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import RedirectView
 
 from .services import ResponseWithCookies
 from ..studypods.services import decrypt_data
-
 
 class LoginAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -130,14 +129,14 @@ class AuthenticatedUserDetail(APIView):
         data = UserInfoSerializer(request.user).data
         return Response(data, status=status.HTTP_200_OK)
         
-# class GoogleLoginView(SocialLoginView):
-#     adapter_class = GoogleOAuth2Adapter
-#     callback_url = GOOGLE_REDIRECT_URL
-#     client_class = OAuth2Client
+class GoogleLoginView(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = "http://127.0.0.1:8000/accounts/google/login/callback/"
+    client_class = OAuth2Client
 
-# class UserRedirectView(LoginRequiredMixin, RedirectView):
-#     permanent = False
+class UserRedirectView(LoginRequiredMixin, RedirectView):
+    permanent = False
 
-#     def get_redirect_url(self):
-#         return "redirect-url"
+    def get_redirect_url(self):
+        return "redirect-url"
 

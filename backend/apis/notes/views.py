@@ -10,8 +10,6 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from .serializers import NotesSerializer
 from common.models import Note
-# from reviewers.services import Document
-
 
 class NotesAPIView(
     CreateModelMixin,
