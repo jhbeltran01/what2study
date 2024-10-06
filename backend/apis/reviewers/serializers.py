@@ -16,6 +16,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context['owner']
+        print(self.owner)
 
     def create(self, validated_data):
         validated_data.pop('files', None)
@@ -25,6 +26,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
         slug = slugify('{}-{}'.format(value, self.owner.id))
         reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
 
-        # if reviewer_exists:
-        #     raise serializers.ValidationError("Reviewer exists.")
+        if reviewer_exists:
+            raise serializers.ValidationError("Reviewer exists.")
         return value
