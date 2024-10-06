@@ -43,15 +43,15 @@ const Signup = ({ onToggle, onAuthSuccess }) => {
 
         // Validation checks
         if (!validateUsername(username)) {
-            setUsernameError('Username must be 3-20 characters long and contain only letters and numbers.');
+            setUsernameError('Oh no, username must be 3-20 characters long and contain only letters and numbers.');
             isValid = false;
         }
         if (!validateEmail(email)) {
-            setEmailError('Email must be in a valid format.');
+            setEmailError('Oh no, email must be in a valid format.');
             isValid = false;
         }
         if (!validatePassword(password)) {
-            setPasswordError('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
+            setPasswordError('Oh no, password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
             isValid = false;
         }
 
