@@ -1,12 +1,6 @@
 /* _authentication.scss */
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* Ensure full height */
-}
-
-  .auth-page {
+.auth-page {
     font-family: 'Josefin Sans', sans-serif;
     background: url('@assets/auth.png') no-repeat center center; /* Set background image for the whole page */
     background-size: cover; /* Cover the entire viewport with the image */
@@ -16,19 +10,13 @@ html, body {
     align-items: center; /* Center the container vertically */
     height: 100vh; /* Full viewport height */
     width: 100vw;  /* Full viewport width */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
   }
-
-  .auth-page .container,
-  .auth-page .header {
-    margin: 0;
-    padding: 0;
-}
   
   .auth-page .container {
-    width: 500px;
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
     padding: 20px;
+    background: white; /* Background for the container */
     border-radius: 8px; /* Rounded corners */
   }
 
@@ -58,7 +46,7 @@ html, body {
 }
 
 .container {
-    margin: 0 auto;
+    margin: auto;
     width: 400px; /* Set container width to 400px */
     background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for better readability */
     border-radius: 25px;
@@ -68,6 +56,8 @@ html, body {
     padding: 20px; /* Add padding inside the container to ensure content is not touching edges */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
+
+
 
 .text {
     color: #000000;
