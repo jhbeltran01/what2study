@@ -72,8 +72,9 @@ class StudyPod(SlugField):
         return self.slug
 
     def save(self, **kwargs):
-        self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
-        self.access_code = generate_access_code()
+        if self.slug is None:
+            self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+            self.access_code = generate_access_code()
         super().save(**kwargs)
 
 

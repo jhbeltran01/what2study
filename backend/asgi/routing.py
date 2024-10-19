@@ -4,5 +4,5 @@ from asgi.studypod.urls import urlpatterns as studypod_urls
 
 
 websocket_urlpatterns = [
-    path("study-pod/", URLRouter(studypod_urls))
+    path("ws/study-pod/", URLRouter(studypod_urls))
 ]
