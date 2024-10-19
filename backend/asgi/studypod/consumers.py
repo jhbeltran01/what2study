@@ -5,6 +5,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 from common.models import StudyPod
 
+INCREMENT = 'I'
+DECREMENT = 'D'
+
+connected_users = 0
+moderator = None
+
 
 class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -18,6 +24,7 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
             self.room_name,
             self.channel_name
         )
+        self.update_number_of_connected_users(DECREMENT)
 
     async def initiate_connect(self):
         self.study_pod_name = self.scope['url_route']['kwargs']['study_pod_slug']
@@ -50,14 +57,39 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
             }
         )
 
+    def update_number_of_connected_users(self, action=INCREMENT):
+        global connected_users
+        connected_users = connected_users+1 if action == INCREMENT else connected_users-1
+        connected_users = connected_users
+        self.update_moderator()
+
+    def update_moderator(self):
+        global connected_users
+        # the first connected user is the moderator
+        if connected_users == 1:
+            self.set_moderator(self.scope['user'])
+
+        # set the moderator to None if all the user disconnect on the room
+        if connected_users == 0:
+            self.set_moderator(None)
+
+    @staticmethod
+    def set_moderator(user):
+        global moderator
+        moderator = user
+
 
 class StudyPodConsumer(StudyPodBaseConsumer):
     async def connect(self):
         self.set_room_name(root_name='study_pod')
         await self.initiate_connect()
+        self.update_number_of_connected_users(INCREMENT)
 
-    def receive(self, text_data=None, bytes_data=None):
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+    async def receive(self, text_data=None, bytes_data=None):
+        global connected_users, moderator
+        data = json.loads(text_data)
+        await self.channel_group_send(data, 'send_message')
 
-        self.send(text_data=json.dumps({"message": message}))
+
+    async def send_message(self, event):
+        await self.send(text_data=json.dumps(event['data']))
