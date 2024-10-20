@@ -18,8 +18,8 @@ const Home = () => {
   };
 
   return (
-    <section className="homepage-section p-4 flex flex-col">
-      <div className="header mb-4 flex justify-between items-center">
+    <section className="homepage-section p-4">
+      <div className="mb-4 flex justify-between items-center">
         <div className="header-buttons">
           <button
             onClick={() => handleClick('public-reviewers')}
@@ -41,23 +41,18 @@ const Home = () => {
           </button>
         </div>
         
-        <form className="search-container" onSubmit={handleSearchSubmit}>
+        <form className="block relative" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search..."
-            className="search-bar"
+            className="search-bar w-[100%]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="search-button">
-            <img src={searchIcon} alt="Search" className="search-icon" />
+          <button type="submit" className="pos-item-1">
+            <img className="icon-2" src={searchIcon} alt="Search" />
           </button>
         </form>
-
-        <div className="content">
-
-
-        </div>
       </div>
     </section>
   );
