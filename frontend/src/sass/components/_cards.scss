@@ -1,0 +1,25 @@
+@use '../abstract/variables' as var;
+@use '../abstract/breakpoints' as br;
+
+.card-1 {
+  background-color: var.$white-1;
+  border-radius: 20px;
+  padding: 1em;
+  max-width: 517px;
+  width: 90%;
+  font-family: var.$josefin;
+  margin: 2rem 0;
+
+  @include br.md {
+    padding: 4em;
+  }
+
+  &__title {
+    font: {
+      family: var.$josefin;
+      weight: 600;
+      size: var.$fs-1;
+    }
+    text-align: center;
+  }
+}

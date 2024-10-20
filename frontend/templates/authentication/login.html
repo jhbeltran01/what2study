@@ -1,0 +1,73 @@
+{% extends '../layouts/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block main-content %}
+  <div class="login-page grid place-center"> 
+    <div class="card-1">
+      <h1 class="card-1__title mb-[3rem]">Welcome Back</h1>
+
+      <form method="post" action="">
+        {% csrf_token %}
+        
+        <div class="mb-[2rem]">
+          {{ form.non_field_errors }}
+        </div>
+
+        <div class="mb-[2rem]">
+          <label for="username">Username</label> <br />
+          <input 
+            class="input-1 mb-[1rem]" 
+            type="text" 
+            name="username" 
+            id="username" 
+            value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+          />
+          {% if form.username.errors %}
+            {% for error in form.username.errors  %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="mb-[0.5rem]">
+          <label for="password">Password</label> <br />
+          <input 
+            class="input-1" 
+            type="password" 
+            name="password" 
+            id="password" 
+            value="{% if form.password.value %}{{ form.password.value }}{% endif %}"
+          />
+          {{form.password1.errors}}
+          {% if form.password1.errors %}
+            {% for error in form.password1.errors  %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <p class="text-right mb-[1.5rem]"><a href="">Forgot Password?</a></p>
+
+        <button class="btn-1 mb-[1rem]" type="submit">Log in</button>
+
+        <hr class="mb-[2rem]" />
+
+        
+        <a href="{% provider_login_url 'google' %}?next=/app/">
+          <button class="btn-2 flex items-center justify-between mb-[2rem]">
+            <img class="icon-1" src="{% static 'google.png' %}" alt="google icon">
+            <div>Log in with Google</div>
+            <div></div>
+          </button>
+        </a>
+        
+        <p class="text-center">
+          <span class="text-1">Don't have an account?</span> 
+          Sign up <a class="underline" href="{% url 'custom_auth:create-account' %}">here</a>.</p>
+      </form>
+    </div>
+  </div>
+</body>
+
+{% endblock main-content %}

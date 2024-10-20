@@ -1,0 +1,9 @@
+@use '../abstract/variables' as var;
+
+.input-1 {
+  height: 43px;
+  display: block;
+  width: 100%;
+  border: 1px solid var.$black-1;
+  padding: 0.5em 1em;
+}

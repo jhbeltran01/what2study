@@ -1,0 +1,15 @@
+@use '../abstract/variables' as var;
+
+.login-page {
+	background-image: url('../assets/auth.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-height: 100vh;
+	min-width: 100vw;
+	overflow-x: hidden;
+}
+
+.text-1 {
+	color: var.$black-3;
+}
