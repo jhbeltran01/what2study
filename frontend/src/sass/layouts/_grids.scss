@@ -1,0 +1,5 @@
+.grid-responsive {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: minmax(max-content, max-content);
+  gap: 10px;
+}

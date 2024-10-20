@@ -41,6 +41,7 @@ class Reviewer(SlugField):
         default=list,
         editable=True,
     )
+    description = models.TextField(default='')
 
     reviewers = models.Manager()
 

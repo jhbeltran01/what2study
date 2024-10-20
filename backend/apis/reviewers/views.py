@@ -51,8 +51,6 @@ class ReviewersAPIView(
         return self.destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        api_key = request.headers.get('x-api-key')
-        print(api_key)
         document = Document(
             files=self.files,
             owner=self.request.user,

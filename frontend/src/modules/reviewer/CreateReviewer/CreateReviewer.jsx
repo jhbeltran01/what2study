@@ -2,19 +2,20 @@ import searchIcon from '@assets/search.png';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../../../sass/pages/_createreviewer.scss';
+import axios from 'axios';
+import { apiRootURl } from '../../../globals';
 // import axios from 'axios';
+
+const initialReviewer = {
+  name: '',
+  description: '',
+  files: []
+}
 
 const CreateReviewer = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [reviewerType, setReviewerType] = useState('Enumeration'); // Default type
-  const [numQuestions, setNumQuestions] = useState(10); // Number of questions toggle
-  const [description, setDescription] = useState('');
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false); // Dropdown visibility state
-  const [file, setFile] = useState(null);
+  const [reviewer, setReviewer] = useState(initialReviewer);
   const navigate = useNavigate(); // Initialize useNavigate
-
-  // Question types
-  const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type'];
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
@@ -31,67 +32,52 @@ const CreateReviewer = () => {
   };
 
 
-  const handleFileUpload = (e) => {
-    setFile(e.target.files[0]);
+  const handleFileUpload = (event) => {
+    setReviewer({
+      ...reviewer, 
+      files: event.target.files
+    });
   };
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-  const handleTypeClick = () => {
-    setShowTypeDropdown(!showTypeDropdown); // Toggle the visibility of the dropdown
+    setReviewer({
+      ...reviewer, 
+      [name]: value
+    });
   };
 
-  const handleTypeSelection = (type) => {
-    setReviewerType(type); // Set the selected type
-    setShowTypeDropdown(false); // Hide the dropdown after selection
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    // Prepare form data
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
     const formData = new FormData();
-    formData.append('reviewerName', e.target.reviewerName.value);
-    formData.append('numQuestions', numQuestions);
-    formData.append('reviewerType', reviewerType); // Assuming this maps to `available_question_types`
-    formData.append('description', description);
-    if (file) formData.append('file', file);
-  
-    // Send to backend
-    try {
-      const response = await fetch('http://127.0.0.1:8000/apis/reviewers/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'x-api-key': '175229071824-b6m83cc23849t83pfc3i94of7i16sshj.apps.googleusercontent.com', // Some APIs expect API keys in a custom header
-        },
-      });
-  
-      const data = await response.json();
-      console.log(data)
-      if (response.ok) {
-        alert('Reviewer created successfully!');
-      } else {
-        alert('Error creating reviewer: ' + data.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    
+    formData.append('name', reviewer.name);
+    formData.append('description', reviewer.description);
+
+    Array.from(reviewer.files).forEach((file, index) => {
+      formData.append(`files[${index}]`, file); // Append files correctly
+    });
+
+    axios
+      .post(
+        `${apiRootURl}/reviewers/`, 
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // This header is optional; Axios handles it automatically
+          }
+        }
+      )
+      .then(response => {
+        console.log(response.data)
+        setReviewer(initialReviewer)
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
   };
-  // class App extends React.Component(
-  //   state = { details: [], }
-  //   componentDidMont() {
-  //     let data;
-  //     axios.get('http://localhost:8000')
-  //     .then (res => {
-  //       data = res.data;
-  //       this.setsState({
-  //         details:data
-  //       });
-  //     })
-  //     .catch(err => { })
-  //   }
-  // )
-  
 
   return (
       <section className="create-section p-4 flex flex-col">
@@ -127,49 +113,21 @@ const CreateReviewer = () => {
               id="reviewerName"
               placeholder="Enter reviewer name"
               className="input-field"
+              name='name'
+              value={reviewer.name}
+              onChange={handleChange}
             />
           </div>
-
-          <div className="form-group num-questions-group">
-            <label htmlFor="numQuestions">No. of Questions:</label>
-            <div className="input-toggle-wrapper">
-              <input
-                type="number"
-                id="numQuestions"
-                value={numQuestions}
-                onChange={(e) => setNumQuestions(e.target.value)}
-                className="input-field"
-              />
-
-            </div>
-          </div>
-
-            <div className="form-group">
-              <label>Type of Question:</label>
-              <div className="dropdown-wrapper">
-                <button type="button" className="dropdown-toggle-button" onClick={handleTypeClick}>
-                  {reviewerType} &#x25BC; {/* Down arrow symbol */}
-                </button>
-                {showTypeDropdown && (
-                  <ul className="dropdown-list">
-                    {questionTypes.map((type) => (
-                      <li
-                        key={type}
-                        className="dropdown-item"
-                        onClick={() => handleTypeSelection(type)}
-                      >
-                        {type}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
 
             <div className="form-group">
               <label>Upload Content:</label>
               <div className="upload-field">
-                <input type="file" id="uploadFile" className="input-field" onChange={handleFileUpload} />
+                <input 
+                  type="file" 
+                  id="uploadFile" 
+                  className="input-field"
+                  onChange={handleFileUpload} 
+                />
                 <label htmlFor="uploadFile" className="upload-link">
                 </label>
               </div>
@@ -182,8 +140,9 @@ const CreateReviewer = () => {
                 id="description"
                 placeholder="Enter description"
                 className="input-field"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={reviewer.description}
+                name='description'
+                onChange={handleChange}
               />
             </div>
 

@@ -3,20 +3,25 @@ from common.models import Reviewer
 
 from django.utils.text import slugify
 
+from apis.authentication.serializers import UserInfoSerializer
+
 
 class ReviewerSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField(read_only=True)
+    
     class Meta:
         model = Reviewer
         fields = [
             'name',
             'owner',
             'slug',
+            'created_at',
+            'updated_at',
         ]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context['owner']
-        print(self.owner)
 
     def create(self, validated_data):
         validated_data.pop('files', None)
@@ -29,3 +34,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
         if reviewer_exists:
             raise serializers.ValidationError("Reviewer exists.")
         return value
+    
+    def get_owner(self, instance):
+        return UserInfoSerializer(instance.owner).data

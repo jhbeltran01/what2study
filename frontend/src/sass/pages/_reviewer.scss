@@ -19,7 +19,6 @@ html, body {
   font-weight: bold;
   color: #4a4a4a;
   margin-right: auto;
-  padding: 2rem 2rem;
 }
 
 .search-container {
@@ -35,7 +34,6 @@ html, body {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 999px;
-  width: 100%;
   box-sizing: border-box;
   outline: none;
   padding-right: 3rem;
@@ -68,13 +66,10 @@ html, body {
 }
 
 .reviewer-content {
-  flex: 1; /* Ensure this section takes up remaining space */
-  padding: 1rem;
+  padding: 1em;
   background-color: #f9f9f9;
   border-radius: 8px;
   overflow-y: auto; /* Enable vertical scrolling if content overflows */
-  max-width: 80%; /* Set maximum width to make it smaller */
-  margin: 0 auto; /* Center the content horizontally */
 }
 
 .reviewer-entry {
