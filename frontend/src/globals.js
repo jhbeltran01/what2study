@@ -1,4 +1,4 @@
-const rootPath = ''
+const rootPath = 'app/'
 const apiRootURl = '/apis'
 const conferenceCallServer = 'https://127.0.0.1:8081'
 

@@ -8,8 +8,8 @@ from common.models import StudyPod
 INCREMENT = 'I'
 DECREMENT = 'D'
 
-connected_users = 0
-moderator = None
+connected_users = {}
+moderator = {}
 
 
 class StudyPodBaseConsumer(AsyncWebsocketConsumer):

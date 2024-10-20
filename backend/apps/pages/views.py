@@ -6,10 +6,16 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 
+from apps.custom_auth.services import redirect_to_app
+
 
 class LandingPageView(TemplateView):
-    # template_name = 'pages/landing-page.html'
-    template_name = 'pages/home.html'
+    template_name = 'pages/landing-page.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect_to_app()
+        return super().dispatch(request, *args, **kwargs)
 
 
 def logout_view(request):
@@ -19,11 +25,6 @@ def logout_view(request):
 
 def home(request):
     return render(request, "pages/home.html")
-
-
-def logout_view(request):
-    logout(request)
-    return redirect("/")
 
 
 class DashboardPageView(TemplateView):
