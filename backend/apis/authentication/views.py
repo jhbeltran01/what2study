@@ -119,7 +119,7 @@ class LoginUsingUserID(APIView):
     permission_classes = []
     
     def post(self, request, *args, **kwargs):
-        user_id = decrypt_data(request.data.get('data'))
+        user_id = decrypt_data(request.GET.get('data'))
         response = ResponseWithCookies(user_id)
         return response.get()
 
