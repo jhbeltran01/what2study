@@ -1,4 +1,5 @@
 import random
+from unicodedata import category
 
 from apis.questions.serializers import (
     IdentificationQuestionSerializer,
@@ -61,6 +62,9 @@ class IdentificationQuestion:
         return IdentificationQuestionSerializer(
             self._get_definitions(),
             many=True,
+            context={
+                'category': Reviewer.QuestionType.IDENTIFICATION.label
+            },
         ).data
 
     def _get_definitions(self):
@@ -74,7 +78,10 @@ class MultipleChoiceQuestion(IdentificationQuestion):
     def generate(self):
         return MultipleChoiceQuestionSerializer(
             self._get_definitions(),
-            many=True
+            many=True,
+            context={
+                'category': Reviewer.QuestionType.MULTIPLE_CHOICE.label
+            },
         ).data
 
 
@@ -88,6 +95,9 @@ class EnumerationQuestion:
         return EnumerationQuestionSerializer(
             self._get_titles(),
             many=True,
+            context={
+                'category': Reviewer.QuestionType.ENUMERATION.label
+            },
         ).data
 
     def _set_enumeration_titles(self):
