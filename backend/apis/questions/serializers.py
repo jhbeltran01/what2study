@@ -24,6 +24,8 @@ class GenerateQuestionParamsSerializer(serializers.Serializer):
             slug=value
         ).first()
 
+        if self.reviewer_instance is None:
+            raise serializers.ValidationError("Reviewer doesn't exists.")
         return value
 
     def validate_number_of_questions(self, value):

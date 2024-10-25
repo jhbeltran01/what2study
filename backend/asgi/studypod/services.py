@@ -1,11 +1,50 @@
 from channels.db import database_sync_to_async
 
+from apis.authentication.serializers import UserInfoSerializer
 from apis.questions.services import Question
+from apis.reviewers.serializers import ReviewerSerializer
 from common.models import Reviewer
 
-@database_sync_to_async
-def get_reviewer(slug):
-    return Reviewer.reviewers.filter(slug=slug).first()
+
+def get_error_data(data, message):
+    return {
+        **data,
+        'message': {
+            "error": message
+        }
+    }
+
+
+class GetReviewer:
+    def __init__(self, slug, data, user, moderator):
+        self.user = user
+        self.moderator = moderator
+        self.data = data
+        self.slug = slug
+        self.reviewer = None
+
+    @database_sync_to_async
+    def get(self):
+        if self.user.id != self.moderator.id:
+            return get_error_data(
+                self.data,
+                "The moderator is the only one that can generate a question."
+            )
+        self.reviewer = Reviewer.reviewers.filter(slug=self.slug).first()
+
+        if self.reviewer is None:
+            return get_error_data(
+                self.data,
+                "Reviewer does not exists."
+            )
+
+        return {
+            **self.data,
+            "reviewer": ReviewerSerializer(self.reviewer).data
+        }
+
+    def get_obj(self):
+        return self.reviewer
 
 
 class GenerateQuestion:
@@ -26,27 +65,45 @@ class GenerateQuestion:
     @database_sync_to_async
     def generate(self):
         if self.reviewer is None:
-            return self._get_error_data("Please select a reviewer.")
+            return get_error_data(self.data, "Please select a reviewer.")
 
         if self.user.id != self.moderator.id:
-            return self._get_error_data("The moderator is the only one that can generate a question.")
+            return get_error_data(self.data, "The moderator is the only one that can generate a question.")
 
         if self.number_of_questions < 1:
-            return self._get_error_data("Number of questions must be atleast 1.")
+            return get_error_data(self.data, "Number of questions must be atleast 1.")
 
         question = Question(
             reviewer_obj=self.reviewer,
             number_of_questions=self.number_of_questions
         )
+
         return {
             **self.data,
             "questions": question.generate()
         }
 
-    def _get_error_data(self, message):
-        return {
-            **self.data,
-            'message': {
-                "error": message
-            }
+
+class Answer:
+    def __init__(self, user, answers, user_answers, questions, data, room_name):
+        self.user = user
+        self.answers = answers
+        self.user_answers = user_answers
+        self.questions = questions
+        self.room_name = room_name
+        self.data = data
+
+    def submit(self):
+        if self.user_answers is None:
+            return get_error_data(self.data, "Please generate a question first.")
+
+        self._check_answer()
+
+        self.user_answers[str(self.user.id)] = {
+            "answers": self.answers,
+            "user": UserInfoSerializer(self.user).data
         }
+
+    def _check_answer(self):
+        for index in range(len(self.answers)):
+            self.answers[index]['is_correct'] = True
