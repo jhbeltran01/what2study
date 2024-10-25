@@ -20,7 +20,6 @@ const CreateReviewer = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     console.log('Search term:', searchTerm);
-    // Handle the search logic here
   };
 
   const handleCreateClick = () => {
@@ -57,7 +56,7 @@ const CreateReviewer = () => {
     formData.append('description', reviewer.description);
 
     Array.from(reviewer.files).forEach((file, index) => {
-      formData.append(`files[${index}]`, file); // Append files correctly
+      formData.append(`files[${index}]`, file);
     });
 
     axios
@@ -66,7 +65,7 @@ const CreateReviewer = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data', // This header is optional; Axios handles it automatically
+            'Content-Type': 'multipart/form-data', 
           }
         }
       )

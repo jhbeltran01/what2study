@@ -39,33 +39,48 @@ class GenerateQuestionParamsSerializer(serializers.Serializer):
 class IdentificationQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answer = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Definition
         fields = [
             'question',
-            'answer'
+            'answer',
+            'category',
         ]
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = self.context.pop('category', None)
 
     def get_question(self, instance):
         return instance.text
 
     def get_answer(self, instance):
         return instance.answer
+    
+    def get_category(self, instance):
+        return self.category
 
 
 class EnumerationQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answers = serializers.SerializerMethodField(read_only=True)
     is_in_order = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Title
         fields = [
             'question',
             'answers',
-            'is_in_order'
+            'is_in_order',
+            'category',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = self.context.pop('category', None)
 
     def get_question(self, instance):
         return instance.text
@@ -76,11 +91,15 @@ class EnumerationQuestionSerializer(serializers.ModelSerializer):
     def get_is_in_order(self, instance):
         return instance.enum.all().first().is_in_order
 
+    def get_category(self, instance):
+        return self.category
+
 
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answer = serializers.SerializerMethodField(read_only=True)
     choices = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Definition
@@ -88,7 +107,12 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
             'question',
             'answer',
             'choices',
+            'category',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = self.context.pop('category', None)
 
     def get_question(self, instance):
         return instance.text
@@ -99,3 +123,6 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     def get_choices(self, instance):
         titles = instance.reviewer.titles.exclude(type=Title.Type.ENUMERATION).order_by('?')[:3]
         return [title.text for title in titles]
+
+    def get_category(self, instance):
+        return self.category

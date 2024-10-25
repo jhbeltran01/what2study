@@ -26,9 +26,9 @@ class SlugField(Timestamp):
 
 class Reviewer(SlugField):
     class QuestionType(models.TextChoices):
-        IDENTIFICATION = ('I', 'Identification')
-        ENUMERATION = ('E', 'Enumeration')
-        MULTIPLE_CHOICE = ('M', 'Multiple_Choice')
+        IDENTIFICATION = ('I', 'IDENTIFICATION')
+        ENUMERATION = ('E', 'ENUMERATION')
+        MULTIPLE_CHOICE = ('M', 'MULTIPLE_CHOICE')
 
     owner = models.ForeignKey(
         User,

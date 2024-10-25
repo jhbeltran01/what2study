@@ -14,6 +14,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
         fields = [
             'name',
             'owner',
+            'description',
             'slug',
             'created_at',
             'updated_at',

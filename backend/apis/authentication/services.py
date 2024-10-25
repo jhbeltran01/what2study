@@ -110,6 +110,7 @@ class JWTTokens:
 
     def get_request(self):
         self.request.META['HTTP_AUTHORIZATION'] = 'Bearer {}'.format(self.access_token)
+        return self.request
 
     @property
     def user(self):
