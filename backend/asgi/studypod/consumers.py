@@ -72,16 +72,16 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
         )
 
     def update_number_of_connected_users(self, action=INCREMENT):
-        local_connected_users = self.connected_users.get(self.room_name, 0)
-        if local_connected_users == 0:
+        room_connected_users = self.connected_users.get(self.room_name, 0)
+        if room_connected_users == 0:
             self.connected_users[self.room_name] = 1
             self.update_moderator()
             return
 
-        if local_connected_users == 0:
+        if room_connected_users == 0:
             del self.connected_users[self.room_name]
 
-        if local_connected_users > 0:
+        if room_connected_users > 0:
             self.connected_users[self.room_name] = self.connected_users[self.room_name] + 1 if action == INCREMENT else self.connected_users[self.room_name] - 1
 
     def update_moderator(self):
