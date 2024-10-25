@@ -22,7 +22,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.owner = self.context['owner']
+        self.owner = self.context.pop('owner', None)
 
     def create(self, validated_data):
         validated_data.pop('files', None)
