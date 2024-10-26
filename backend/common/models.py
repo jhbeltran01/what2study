@@ -59,7 +59,8 @@ class StudyPod(SlugField):
     size = models.IntegerField(default=10)
     access_code = models.TextField(
         max_length=100,
-        editable=False
+        editable=False,
+        unique=True,
     )
     # PKs of the users that has the access code
     members = models.JSONField(
