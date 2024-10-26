@@ -11,10 +11,6 @@ from rest_framework import status
 from .models import User
 from .serializers import UserInfoSerializer
 
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import padding
-import os
 
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
@@ -119,7 +115,7 @@ class LoginUsingUserID(APIView):
     permission_classes = []
     
     def post(self, request, *args, **kwargs):
-        user_id = decrypt_data(request.GET.get('data'))
+        user_id = decrypt_data(request.data.get('data'))
         response = ResponseWithCookies(user_id)
         return response.get()
 

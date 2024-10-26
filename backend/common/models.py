@@ -63,8 +63,8 @@ class StudyPod(SlugField):
     )
     # PKs of the users that has the access code
     members = models.JSONField(
-        default=dict,
-        editable=False
+        default=list,
+        editable=False,
     )
 
     groups = models.Manager()
@@ -73,9 +73,26 @@ class StudyPod(SlugField):
         return self.slug
 
     def save(self, **kwargs):
-        if self.slug is None:
-            self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+        if self.slug == '':
             self.access_code = generate_access_code()
+
+        self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+        super().save(**kwargs)
+
+
+class StudypodReviewer(SlugField):
+    studypod = models.ForeignKey(
+        StudyPod,
+        on_delete=models.CASCADE
+    )
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE
+    )
+
+    def save(self, **kwargs):
+        if self.slug is None:
+            self.slug = slugify('{}-{}'.format(self.studypod.slug, self.reviewer.slug))
         super().save(**kwargs)
 
 
