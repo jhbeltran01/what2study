@@ -18,6 +18,7 @@ moderators = {}
 user_answers = {}
 last_action = {}
 
+
 class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
