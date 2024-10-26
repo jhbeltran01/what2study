@@ -28,7 +28,7 @@ class GetReviewer:
         if self.user.id != self.moderator.id:
             return get_error_data(
                 self.data,
-                "The moderator is the only one that can generate a question."
+                "The moderator is the only one that can select a reviewer."
             )
         self.reviewer = Reviewer.reviewers.filter(slug=self.slug).first()
 
