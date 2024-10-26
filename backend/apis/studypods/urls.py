@@ -10,8 +10,11 @@ urlpatterns = [
                 name='studypod'),
     path('<slug:slug>/',
             views.StudyPodAPIView.as_view(),
-                name='studypod-slug'),
+                name='slug'),
+    path('join/room/',
+            views.JoinStudypodAPIView.as_view(),
+                name='join'),
     path('get-encrypted-id/',
-            views.StudyPodGenerateEncryptedUserID.as_view(),
+            views.StudyPodGenerateEncryptedUserIDAPIView.as_view(),
                 name='studypod-encrypted-id'),
 ]

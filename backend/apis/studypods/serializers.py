@@ -38,3 +38,26 @@ class StudyPodSerializer(serializers.ModelSerializer):
 
     def get_owner(self, instance):
         return UserInfoSerializer(self.owner).data
+
+
+class StudypodAccessCodeSerializer(serializers.Serializer):
+    access_code = serializers.CharField(max_length=12)
+    studypod = serializers.SerializerMethodField(read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.studypod = None
+
+    def validate_access_code(self, value):
+        self.studypod = StudyPod.groups.filter(access_code=value).first()
+
+        if self.studypod is None:
+            raise serializers.ValidationError('Invalid access code.')
+
+        if len(self.studypod.members) >= self.studypod.size:
+            raise serializers.ValidationError('Maximum number of members reached.')
+
+        return value
+
+    def get_studypod(self, instance):
+        return self.studypod

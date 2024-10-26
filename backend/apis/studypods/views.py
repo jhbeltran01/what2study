@@ -1,5 +1,6 @@
 import json
 
+from django.db.migrations.serializer import Serializer
 from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
@@ -14,7 +15,7 @@ from rest_framework import status
 from rest_framework import exceptions
 
 
-from apis.studypods.serializers import StudyPodSerializer
+from apis.studypods.serializers import StudyPodSerializer, StudypodAccessCodeSerializer
 from apis.studypods.services import encrypt_text, decrypt_data
 
 from common.models import StudyPod
@@ -55,8 +56,11 @@ class StudyPodAPIView(
     def delete(self, request, *args, **kwargs):
         if self.slug is None:
             raise exceptions.MethodNotAllowed('DELETE')
+
         super().destroy(request, *args, **kwargs)
-        return Response(data={'detail': 'Studypod has been successfully deleted.'}, status=status.HTTP_200_OK)
+
+        payload = {'detail': 'Studypod has been successfully deleted.'}
+        return Response(payload, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         return StudyPod.groups.filter(owner=self.request.user)
@@ -68,7 +72,30 @@ class StudyPodAPIView(
         serializer.save(owner=self.request.user)
 
 
-class StudyPodGenerateEncryptedUserID(APIView):
+class StudyPodGenerateEncryptedUserIDAPIView(APIView):
     def post(self, request, *args, **kwargs):
         payload = {'data': str(encrypt_text(str(request.user.id)))}
         return Response(payload, status=status.HTTP_200_OK)
+
+
+class JoinStudypodAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = StudypodAccessCodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self._add_user_to_studypod(serializer.studypod)
+
+        payload = StudyPodSerializer(serializer.studypod).data
+        return Response(payload, status=status.HTTP_200_OK)
+
+    def _add_user_to_studypod(self, studypod):
+        user_id = self.request.user.id
+        try:
+            studypod.members.index(user_id)
+            user_is_in_the_studypod = True
+        except ValueError:
+            user_is_in_the_studypod = False
+
+        if not user_is_in_the_studypod:
+            studypod.members.append(user_id)
+            studypod.save()
