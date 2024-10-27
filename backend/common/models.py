@@ -17,7 +17,7 @@ class Timestamp(models.Model):
 class SlugField(Timestamp):
     slug = models.SlugField(
         default='',
-        editable=False
+        # editable=False
     )
 
     class Meta:
@@ -59,7 +59,7 @@ class StudyPod(SlugField):
     size = models.IntegerField(default=10)
     access_code = models.TextField(
         max_length=100,
-        editable=False,
+        # editable=False,
         unique=True,
     )
     # PKs of the users that has the access code
@@ -82,6 +82,10 @@ class StudyPod(SlugField):
 
 
 class StudypodReviewer(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     studypod = models.ForeignKey(
         StudyPod,
         on_delete=models.CASCADE
@@ -90,10 +94,17 @@ class StudypodReviewer(SlugField):
         Reviewer,
         on_delete=models.CASCADE
     )
+    name = models.CharField(max_length=50)
+
+    reviewers = models.Manager()
+
+    def __str__(self):
+        return self.slug
 
     def save(self, **kwargs):
-        self.slug = slugify('{}-{}'.format(self.studypod.slug, self.reviewer.slug))
+        self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
+
 
 
 class Title(Timestamp):

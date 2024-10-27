@@ -9,10 +9,13 @@ from rest_framework.mixins import (
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import ReviewerSerializer
+from rest_framework import exceptions
+
 from common.models import Reviewer
+
+from .serializers import ReviewerSerializer
 from .services import Document
-import requests
+
 
 class ReviewersAPIView(
     CreateModelMixin,
@@ -33,7 +36,7 @@ class ReviewersAPIView(
         self.files = ''
 
     def dispatch(self, request, *args, **kwargs):
-        self.slug = kwargs.get('slug')
+        self.slug = kwargs.get('slug', None)
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
@@ -63,7 +66,10 @@ class ReviewersAPIView(
         reviewer.available_question_types = document.question_types
         reviewer.save()
 
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
+        if self.slug is not None:
+            raise exceptions.MethodNotAllowed('PATCH')
+        kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
     
     def get_queryset(self):
