@@ -1,6 +1,3 @@
-import json
-
-from django.db.migrations.serializer import Serializer
 from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
@@ -16,7 +13,7 @@ from rest_framework import exceptions
 
 
 from apis.studypods.serializers import StudyPodSerializer, StudypodAccessCodeSerializer
-from apis.studypods.services import encrypt_text, decrypt_data
+from apis.studypods.services import encrypt_text, add_user_to_studypod
 
 from common.models import StudyPod
 
@@ -83,19 +80,7 @@ class JoinStudypodAPIView(APIView):
         serializer = StudypodAccessCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        self._add_user_to_studypod(serializer.studypod)
+        add_user_to_studypod(serializer.studypod, self.request.user.id)
 
         payload = StudyPodSerializer(serializer.studypod).data
         return Response(payload, status=status.HTTP_200_OK)
-
-    def _add_user_to_studypod(self, studypod):
-        user_id = self.request.user.id
-        try:
-            studypod.members.index(user_id)
-            user_is_in_the_studypod = True
-        except ValueError:
-            user_is_in_the_studypod = False
-
-        if not user_is_in_the_studypod:
-            studypod.members.append(user_id)
-            studypod.save()
