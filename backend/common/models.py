@@ -92,8 +92,7 @@ class StudypodReviewer(SlugField):
     )
 
     def save(self, **kwargs):
-        if self.slug is None:
-            self.slug = slugify('{}-{}'.format(self.studypod.slug, self.reviewer.slug))
+        self.slug = slugify('{}-{}'.format(self.studypod.slug, self.reviewer.slug))
         super().save(**kwargs)
 
 
@@ -192,7 +191,7 @@ class Note(SlugField):
     name = models.TextField(max_length=50)
     content = models.TextField(default='')
 
-    note = models.Manager()
+    notes = models.Manager()
 
     def __str__(self):
         return self.slug
@@ -211,7 +210,7 @@ class Todo(SlugField):
     name = models.TextField(max_length=50)
     content = models.TextField(default='')
 
-    todo = models.Manager()
+    todos = models.Manager()
 
     def __str__(self):
         return self.slug
