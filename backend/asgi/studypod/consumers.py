@@ -2,20 +2,25 @@ import json
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.exceptions import DenyConnection
 
 from apis.authentication.serializers import UserInfoSerializer
 from asgi.studypod.services import (
     GenerateQuestion,
-    GetReviewer, Answer,
+    GetReviewer, Answer, ReviewerList,
 )
 from common.models import StudyPod
 
 INCREMENT = 'I'
 DECREMENT = 'D'
 
+# the number of connected users per room
 connected_users = {}
+# the room moderators per room
 moderators = {}
+# all the answers of the users per room
 user_answers = {}
+# all the last action per room
 last_action = {}
 
 
@@ -46,19 +51,25 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     async def initiate_connect(self):
         self.study_pod_name = self.scope['url_route']['kwargs']['study_pod_slug']
         self.set_room_name(root_name='study_pod')
-        await self.set_study_pod_instance()
+        await self._set_study_pod_instance()
+        self._check_if_studypod_exists()
         await self.channel_layer.group_add(
             self.room_name,
             self.channel_name
         )
         await self.accept()
 
-    async def set_study_pod_instance(self):
-        self.study_pod = await self.get_study_pod()
+    async def _set_study_pod_instance(self):
+        self.study_pod = await self._get_study_pod()
 
     @database_sync_to_async
-    def get_study_pod(self):
+    def _get_study_pod(self):
         return StudyPod.groups.filter(slug=self.study_pod_name).first()
+
+    def _check_if_studypod_exists(self):
+        if self.study_pod is not None:
+            return
+        raise DenyConnection('Studypod doesn\'nt exists.')
 
     def set_room_name(self, root_name=''):
         self.room_name = '{}_{}'.format(
@@ -66,17 +77,17 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
             self.study_pod_name
         )
 
-    async def channel_group_send(self, data, channel_type):
+    async def channel_group_send(self, channel_type):
         await self.channel_layer.group_send(
             self.room_name,
             {
                 'type': channel_type,
-                'data': data
+                'data': self.data
             }
         )
 
     async def _send_message_to_room(self):
-        await self.channel_group_send(self.data, 'send_message')
+        await self.channel_group_send('send_message')
 
     async def _send_message_to_self(self):
         await self.send(text_data=json.dumps(self.data))
@@ -149,7 +160,7 @@ class StudyPodConsumer(StudyPodBaseConsumer):
                     will_send_message_to_room = False
             case self.RETRIEVE_REVIEWER_LIST:
                 if self._has_moderator():
-                    will_send_message_to_room = self._retrieve_reviewer_list()
+                    will_send_message_to_room = await self._retrieve_reviewer_list()
             case self.SELECT_REVIEWER:
                 if self._has_moderator():
                     await self._select_reviewer()
@@ -214,9 +225,10 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         }
 
     """@TODO: retrieve the reviewers that belongs on the studypod"""
-    def _retrieve_reviewer_list(self):
+    async def _retrieve_reviewer_list(self):
         is_the_moderator = self.moderators[self.room_name].id == self.user.id
-        self.data = self._get_data(self.data, {'reviewers': []})
+        reviewer_list = ReviewerList(studypod=self.study_pod)
+        self.data = self._get_data(self.data, await reviewer_list.get())
         return is_the_moderator
 
     def _set_last_action(self, action):
@@ -242,13 +254,12 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             moderator=self.moderators[self.room_name],
             number_of_questions=self.data['number_of_questions']
         )
-        data = await question.generate()
-
-        questions = data['questions']
+        self.data = await question.generate()
+        questions = self.data['questions']
 
         if questions is not None:
             self.room_user_answers[self.room_name] = {
-                "questions": data['questions'],
+                "questions": self.data['questions'],
             }
 
     async def _select_reviewer(self):

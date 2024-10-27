@@ -3,7 +3,8 @@ from channels.db import database_sync_to_async
 from apis.authentication.serializers import UserInfoSerializer
 from apis.questions.services import Question
 from apis.reviewers.serializers import ReviewerSerializer
-from common.models import Reviewer
+from apis.studypods.serializers import StudypodReviewerSerializer
+from common.models import Reviewer, StudypodReviewer
 
 
 def get_error_data(data, message):
@@ -107,3 +108,13 @@ class Answer:
     def _check_answer(self):
         for index in range(len(self.answers)):
             self.answers[index]['is_correct'] = True
+
+
+class ReviewerList:
+    def __init__(self, studypod):
+        self.studypod = studypod
+
+    @database_sync_to_async
+    def get(self):
+        reviewers = StudypodReviewer.reviewers.filter(studypod=self.studypod)
+        return StudypodReviewerSerializer(reviewers, many=True).data
