@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from common.models import Reviewer
+
+from apis.reviewers.services import unauthorized_user, is_already_public
+from common.models import Reviewer, PublicReviewer
 
 from django.utils.text import slugify
+from django.db.models import Q
 
 from apis.authentication.serializers import UserInfoSerializer
 
@@ -38,3 +41,57 @@ class ReviewerSerializer(serializers.ModelSerializer):
     
     def get_owner(self, instance):
         return UserInfoSerializer(instance.owner).data
+
+
+class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
+    reviewer = serializers.CharField(max_length=100)
+    is_public = serializers.BooleanField()
+
+
+class PublicReviewerSerializer(serializers.ModelSerializer):
+    reviewer_info = serializers.SerializerMethodField(read_only=True)
+    reviewer = serializers.SlugRelatedField(queryset=Reviewer.reviewers.all(), slug_field='slug')
+    name = serializers.CharField(default='')
+
+    class Meta:
+        model = PublicReviewer
+        fields = [
+            'reviewer',
+            'name',
+            'slug',
+            'reviewer_info'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.owner = self.context.get('owner')
+
+    def validate_name(self, value):
+        reviewer_slug = self.initial_data['reviewer']
+        reviewer = Reviewer.reviewers.filter(slug=reviewer_slug).first()
+
+        if value == '' and 'reviewer' in self.initial_data and reviewer:
+            value = reviewer.name
+
+        unauthorized_user(reviewer, self.owner.id)
+        is_already_public(value, self.owner.id, reviewer=reviewer)
+
+        return value
+
+    def get_reviewer_info(self, instance):
+        return ReviewerSerializer(instance.reviewer).data
+
+
+class RetrievePublicReviewerSerializer(serializers.ModelSerializer):
+    reviewer = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = PublicReviewer
+        fields = [
+            'reviewer',
+            'name',
+            'slug',
+        ]
+
+    def get_reviewer(self, instance):
+        return ReviewerSerializer(instance.reviewer).data
