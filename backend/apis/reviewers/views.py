@@ -1,5 +1,3 @@
-import json
-from rest_framework.permissions import AllowAny
 from rest_framework.mixins import (
     CreateModelMixin,
     ListModelMixin,
@@ -10,11 +8,18 @@ from rest_framework.mixins import (
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import exceptions
+from rest_framework.response import Response
+from rest_framework import status
 
-from common.models import Reviewer
+from common.models import Reviewer, PublicReviewer
 
-from .serializers import ReviewerSerializer
-from .services import Document
+from .serializers import (
+    ReviewerSerializer,
+    PublicReviewerSerializer, RetrievePublicReviewerSerializer,
+)
+from .services import (
+    Document,
+)
 
 
 class ReviewersAPIView(
@@ -80,3 +85,51 @@ class ReviewersAPIView(
     
     def get_serializer_context(self):
         return {'owner': self.request.user}
+
+
+class PublicizeReviewerAPIView(
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    GenericAPIView
+):
+    lookup_field = 'slug'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slug = None
+        self.is_get_method = False
+
+    def dispatch(self, request, *args, **kwargs):
+        self.slug = kwargs.get('slug')
+        self.is_get_method = request.method == 'GET'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        if self.slug is None:
+            raise exceptions.MethodNotAllowed('DELETE')
+
+        super().destroy(request, *args, **kwargs)
+        payload = {'detail': 'Reviewer has been set to private.'}
+        return Response(payload, status=status.HTTP_200_OK)
+
+    def get_queryset(self):
+        if self.is_get_method:
+            return PublicReviewer.reviewers.all()
+        return PublicReviewer.reviewers.filter(reviewer__owner=self.request.user)
+
+    def get_serializer_context(self):
+        return {'owner': self.request.user}
+
+    def get_serializer_class(self):
+        if self.is_get_method:
+            return RetrievePublicReviewerSerializer
+        return PublicReviewerSerializer
+
+

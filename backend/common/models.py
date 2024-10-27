@@ -53,6 +53,23 @@ class Reviewer(SlugField):
         super().save(**kwargs)
 
 
+class PublicReviewer(SlugField):
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=50)
+
+    reviewers = models.Manager()
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify('{}-{}'.format(self.name, self.reviewer.owner.id))
+        super().save(*args, **kwargs)
+
+
 class StudyPod(SlugField):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.TextField(max_length=50)
@@ -94,7 +111,10 @@ class StudypodReviewer(SlugField):
         Reviewer,
         on_delete=models.CASCADE
     )
-    name = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=50,
+        blank=True
+    )
 
     reviewers = models.Manager()
 

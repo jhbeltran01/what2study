@@ -1,8 +1,11 @@
-import io
-
 import pdfplumber
 
-from common.models import Title, Definition, EnumerationTitle, Reviewer
+from rest_framework .serializers import ValidationError
+
+from django.utils.text import slugify
+from django.db.models import Q
+
+from common.models import Title, Definition, EnumerationTitle, Reviewer, PublicReviewer
 
 
 class Document:
@@ -113,3 +116,15 @@ class Document:
     def _get_text(text):
         """Remove the mark"""
         return text[2:]
+
+def unauthorized_user(reviewer, user_id):
+    if reviewer is not None and reviewer.owner.id != user_id:
+        raise ValidationError('You can\'t publicize a reviewer that you don\'t own.')
+
+def is_already_public(value='', user_id='', reviewer=''):
+    slug = slugify('{}-{}'.format(value, user_id))
+    public_reviewer = PublicReviewer.reviewers.filter(Q(slug=slug) | Q(reviewer=reviewer)).first()
+
+    if public_reviewer is not None:
+        raise ValidationError('Try to change the name to see if it works. If not, the'
+                              'selected reviewer is already public')
