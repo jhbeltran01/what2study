@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import personIcon from '@assets/person.png'
 import bookmark from '@assets/bookmark.svg'
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { apiRootURl } from '../../globals';
 
 function ReviewerCard({reviewer}) {
   const owner = reviewer.owner;
+  const [isBookmarked, setIsBookmarked] = useState(reviewer.is_bookmarked)
+
+  const updatedBookmarkStatus = (is_bookmarked) => {
+    axios
+      .post(
+        `${apiRootURl}/reviewers/public/bookmark/`
+        + `?reviewer=${reviewer.slug}&is_bookmarked=${is_bookmarked}`
+      )
+      .then(response => {
+        setIsBookmarked(is_bookmarked)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
   return (
     <div className="reviewer-entry">
@@ -12,8 +29,12 @@ function ReviewerCard({reviewer}) {
         <div className="flex justify-between items-center">
           <h2 className="reviewer-title">{reviewer.name}</h2>
           
-          <button>
-            <img src={bookmark} alt="bookmark icon" />
+          <button onClick={() => updatedBookmarkStatus(!isBookmarked)}>
+            <img 
+              className={`${isBookmarked && 'bookmarked'}`}
+              src={bookmark} 
+              alt="bookmark icon" 
+            />
           </button>
         </div>
 
@@ -50,6 +71,8 @@ ReviewerCard.propTypes = {
     }).isRequired,
     description: PropTypes.string.isRequired,
     created_at: PropTypes.string.isRequired,
+    is_bookmarked: PropTypes.bool.isRequired,
+    slug: PropTypes.string.isRequired,
   }).isRequired,
 };
 

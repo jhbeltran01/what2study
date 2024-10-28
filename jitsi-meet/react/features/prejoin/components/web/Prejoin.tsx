@@ -293,6 +293,7 @@ const Prejoin = ({
 
             return;
         }
+        console.log('hello')
         joinConference();
     };
 
@@ -497,7 +498,7 @@ const Prejoin = ({
                             tabIndex = { 0 }
                             testId = 'prejoin.joinMeeting'
                             type = 'primary'>
-                            {t('prejoin.joinMeeting')}
+                            {t('prejoin.joinMeeting')} asdsa
                         </ActionButton>
                     </Popover>
                 </div>

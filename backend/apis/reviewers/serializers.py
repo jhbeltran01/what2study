@@ -1,10 +1,14 @@
 from rest_framework import serializers
 
 from apis.reviewers.services import unauthorized_user, is_already_public
-from common.models import Reviewer, PublicReviewer
+from common.models import (
+    Reviewer,
+    PublicReviewer,
+    RecentViewedPublicReviewer,
+    BookmarkedPublicReviewer,
+)
 
 from django.utils.text import slugify
-from django.db.models import Q
 
 from apis.authentication.serializers import UserInfoSerializer
 
@@ -53,6 +57,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
     description = serializers.SerializerMethodField(read_only=True)
     reviewer = serializers.SlugRelatedField(queryset=Reviewer.reviewers.all(), slug_field='slug')
     name = serializers.CharField(default='')
+    is_bookmarked = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = PublicReviewer
@@ -62,6 +67,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             'slug',
             'owner',
             'description',
+            'is_bookmarked',
             'created_at',
             'updated_at',
         ]
@@ -88,17 +94,24 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
     def get_description(self, instance):
         return instance.reviewer.description
 
+    def get_is_bookmarked(self, instance):
+        bookmarked_reviewer = BookmarkedPublicReviewer.reviewers.filter(
+            public_reviewer=instance,
+            owner=self.owner,
+        ).first()
+        return bookmarked_reviewer is not None
 
-class RetrievePublicReviewerSerializer(serializers.ModelSerializer):
-    reviewer = serializers.SerializerMethodField(read_only=True)
 
-    class Meta:
-        model = PublicReviewer
-        fields = [
-            'reviewer',
-            'name',
-            'slug',
-        ]
+class RecentlyViewedQueryParamSerializer(serializers.Serializer):
+    reviewer = serializers.CharField(max_length=100)
 
-    def get_reviewer(self, instance):
-        return ReviewerSerializer(instance.reviewer).data
+
+class BookmarkedQueryParamSerializer(serializers.Serializer):
+    reviewer = serializers.CharField(max_length=100)
+    is_bookmarked = serializers.BooleanField(required=True)
+
+    def validate_is_bookmarked(self, value):
+        if self.initial_data.get('is_bookmarked', None) is None:
+            raise serializers.ValidationError('This field is required')
+
+        return value
