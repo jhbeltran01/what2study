@@ -1,11 +1,19 @@
 import pdfplumber
 
-from rest_framework .serializers import ValidationError
+from rest_framework.serializers import ValidationError
 
 from django.utils.text import slugify
 from django.db.models import Q
 
-from common.models import Title, Definition, EnumerationTitle, Reviewer, PublicReviewer
+
+from common.models import (
+    Title, Definition,
+    EnumerationTitle,
+    Reviewer,
+    PublicReviewer,
+    RecentViewedPublicReviewer,
+    BookmarkedPublicReviewer,
+)
 
 
 class Document:
@@ -117,14 +125,48 @@ class Document:
         """Remove the mark"""
         return text[2:]
 
+
 def unauthorized_user(reviewer, user_id):
     if reviewer is not None and reviewer.owner.id != user_id:
         raise ValidationError('You can\'t publicize a reviewer that you don\'t own.')
+
 
 def is_already_public(value='', user_id='', reviewer=''):
     slug = slugify('{}-{}'.format(value, user_id))
     public_reviewer = PublicReviewer.reviewers.filter(Q(slug=slug) | Q(reviewer=reviewer)).first()
 
     if public_reviewer is not None:
-        raise ValidationError('Try to change the name to see if it works. If not, the'
+        raise ValidationError('Try to change the name to see if it works. If not, the '
                               'selected reviewer is already public')
+
+
+def get_public_reviewers(user, category: str):
+    public_reviewers_ids = None
+    category_reviewers = None
+
+    match category:
+        case 'RECENTLY_VIEWED':
+            category_reviewers = RecentViewedPublicReviewer.reviewers.filter(owner=user)
+        case 'BOOKMARKED':
+            category_reviewers = BookmarkedPublicReviewer.reviewers.filter(owner=user)
+        case _:
+            return PublicReviewer.reviewers.all()
+        
+    public_reviewers_ids = [category.public_reviewer.id for category in category_reviewers]
+
+    return PublicReviewer.reviewers.filter(id__in=public_reviewers_ids)
+
+
+def get_category_reviewer(slug, model):
+    return model.reviewers.filter(public_reviewer__slug=slug).first()
+
+
+def create_reviewer_category(public_reviewer_slug, user, model):
+    public_reviewer = PublicReviewer.reviewers.filter(slug=public_reviewer_slug).first()
+    if public_reviewer is None:
+        raise ValidationError({'details': 'Public reviewer doesn\'t exists'})
+
+    model.reviewers.create(
+        owner=user,
+        public_reviewer=public_reviewer
+    )

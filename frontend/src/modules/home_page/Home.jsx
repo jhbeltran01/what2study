@@ -11,8 +11,9 @@ const Home = () => {
   const [reviewers, setReviewers] = useState([])
 
   useEffect(() => {
+    console.log(activeTabName)
     axios
-      .get(`${apiRootURl}/reviewers/public/`)
+      .get(`${apiRootURl}/reviewers/public/?category=${activeTabName}`)
       .then(response => {
         setReviewers(response.data.results)
       })

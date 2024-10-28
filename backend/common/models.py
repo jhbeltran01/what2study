@@ -17,7 +17,8 @@ class Timestamp(models.Model):
 class SlugField(Timestamp):
     slug = models.SlugField(
         default='',
-        # editable=False
+        # editable=False,
+        unique=True
     )
 
     class Meta:
@@ -212,7 +213,6 @@ class Definition(Timestamp):
         return self.title.text
 
 
-    
 class Note(SlugField):
     owner = models.ForeignKey(
         User,
@@ -249,3 +249,36 @@ class Todo(SlugField):
     def save(self, **kwargs):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
+
+
+class PublicReviewerCategory(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+    public_reviewer = models.ForeignKey(
+        PublicReviewer,
+        on_delete=models.CASCADE
+    )
+
+    reviewers = models.Manager()
+
+    class Meta:
+        ordering = ['-updated_at']
+        abstract = True
+
+    def __str__(self):
+        return str(self.public_reviewer.slug)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify('{}-{}'.format(self.public_reviewer.id, self.owner.id))
+        super().save(*args, **kwargs)
+
+
+
+class RecentViewedPublicReviewer(PublicReviewerCategory):
+    pass
+
+
+class BookmarkedPublicReviewer(PublicReviewerCategory):
+    pass
