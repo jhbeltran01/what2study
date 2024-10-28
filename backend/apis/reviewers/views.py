@@ -94,6 +94,7 @@ class PublicizeReviewerAPIView(
     GenericAPIView
 ):
     lookup_field = 'slug'
+    serializer_class = PublicReviewerSerializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -126,10 +127,4 @@ class PublicizeReviewerAPIView(
 
     def get_serializer_context(self):
         return {'owner': self.request.user}
-
-    def get_serializer_class(self):
-        if self.is_get_method:
-            return RetrievePublicReviewerSerializer
-        return PublicReviewerSerializer
-
 
