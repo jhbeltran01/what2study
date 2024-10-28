@@ -49,7 +49,8 @@ class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
 
 
 class PublicReviewerSerializer(serializers.ModelSerializer):
-    reviewer_info = serializers.SerializerMethodField(read_only=True)
+    owner = serializers.SerializerMethodField(read_only=True)
+    description = serializers.SerializerMethodField(read_only=True)
     reviewer = serializers.SlugRelatedField(queryset=Reviewer.reviewers.all(), slug_field='slug')
     name = serializers.CharField(default='')
 
@@ -59,7 +60,10 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             'reviewer',
             'name',
             'slug',
-            'reviewer_info'
+            'owner',
+            'description',
+            'created_at',
+            'updated_at',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -78,8 +82,11 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
 
         return value
 
-    def get_reviewer_info(self, instance):
-        return ReviewerSerializer(instance.reviewer).data
+    def get_owner(self, instance):
+        return UserInfoSerializer(instance.reviewer.owner).data
+
+    def get_description(self, instance):
+        return instance.reviewer.description
 
 
 class RetrievePublicReviewerSerializer(serializers.ModelSerializer):
