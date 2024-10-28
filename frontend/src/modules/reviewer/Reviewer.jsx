@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'; // Ensure this is imported corre
 import '../../sass/pages/_reviewer.scss';
 import { apiRootURl } from '../../globals';
 import axios from 'axios';
+import ReviewerCard from './ReviewerCard';
 
 const Reviewer = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,19 +65,7 @@ const Reviewer = () => {
 
       <div className="reviewer-content h-[100%] grid grid-responsive">
         {reviewers.map((reviewer) => {
-          return (
-            <div className="reviewer-entry" key={reviewer.slug}>
-              <div className="reviewer-header">
-                <h2 className="reviewer-title">{reviewer.name}</h2>
-                <div className="reviewer-info">
-                  <span className="reviewer-date">2024-09-15</span>
-                </div>
-                <button className="more-options">⋮</button>
-              </div>
-              <p className="reviewer-created-by">Created by: {reviewer.owner.username}</p>
-              <a href="#" className="view-link">View</a>
-            </div>
-          )
+          return <ReviewerCard reviewer={reviewer} key={reviewer.slug} />
         })}
       </div>
     </section>

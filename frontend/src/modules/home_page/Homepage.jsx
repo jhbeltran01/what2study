@@ -9,7 +9,7 @@ const Homepage = () => {
         <div className="sidebar-container">
           <Sidebar />
         </div>
-        <div className="navpage-container">
+        <div className="navpage-container grid">
           <Outlet />
         </div>
       </div>

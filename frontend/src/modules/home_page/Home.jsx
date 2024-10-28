@@ -1,14 +1,28 @@
 import searchIcon from '@assets/search.png';
-import React, { useState } from 'react';
-import '../../sass/pages/_homepage.scss';
-
+import React, { useEffect, useState } from 'react';
+import * as constants from './constants' ;
+import axios from 'axios';
+import { apiRootURl } from '@root/globals';
+import ReviewerCard from './ReviewerCard';
 
 const Home = () => {
-  const [active, setActive] = useState('public-reviewers');
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTabName, setActiveTabName] = useState(constants.PUBLIC_TAB)
+  const [reviewers, setReviewers] = useState([])
+
+  useEffect(() => {
+    axios
+      .get(`${apiRootURl}/reviewers/public/`)
+      .then(response => {
+        setReviewers(response.data.results)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [activeTabName])
 
   const handleClick = (section) => {
-    setActive(section);
+    setActiveTabName(section);
   };
 
   const handleSearchSubmit = (event) => {
@@ -18,24 +32,24 @@ const Home = () => {
   };
 
   return (
-    <section className="homepage-section p-4">
+    <div className="homepage-section p-4 flex flex-col">
       <div className="mb-4 flex justify-between items-center">
         <div className="header-buttons">
           <button
-            onClick={() => handleClick('public-reviewers')}
-            className={active === 'public-reviewers' ? 'active' : ''}
+            onClick={() => handleClick(constants.PUBLIC_TAB)}
+            className={activeTabName === constants.PUBLIC_TAB ? 'active' : ''}
           >
             Public Reviewers
           </button>
           <button
-            onClick={() => handleClick('recently-viewed')}
-            className={active === 'recently-viewed' ? 'active' : ''}
+            onClick={() => handleClick(constants.RECENTLY_VIEWED_TAB)}
+            className={activeTabName === constants.RECENTLY_VIEWED_TAB ? 'active' : ''}
           >
             Recently Viewed
           </button>
           <button
-            onClick={() => handleClick('bookmarks')}
-            className={active === 'bookmarks' ? 'active' : ''}
+            onClick={() => handleClick(constants.BOOKMARK_TAB)}
+            className={activeTabName === constants.BOOKMARK_TAB ? 'active' : ''}
           >
             Bookmarks
           </button>
@@ -54,7 +68,13 @@ const Home = () => {
           </button>
         </form>
       </div>
-    </section>
+
+      <section className='reviewer-content h-[100%] grid grid-responsive'>
+        {reviewers.map((reviewer) => {
+          return <ReviewerCard reviewer={reviewer} key={reviewer.slug}/>
+        })}
+      </section>
+    </div>
   );
 };
 
