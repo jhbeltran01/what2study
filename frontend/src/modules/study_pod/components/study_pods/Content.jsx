@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { apiRootURl } from '@root/globals'
+import { apiRootURL } from '@root/globals'
 import axios from 'axios'
 import Card from './Card'
 
@@ -7,7 +7,7 @@ function Content() {
   const [studypods, setStudypods] = useState([])
 
   useEffect(() => {
-    const url = `${apiRootURl}/studypods/`
+    const url = `${apiRootURL}/studypods/`
 
     axios
       .get(url)

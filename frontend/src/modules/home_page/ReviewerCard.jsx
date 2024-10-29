@@ -3,24 +3,36 @@ import personIcon from '@assets/person.png'
 import bookmark from '@assets/bookmark.svg'
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { apiRootURl } from '../../globals';
+import { apiRootURL } from '../../globals';
+import { useNavigate } from 'react-router-dom';
+import { setReviewer } from '@redux/reviewer';
+import * as routes from '../../routes/constants';
+import { useDispatch } from 'react-redux';
 
 function ReviewerCard({reviewer}) {
   const owner = reviewer.owner;
   const [isBookmarked, setIsBookmarked] = useState(reviewer.is_bookmarked)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const updatedBookmarkStatus = (is_bookmarked) => {
     axios
       .post(
-        `${apiRootURl}/reviewers/public/bookmark/`
+        `${apiRootURL}/reviewers/public/bookmark/`
         + `?reviewer=${reviewer.slug}&is_bookmarked=${is_bookmarked}`
       )
       .then(response => {
+        response
         setIsBookmarked(is_bookmarked)
       })
       .catch(err => {
         console.log(err)
       })
+  }
+
+  const redirectToSelectedReviewerContent = () => {
+    dispatch(setReviewer(reviewer))
+    navigate(routes.VIEW_REVIEWER_CONTENT)
   }
 
   return (
@@ -52,8 +64,12 @@ function ReviewerCard({reviewer}) {
 
         <p>{reviewer.description ? reviewer.description : 'No description' }</p>
     
-        {/* <p className="reviewer-created-by">Created by: {reviewer.owner.username}</p> */}
-        <a href="#" className="view-link">View</a>
+        <button 
+          onClick={redirectToSelectedReviewerContent} 
+          className='view-link'
+        >
+          View
+        </button>
       </div>
     </div>
   )

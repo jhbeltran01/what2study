@@ -55,7 +55,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
         return UserInfoSerializer(instance.owner).data
 
     def get_titles(self, instance):
-        titles = Title.titles.filter(reviewer=instance)
+        titles = Title.titles.filter(reviewer=instance, enum_title=None)
         return InlineTitleSerializer(titles, many=True).data
 
 
@@ -162,10 +162,7 @@ class InlineTitleSerializer(serializers.ModelSerializer):
                 definitions = instance.definitions.all()
                 return DefinitionSerializer(definitions, many=True).data
             case Title.Type.ENUMERATION:
-                enumeration_answers= Title.titles.filter(
-                    reviewer=instance.reviewer,
-                    type=Title.Type.ENUMERATION_TITLE
-                )
+                enumeration_answers = instance.answers.all()
                 return InlineTitleSerializer(enumeration_answers, many=True).data
 
     def get_is_in_order(self, instance):
