@@ -4,8 +4,7 @@ from apis.reviewers.services import unauthorized_user, is_already_public
 from common.models import (
     Reviewer,
     PublicReviewer,
-    RecentViewedPublicReviewer,
-    BookmarkedPublicReviewer,
+    BookmarkedPublicReviewer, Title, Definition, EnumerationTitle,
 )
 
 from django.utils.text import slugify
@@ -15,7 +14,8 @@ from apis.authentication.serializers import UserInfoSerializer
 
 class ReviewerSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
-    
+    titles = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Reviewer
         fields = [
@@ -23,6 +23,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
             'owner',
             'description',
             'slug',
+            'titles',
             'created_at',
             'updated_at',
         ]
@@ -30,6 +31,13 @@ class ReviewerSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context.pop('owner', None)
+        self.is_get_content = self.context.pop('is_get_content', False)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not self.is_get_content:
+            representation.pop('titles', None)
+        return representation
 
     def create(self, validated_data):
         validated_data.pop('files', None)
@@ -45,6 +53,10 @@ class ReviewerSerializer(serializers.ModelSerializer):
     
     def get_owner(self, instance):
         return UserInfoSerializer(instance.owner).data
+
+    def get_titles(self, instance):
+        titles = Title.titles.filter(reviewer=instance)
+        return InlineTitleSerializer(titles, many=True).data
 
 
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
@@ -115,3 +127,61 @@ class BookmarkedQueryParamSerializer(serializers.Serializer):
             raise serializers.ValidationError('This field is required')
 
         return value
+
+
+class InlineTitleSerializer(serializers.ModelSerializer):
+    content = serializers.SerializerMethodField(read_only=True)
+    is_in_order = serializers.SerializerMethodField(read_only=True)
+    type = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Title
+        fields = [
+            'text',
+            'type',
+            'content',
+            'is_in_order',
+            'created_at',
+            'updated_at',
+        ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if instance.type != Title.Type.ENUMERATION:
+            representation.pop('is_in_order', None)
+
+        return representation
+
+    def get_type(self, instance):
+        return instance.get_type_display()
+
+    def get_content(self, instance):
+        match instance.type:
+            case Title.Type.DEFINITION | Title.Type.ENUMERATION_TITLE:
+                definitions = instance.definitions.all()
+                return DefinitionSerializer(definitions, many=True).data
+            case Title.Type.ENUMERATION:
+                enumeration_answers= Title.titles.filter(
+                    reviewer=instance.reviewer,
+                    type=Title.Type.ENUMERATION_TITLE
+                )
+                return InlineTitleSerializer(enumeration_answers, many=True).data
+
+    def get_is_in_order(self, instance):
+        """Will only show when the title type is Enumeration"""
+        if instance.type != Title.Type.ENUMERATION:
+            return None
+
+        enum_title = EnumerationTitle.titles.filter(title=instance).first()
+        return enum_title.is_in_order
+
+
+class DefinitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Definition
+        fields = [
+            'text',
+            'created_at',
+            'updated_at'
+        ]

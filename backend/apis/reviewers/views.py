@@ -22,7 +22,8 @@ from common.models import (
 from .serializers import (
     ReviewerSerializer,
     PublicReviewerSerializer,
-    RecentlyViewedQueryParamSerializer, BookmarkedQueryParamSerializer,
+    RecentlyViewedQueryParamSerializer,
+    BookmarkedQueryParamSerializer,
 )
 from .services import (
     Document,
@@ -47,9 +48,11 @@ class ReviewersAPIView(
         self.slug = ''
         self.is_get_reviewer = ''
         self.files = ''
+        self.is_get_content = False
 
     def dispatch(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug', None)
+        self.is_get_content = request.GET.get('is_get_content', False)
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
@@ -92,7 +95,10 @@ class ReviewersAPIView(
         return Reviewer.reviewers.get(slug=self.slug)
     
     def get_serializer_context(self):
-        return {'owner': self.request.user}
+        return {
+            'owner': self.request.user,
+            'is_get_content': self.is_get_content,
+        }
 
 
 class PublicizeReviewerAPIView(
