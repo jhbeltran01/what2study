@@ -130,9 +130,9 @@ class StudypodReviewer(SlugField):
 
 class Title(Timestamp):
     class Type(models.TextChoices):
-        DEFINITION = ('D', 'Definition')
-        ENUMERATION = ('E', 'Enumeration')
-        ENUMERATION_TITLE = ('T', 'Enumeration_Title')
+        DEFINITION = ('D', 'DEFINITION')
+        ENUMERATION = ('E', 'ENUMERATION')
+        ENUMERATION_TITLE = ('T', 'ENUMERATION_TITLE')
 
     owner = models.ForeignKey(
         User,
@@ -199,6 +199,7 @@ class Definition(Timestamp):
         Title,
         on_delete=models.CASCADE,
         editable=False,
+        related_name='definitions'
     )
     text = models.TextField()
     is_answered_correctly = models.BooleanField(default=False)
