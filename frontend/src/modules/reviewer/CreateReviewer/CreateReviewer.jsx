@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../../../sass/pages/_createreviewer.scss';
 import axios from 'axios';
-import { apiRootURl } from '../../../globals';
+import { apiRootURL } from '../../../globals';
 // import axios from 'axios';
 
 const initialReviewer = {
@@ -61,7 +61,7 @@ const CreateReviewer = () => {
 
     axios
       .post(
-        `${apiRootURl}/reviewers/`, 
+        `${apiRootURL}/reviewers/`, 
         formData,
         {
           headers: {

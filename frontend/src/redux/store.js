@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import studypodReducer from "./studypod";
+import reviewerReducer from './reviewer'
 import { loadState, saveState } from './utils' 
 
 const persistedState = loadState()
 
 const store = configureStore({
   reducer: {
-    studypod: studypodReducer
+    studypod: studypodReducer,
+    reviewer: reviewerReducer,
   },
   preloadedState: persistedState
 })
@@ -14,6 +16,7 @@ const store = configureStore({
 store.subscribe(() => {
   saveState({
     studypod: store.getState().studypod,
+    reviewer: store.getState().reviewer,
   })
 })
 

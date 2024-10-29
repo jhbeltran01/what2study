@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
-import { apiRootURl, conferenceCallServer } from '@root/globals'
+import { apiRootURL, conferenceCallServer } from '@root/globals'
 import { useSelector } from 'react-redux';
 // import Question from './Question/Question';
 
@@ -9,7 +9,7 @@ function Main() {
 
   useEffect(() => {
     axios
-      .post(`${apiRootURl}/studypods/get-encrypted-id/`)
+      .post(`${apiRootURL}/studypods/get-encrypted-id/`)
       .then(response => {
         const encryptedData = response.data.data.toString()
         window.open(

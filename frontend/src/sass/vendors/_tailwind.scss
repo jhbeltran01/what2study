@@ -587,6 +587,24 @@ video {
   position: relative;
 }
 
+.m-\[1em\] {
+  margin: 1em;
+}
+
+.m-\[1rem\] {
+  margin: 1rem;
+}
+
+.my-\[1em\] {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.my-\[2rem\] {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -673,6 +691,15 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-\[1em\] {
+  padding: 1em;
+}
+
+.px-\[1em\] {
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .text-center {

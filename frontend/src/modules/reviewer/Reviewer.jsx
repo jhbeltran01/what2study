@@ -2,7 +2,7 @@ import searchIcon from '@assets/search.png';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Ensure this is imported correctly
 import '../../sass/pages/_reviewer.scss';
-import { apiRootURl } from '../../globals';
+import { apiRootURL } from '../../globals';
 import axios from 'axios';
 import ReviewerCard from './ReviewerCard';
 
@@ -12,7 +12,7 @@ const Reviewer = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-    const reviewersUrl = `${apiRootURl}/reviewers/`
+    const reviewersUrl = `${apiRootURL}/reviewers/`
 
     axios
       .get(reviewersUrl)

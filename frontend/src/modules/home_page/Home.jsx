@@ -2,7 +2,7 @@ import searchIcon from '@assets/search.png';
 import React, { useEffect, useState } from 'react';
 import * as constants from './constants' ;
 import axios from 'axios';
-import { apiRootURl } from '@root/globals';
+import { apiRootURL } from '@root/globals';
 import ReviewerCard from './ReviewerCard';
 
 const Home = () => {
@@ -11,9 +11,8 @@ const Home = () => {
   const [reviewers, setReviewers] = useState([])
 
   useEffect(() => {
-    console.log(activeTabName)
     axios
-      .get(`${apiRootURl}/reviewers/public/?category=${activeTabName}`)
+      .get(`${apiRootURL}/reviewers/public/?category=${activeTabName}`)
       .then(response => {
         setReviewers(response.data.results)
       })
