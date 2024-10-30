@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apis.reviewers.services import unauthorized_user, is_already_public
+from apis.reviewers.services import unauthorized_user, is_already_public, remove_items_in_dictionary
 from common.models import (
     Reviewer,
     PublicReviewer,
@@ -32,11 +32,18 @@ class ReviewerSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         self.owner = self.context.pop('owner', None)
         self.is_get_content = self.context.pop('is_get_content', False)
+        self.is_partial = self.context.pop('is_partial', False)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+
+        if self.is_partial:
+            keys = ['name', 'owner', 'description', 'slug', 'created_at', 'updated_at']
+            return remove_items_in_dictionary(representation, keys)
+
         if not self.is_get_content:
             representation.pop('titles', None)
+
         return representation
 
     def create(self, validated_data):
@@ -52,6 +59,8 @@ class ReviewerSerializer(serializers.ModelSerializer):
         return value
     
     def get_owner(self, instance):
+        if self.is_partial:
+            return None
         return UserInfoSerializer(instance.owner).data
 
     def get_titles(self, instance):
