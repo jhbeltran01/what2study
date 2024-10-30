@@ -49,10 +49,12 @@ class ReviewersAPIView(
         self.is_get_reviewer = ''
         self.files = ''
         self.is_get_content = False
+        self.is_partial = False
 
     def dispatch(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug', None)
         self.is_get_content = request.GET.get('is_get_content', False)
+        self.is_partial = request.GET.get('is_partial', False)
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
@@ -98,6 +100,7 @@ class ReviewersAPIView(
         return {
             'owner': self.request.user,
             'is_get_content': self.is_get_content,
+            'is_partial': self.is_partial
         }
 
 

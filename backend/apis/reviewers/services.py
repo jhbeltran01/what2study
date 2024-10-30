@@ -170,3 +170,8 @@ def create_reviewer_category(public_reviewer_slug, user, model):
         owner=user,
         public_reviewer=public_reviewer
     )
+
+def remove_items_in_dictionary(dict, keys):
+    for key in keys:
+        dict.pop(key, None)
+    return dict
