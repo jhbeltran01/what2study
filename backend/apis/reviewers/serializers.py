@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apis.reviewer_content.serializers import DefinitionSerializer
 from apis.reviewers.services import unauthorized_user, is_already_public, remove_items_in_dictionary
 from common.models import (
     Reviewer,
@@ -64,8 +65,8 @@ class ReviewerSerializer(serializers.ModelSerializer):
         return UserInfoSerializer(instance.owner).data
 
     def get_titles(self, instance):
-        titles = Title.titles.filter(reviewer=instance, enum_title=None)
-        return InlineTitleSerializer(titles, many=True).data
+        titles = Title.titles.filter(reviewer=instance)
+        return TitleSerializer(titles, many=True).data
 
 
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
@@ -95,7 +96,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.owner = self.context.get('owner')
+        self.owner = self.context.pop('owner')
 
     def validate_name(self, value):
         reviewer_slug = self.initial_data['reviewer']
@@ -138,10 +139,9 @@ class BookmarkedQueryParamSerializer(serializers.Serializer):
         return value
 
 
-class InlineTitleSerializer(serializers.ModelSerializer):
+class TitleSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField(read_only=True)
     is_in_order = serializers.SerializerMethodField(read_only=True)
-    type = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Title
@@ -149,10 +149,15 @@ class InlineTitleSerializer(serializers.ModelSerializer):
             'text',
             'type',
             'content',
+            'slug',
             'is_in_order',
             'created_at',
             'updated_at',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_enum_content = self.context.pop('is_enum_content', False)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -166,13 +171,20 @@ class InlineTitleSerializer(serializers.ModelSerializer):
         return instance.get_type_display()
 
     def get_content(self, instance):
+        if instance is None or self.is_enum_content:
+            return []
+
         match instance.type:
             case Title.Type.DEFINITION | Title.Type.ENUMERATION_TITLE:
                 definitions = instance.definitions.all()
                 return DefinitionSerializer(definitions, many=True).data
             case Title.Type.ENUMERATION:
                 enumeration_answers = instance.answers.all()
-                return InlineTitleSerializer(enumeration_answers, many=True).data
+                return TitleSerializer(
+                    enumeration_answers,
+                    many=True,
+                    context={'is_enum_content': True}
+                ).data
 
     def get_is_in_order(self, instance):
         """Will only show when the title type is Enumeration"""
@@ -181,13 +193,3 @@ class InlineTitleSerializer(serializers.ModelSerializer):
 
         enum_title = EnumerationTitle.titles.filter(title=instance).first()
         return enum_title.is_in_order
-
-
-class DefinitionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Definition
-        fields = [
-            'text',
-            'created_at',
-            'updated_at'
-        ]

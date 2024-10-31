@@ -1,9 +1,11 @@
+
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
 
 from apis.authentication.models import User
 
-from common.services import generate_access_code
+from common.services import generate_access_code, generate_unique_id
 
 
 class Timestamp(models.Model):
@@ -16,9 +18,9 @@ class Timestamp(models.Model):
 
 class SlugField(Timestamp):
     slug = models.SlugField(
-        default='',
-        # editable=False,
-        unique=True
+        editable=settings.DEBUG,
+        unique=True,
+        default=None
     )
 
     class Meta:
@@ -127,8 +129,7 @@ class StudypodReviewer(SlugField):
         super().save(**kwargs)
 
 
-
-class Title(Timestamp):
+class Title(SlugField):
     class Type(models.TextChoices):
         DEFINITION = ('D', 'DEFINITION')
         ENUMERATION = ('E', 'ENUMERATION')
@@ -158,8 +159,7 @@ class Title(Timestamp):
     type = models.CharField(
         max_length=1,
         choices=Type.choices,
-        default=Type.DEFINITION,
-        editable=False,
+        editable=settings.DEBUG,
     )
 
     titles = models.Manager()
@@ -167,8 +167,13 @@ class Title(Timestamp):
     def __str__(self):
         return self.text
 
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
 
-class EnumerationTitle(Timestamp):
+
+class EnumerationTitle(SlugField):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -183,8 +188,13 @@ class EnumerationTitle(Timestamp):
     def __str__(self):
         return self.title.text
 
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
 
-class Definition(Timestamp):
+
+class Definition(SlugField):
     owner = models.ForeignKey(
         User,
         editable=False,
@@ -208,6 +218,11 @@ class Definition(Timestamp):
 
     def __str__(self):
         return self.text
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
 
     @property
     def answer(self):

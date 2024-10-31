@@ -16,7 +16,7 @@ from common.models import (
     Reviewer,
     PublicReviewer,
     RecentViewedPublicReviewer,
-    BookmarkedPublicReviewer
+    BookmarkedPublicReviewer,
 )
 
 from .serializers import (
@@ -27,7 +27,9 @@ from .serializers import (
 )
 from .services import (
     Document,
-    get_public_reviewers, create_reviewer_category, get_category_reviewer,
+    get_public_reviewers,
+    create_reviewer_category,
+    get_category_reviewer,
 )
 
 
@@ -94,7 +96,10 @@ class ReviewersAPIView(
         return Reviewer.reviewers.filter(owner=self.request.user)
     
     def get_object(self):
-        return Reviewer.reviewers.get(slug=self.slug)
+        reviewer = Reviewer.reviewers.filter(slug=self.slug).first()
+        if reviewer is None:
+            raise exceptions.NotFound('Reviewer not found.')
+        return reviewer
     
     def get_serializer_context(self):
         return {
