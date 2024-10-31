@@ -14,6 +14,7 @@ from common.models import (
     RecentViewedPublicReviewer,
     BookmarkedPublicReviewer,
 )
+from common.services import generate_unique_id
 
 
 class Document:
@@ -48,9 +49,9 @@ class Document:
 
         self.text_content += '\n'
 
-    def convert_text_to_content(self, reviewer):
+    def convert_text_to_content(self, reviewer, content=None):
         self.reviewer = reviewer
-        contents = self.text_content.split('\n')
+        contents = self.text_content.split('\n') if content is None else content.split('\n')
 
         for index, text in enumerate(contents):
             self.text = text
@@ -90,7 +91,7 @@ class Document:
             reviewer=self.reviewer,
             text=self._get_text(self.text) if title_type != Title.Type.DEFINITION else self.text,
             type=title_type,
-            enum_title=enum_title
+            enum_title=enum_title,
         )
 
     def _add_to_definitions(self):
@@ -98,12 +99,14 @@ class Document:
             owner=self.owner,
             reviewer=self.reviewer,
             title=self.new_title,
-            text=self._get_text(self.text)
+            text=self._get_text(self.text),
+            slug=generate_unique_id(),
         ))
 
     def _add_to_enum_title(self):
         self.enum_titles.append(EnumerationTitle(
-            title=self.new_enum_title
+            title=self.new_enum_title,
+            slug=generate_unique_id(),
         ))
 
     def _add_identification_to_question_types(self):
@@ -171,7 +174,23 @@ def create_reviewer_category(public_reviewer_slug, user, model):
         public_reviewer=public_reviewer
     )
 
-def remove_items_in_dictionary(dict, keys):
+
+def remove_items_in_dictionary(dictionary, keys):
     for key in keys:
-        dict.pop(key, None)
-    return dict
+        dictionary.pop(key, None)
+    return dictionary
+
+
+def get_reviewer(slug):
+    return Reviewer.reviewers.filter(slug=slug).first()
+
+
+def get_query_params(kwargs, context=None):
+    from apis.reviewer_content.serializers import ReviewerContentQueryParamSerializer
+
+    query_params_serializer = ReviewerContentQueryParamSerializer(
+        data=kwargs,
+        context=context,
+    )
+    query_params_serializer.is_valid(raise_exception=True)
+    return query_params_serializer.data

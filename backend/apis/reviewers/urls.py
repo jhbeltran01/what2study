@@ -1,9 +1,11 @@
 from django.urls import path, include
+
 from . import views
 
 app_name = 'apis_reviewers'
 
 urlpatterns = [
+    path('<slug:reviewer_slug>/content/', include('apis.reviewer_content.urls')),
     path('public/', include([
         path('',
                 views.PublicizeReviewerAPIView.as_view(),
