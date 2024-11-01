@@ -1,15 +1,20 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
+import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
+
 /** @TODO strip the text before saving to the database */
-function Definition({definition, titleSlug}) {
+function Definition({definition, titleSlug, deleteAContent, index}) {
   const [inputText, setInputText] = useState(definition.text)
   const [text, setText] = useState(definition.text)
   const reviewer = useSelector(state => state.reviewer.value)
+  const [deleteIsHovered, setDeleteIsHovered] = useState(false)
 
-  const updateDefinition = () => {
+  const updateDefinition = (event) => {
+    handleDefinitionTextChange(event)
+
     if (inputText == text) { return }
 
     axios
@@ -19,22 +24,51 @@ function Definition({definition, titleSlug}) {
         {text: inputText}
       )
       .then(response => {
-        console.log(response.status)
-        setText(inputText)
+        setText(response.data.text)
+        setInputText(response.data.text)
       })
       .catch(err => {
         console.log(err.request.data)
       })
+    
+    setDeleteIsHovered(false)
   }
 
+  const handleDefinitionTextChange = (event) => {
+    makeTextareaHeightToBeResponsive(event.target)
+    setInputText(event.target.value)
+  }
+
+  const deleteADefinition = async () => {
+    const isSuccessful = await performDeleteDefinition(
+      reviewer.reviewer,
+      titleSlug,
+      definition.slug,
+    )
+    if (!isSuccessful) { return }
+
+    setDeleteIsHovered(false)
+    deleteAContent(index)
+  }
+  
   return (
     <li>
-      <textarea 
-        className='w-[100%]'
-        onChange={(e) => setInputText(e.target.value)}
-        value={inputText}
-        onBlur={updateDefinition}
-      ></textarea>
+      <div className='flex gap-[10px]'>
+        <textarea
+          className='w-[100%] textarea-1 h-[auto]'
+          onChange={handleDefinitionTextChange}
+          onFocus={handleDefinitionTextChange}
+          value={inputText}
+          onBlur={updateDefinition}
+        ></textarea>
+        <button 
+          className={`delete ${!deleteIsHovered && 'hidden'}`}
+          onMouseOver={() => setDeleteIsHovered(true)}
+          onClick={deleteADefinition}
+        >
+          Delete
+        </button>
+      </div>
     </li>
   )
 }
@@ -44,7 +78,9 @@ Definition.propTypes = {
     text: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
   }).isRequired,
-  titleSlug: PropTypes.string.isRequired
+  titleSlug: PropTypes.string.isRequired,
+  deleteAContent: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired
 }
 
 export default Definition
