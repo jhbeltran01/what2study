@@ -5,7 +5,7 @@ import Definition from './Definition'
 import axios from 'axios';
 import { apiRootURL } from '@root/globals';
 import { useSelector } from 'react-redux';
-import { performAddNewDefinition } from './services';
+import { makeTextareaHeightToBeResponsive, performAddNewDefinition } from './services';
 
 /**
  * @TODO when updating a title, do not include the content on the returned data 
@@ -31,8 +31,8 @@ function Title({title}) {
         {text: inputText}
       )
       .then(response => {
-        console.log(response.status)
-        setText(inputText)
+        setText(response.data.text)
+        setInputText(response.data.text)
       })
       .catch(err => {
         console.log(err.request.data)
@@ -41,14 +41,28 @@ function Title({title}) {
 
   const addAContent = async () => {
     if (isDefinitionTitle) {
-      const [isSuccesfull, newDefinition] = await performAddNewDefinition(reviewer.reviewer, title.slug, newContentValue)
-      console.log(isSuccesfull, newDefinition)
-      if (!isSuccesfull) { return }
+      const [isSuccessful, newDefinition] = await performAddNewDefinition(
+        reviewer.reviewer, 
+        title.slug, 
+        newContentValue
+      )
+      if (!isSuccessful) { return }
       setContent([...content, newDefinition])
     }
 
     setWillAddAContent(false)
     setNewContentValue('')
+  }
+
+  const deleteAContent = (index) => {
+    let newContent = [...content]
+    newContent.splice(index, 1)
+    setContent(newContent)
+  }
+
+  const handleNewContentChange = (event) => {
+    setNewContentValue(event.target.value)
+    makeTextareaHeightToBeResponsive(event.target)
   }
 
   const headerBtns = (
@@ -76,7 +90,13 @@ function Title({title}) {
           switch(title.t_type) {
             case constants.DEFINITION:
             case constants.ENUMERATION_TITLE:
-              return <Definition definition={content} titleSlug={title.slug} key={index}/>
+              return <Definition 
+                        definition={content} 
+                        titleSlug={title.slug} 
+                        deleteAContent={deleteAContent}
+                        index={index}
+                        key={index}
+                      />
             case constants.ENUMERATION:
               return <Title title={content} key={index} />
           }
@@ -87,7 +107,7 @@ function Title({title}) {
             && <textarea 
               className='w-[100%] text-red-700'
               value={newContentValue}
-              onChange={(e) => setNewContentValue(e.target.value)}
+              onChange={handleNewContentChange}
               onBlur={addAContent}
             ></textarea> 
           }

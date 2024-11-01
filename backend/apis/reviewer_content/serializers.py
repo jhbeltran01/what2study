@@ -65,6 +65,9 @@ class DefinitionSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
 
+    def validate_text(self, value):
+        return value.strip()
+
 
 class AddReviewerContentSerializer(serializers.Serializer):
     content = serializers.CharField()

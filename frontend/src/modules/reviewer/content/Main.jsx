@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals'
 import Title from './Title'
-/** 
- * @TODO when updating the recently viewed, instead of fetching
- * the reviewer, convert it to a try-catch block
- */
+
 function Main() {
   const reviewer = useSelector(state => state.reviewer.value)
   const [titles, setTitles] = useState([])

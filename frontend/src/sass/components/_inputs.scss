@@ -7,3 +7,7 @@
   border: 1px solid var.$black-1;
   padding: 0.5em 1em;
 }
+
+.textarea-1:focus + .delete {
+  display: block;
+}
