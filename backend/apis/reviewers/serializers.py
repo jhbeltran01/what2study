@@ -62,9 +62,12 @@ class ReviewerSerializer(serializers.ModelSerializer):
     def get_owner(self, instance):
         if self.is_partial:
             return None
-        return UserInfoSerializer(instance.owner).data
+        return UserInfoSerializer(self.owner).data
 
     def get_titles(self, instance):
+        if type(instance) is dict:
+            return []
+
         titles = Title.titles.filter(reviewer=instance)
         return TitleSerializer(titles, many=True).data
 
@@ -142,12 +145,14 @@ class BookmarkedQueryParamSerializer(serializers.Serializer):
 class TitleSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField(read_only=True)
     is_in_order = serializers.SerializerMethodField(read_only=True)
+    t_type = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Title
         fields = [
             'text',
             'type',
+            't_type',
             'content',
             'slug',
             'is_in_order',
@@ -167,7 +172,7 @@ class TitleSerializer(serializers.ModelSerializer):
 
         return representation
 
-    def get_type(self, instance):
+    def get_t_type(self, instance):
         return instance.get_type_display()
 
     def get_content(self, instance):

@@ -13,4 +13,4 @@ def generate_access_code():
 
 
 def generate_unique_id():
-    return datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
+    return datetime.now().strftime("%Y%m%d%H%M%S%f")

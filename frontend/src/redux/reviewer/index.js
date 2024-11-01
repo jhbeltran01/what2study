@@ -9,6 +9,10 @@ export const reviewerSlice = createSlice({
   reducers: reducers
 })
 
-export const { setReviewer } = reviewerSlice.actions
+export const { 
+  setReviewer, 
+  setReviewerSlug,
+  setReviewerIsPublic, 
+} = reviewerSlice.actions
 
 export default reviewerSlice.reducer

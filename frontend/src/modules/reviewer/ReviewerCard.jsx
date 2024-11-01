@@ -1,7 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setReviewer, setReviewerSlug } from '@redux/reviewer';
+import * as routes from '../../routes/constants';
+import { useNavigate } from 'react-router-dom';
 
 function ReviewerCard({reviewer}) {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const redirectToSelectedReviewerContent = () => {
+    dispatch(setReviewer(reviewer))
+    dispatch(setReviewerSlug(reviewer.slug))
+    navigate(routes.VIEW_REVIEWER_CONTENT)
+  }
+
   return (
     <div className="reviewer-entry">
       <div className="reviewer-header">
@@ -12,7 +25,12 @@ function ReviewerCard({reviewer}) {
         <button className="more-options">⋮</button>
       </div>
       <p className="reviewer-created-by">Created by: {reviewer.owner.username}</p>
-      <a href="#" className="view-link">View</a>
+      <button 
+        onClick={redirectToSelectedReviewerContent} 
+        className="view-link"
+      >
+        View
+      </button>
     </div>
   )
 }
