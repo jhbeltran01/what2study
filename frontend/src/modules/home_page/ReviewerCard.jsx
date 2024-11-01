@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { apiRootURL } from '../../globals';
 import { useNavigate } from 'react-router-dom';
-import { setReviewer } from '@redux/reviewer';
+import { setReviewer, setReviewerIsPublic } from '@redux/reviewer';
 import * as routes from '../../routes/constants';
 import { useDispatch } from 'react-redux';
 
@@ -32,6 +32,7 @@ function ReviewerCard({reviewer}) {
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
+    dispatch(setReviewerIsPublic(true))
     navigate(routes.VIEW_REVIEWER_CONTENT)
   }
 

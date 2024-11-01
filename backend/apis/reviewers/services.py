@@ -1,3 +1,5 @@
+from ast import Index
+
 import pdfplumber
 
 from rest_framework.serializers import ValidationError
@@ -25,9 +27,10 @@ class Document:
         self.text_content = ''
         self.definitions = []
         self.enum_titles = []
-        self.new_title = ''
-        self.new_enum_title = ''
+        self.new_title = None
+        self.new_enum_title = None
         self.text = ''
+        self.DEFINITION_TITLE_MARK = '$'
         self.DEFINITION_MARK = '-'
         self.ENUMERATION_MARK = '>'
         self.ENUMERATION_TITLE_MARK = '+'
@@ -35,6 +38,12 @@ class Document:
         self.has_enumeration = False
         self.has_identification = False
         self.question_types = []
+        self.markers = [
+            self.DEFINITION_MARK,
+            self.ENUMERATION_MARK,
+            self.ENUMERATION_TITLE_MARK,
+            self.DEFINITION_TITLE_MARK,
+        ]
 
     def generate_text(self):
         for file in self.files:
@@ -50,23 +59,46 @@ class Document:
         self.text_content += '\n'
 
     def convert_text_to_content(self, reviewer, content=None):
+        content = self.text_content.split('\n') if content is None else content.split('\n')
+        content = self._clean_text_content(content)
+
         self.reviewer = reviewer
-        contents = self.text_content.split('\n') if content is None else content.split('\n')
 
-        for index, text in enumerate(contents):
+        for index, text in enumerate(content):
             self.text = text
-
-            if self.text == '':
-                continue
-
-            self._identify_content_type(marker=text[0])
+            self._identify_content_type(text[0])
 
         self._add_multiple_choice_to_question_types()
 
         Definition.definitions.bulk_create(self.definitions)
         EnumerationTitle.titles.bulk_create(self.enum_titles)
 
+    def _clean_text_content(self, content):
+        index = -1
+        while index < len(content):
+            index += 1
+            text = content[index]
+            prev_text = content[index - 1]
+
+            if  text == '':
+                content.pop(index)
+                continue
+
+            if prev_text == '' or prev_text is None:
+                continue
+
+            curr_text_has_a_marker = text[0] in self.markers
+            prev_text_has_a_marker = prev_text[0] in self.markers
+
+            if not curr_text_has_a_marker and prev_text_has_a_marker:
+                content[index-1] += ' ' + text
+                content.pop(index)
+                index -= 1
+
+        return content
+
     def _identify_content_type(self, marker):
+
         match marker:
             case self.DEFINITION_MARK:
                 self._add_to_definitions()
@@ -81,7 +113,7 @@ class Document:
                     enum_title=self.new_enum_title
                 )
                 self.number_of_title += 1
-            case _:
+            case self.DEFINITION_TITLE_MARK:
                 self.new_title = self._create_title(title_type=Title.Type.DEFINITION)
                 self.number_of_title += 1
 
@@ -89,7 +121,7 @@ class Document:
         return Title.titles.create(
             owner=self.owner,
             reviewer=self.reviewer,
-            text=self._get_text(self.text) if title_type != Title.Type.DEFINITION else self.text,
+            text=self._get_text(self.text),
             type=title_type,
             enum_title=enum_title,
         )
@@ -115,6 +147,7 @@ class Document:
             self.question_types.append(Reviewer.QuestionType.IDENTIFICATION)
 
     def _add_enumeration_to_question_types(self):
+        """@TODO make sure that the enumeration has an enumeration title"""
         if not self.has_enumeration:
             self.has_enumeration = True
             self.question_types.append(Reviewer.QuestionType.ENUMERATION)
@@ -126,7 +159,7 @@ class Document:
     @staticmethod
     def _get_text(text):
         """Remove the mark"""
-        return text[2:]
+        return text[1:].strip()
 
 
 def unauthorized_user(reviewer, user_id):

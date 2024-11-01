@@ -27,6 +27,8 @@ function Main() {
   },[])
 
   useEffect(() => {
+    if (!reviewer.is_public) { return }
+    
     /** add reviewer to recently viewed */
     axios
       .post(

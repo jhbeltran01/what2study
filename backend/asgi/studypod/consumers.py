@@ -225,7 +225,6 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             "last_action": self.last_action[self.room_name]
         }
 
-    """@TODO: retrieve the reviewers that belongs on the studypod"""
     async def _retrieve_reviewer_list(self):
         is_the_moderator = self.moderators[self.room_name].id == self.user.id
         reviewer_list = ReviewerList(studypod=self.study_pod)

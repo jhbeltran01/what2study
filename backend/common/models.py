@@ -9,8 +9,8 @@ from common.services import generate_access_code, generate_unique_id
 
 
 class Timestamp(models.Model):
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -135,6 +135,10 @@ class Title(SlugField):
         ENUMERATION = ('E', 'ENUMERATION')
         ENUMERATION_TITLE = ('T', 'ENUMERATION_TITLE')
 
+
+    class Meta:
+        ordering = ['created_at']
+
     owner = models.ForeignKey(
         User,
         editable=False,
@@ -185,6 +189,9 @@ class EnumerationTitle(SlugField):
 
     titles = models.Manager()
 
+    class Meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return self.title.text
 
@@ -216,6 +223,9 @@ class Definition(SlugField):
 
     definitions = models.Manager()
 
+    class Meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return self.text
 
@@ -239,6 +249,9 @@ class Note(SlugField):
     content = models.TextField(default='')
 
     notes = models.Manager()
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return self.slug
