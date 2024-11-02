@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as constants from './constants'
 import Definition from './Definition'
 import axios from 'axios';
@@ -12,7 +12,7 @@ import { TitleContext } from './Main';
  * @TODO when updating a title, do not include the content on the returned data 
 */
 function Title({title, index=null, titleSlug=null, setContentParent=null, contentParent=null}) {
-  const isEnumerationTitle = title.content.length === 0
+  const isEnumerationTitle = title.content.length === 0 && title.t_type != constants.DEFINITION
   const isEnumerationTitleWithDefinition = title.content.length > 0
   const isEnumeration = title.t_type === constants.ENUMERATION
   const isDefinitionTitle = title.t_type === constants.DEFINITION
@@ -24,6 +24,12 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   const [newContentValue, setNewContentValue] = useState('')
   const [titles, setTitles] = useContext(TitleContext)
 
+  useEffect(() => {
+    if (isEnumerationTitleWithDefinition && !isEnumerationTitle) {
+      // setInputText(title.text)
+    }
+  }, [titles])
+
   const updateTitle = () => {
     if (inputText == text) { return }
 
@@ -33,12 +39,56 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
         {text: inputText}
       )
       .then(response => {
-        setText(response.data.text)
-        setInputText(response.data.text)
+        const text = response.data.text
+        setText(text)
+        setInputText(text)
+        updateMainTitleText(title.slug, text)
+        updateEnumerationTitleText(title.slug, text)
       })
       .catch(err => {
-        console.log(err.request.data)
+        console.log(err)
       })
+  }
+
+  const updateMainTitleText = (slug, text) => {
+    if (!isEnumerationTitle) { return }
+
+    const updatedTitles = titles.map(title => 
+      title.slug === slug ? { ...title, text: text} : title
+    );
+
+    setTitles(updatedTitles)
+  }
+
+  const updateEnumerationTitleText = (slug, text) => {
+    if (!isEnumerationTitleWithDefinition) { return }
+
+    const tempTitles = [...titles]
+    let has_been_updated = false
+    
+    for (let index = 0; index < titles.length; ++index) {
+      if (titles[index].t_type != constants.ENUMERATION) { continue }
+      
+      const content = titles[index].content
+
+      for (let inner_index = 0; inner_index < content.length; ++inner_index) {
+        if (slug != content[inner_index].slug) { continue }
+        
+        const tempContent = [...titles[index].content]
+        tempContent[inner_index] = {...tempContent[inner_index], text: text}
+        tempTitles[index].content = tempContent
+        console.log(text)
+        console.log(tempContent)
+        has_been_updated = true 
+        break
+      }
+
+      if (has_been_updated) { break }
+    }
+    
+    console.log(tempTitles)
+
+    setTitles(tempTitles)
   }
 
   const addAContent = async () => {
