@@ -23,6 +23,9 @@ urlpatterns = [
              name='enum-title'),
         path('enumeration-titles/<slug:slug>/',
              views.EnumerationTitleAPIView.as_view(),
-             name='single-enum-title')
+                name='single-enum-title'),
+        path('enumeration-titles/<slug:slug>/<int:is_definition>/',
+                views.EnumerationTitleAPIView.as_view(),
+                    name='single-enum-title')
     ])),
 ]

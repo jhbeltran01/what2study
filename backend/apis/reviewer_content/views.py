@@ -20,7 +20,7 @@ from .serializers import (
     ReviewerContentQueryParamSerializer, ReviewerContentSerializer,
 )
 from ..reviewers.serializers import TitleSerializer
-from ..reviewers.services import get_query_params, Document
+from ..reviewers.services import get_query_params, Document, delete_enum_title
 
 
 class DefinitionAPIView(
@@ -84,14 +84,14 @@ class EnumerationTitleAPIView(
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.query_params = None
-        self.valid_types = {'valid_title_types': [Title.Type.ENUMERATION]}
+        self.params_context = {'valid_title_types': [Title.Type.ENUMERATION]}
 
     def post(self, request, *args, **kwargs):
-        self.query_params = get_query_params(kwargs, context=self.valid_types)
+        self.query_params = get_query_params(kwargs, context=self.params_context)
         return super().create(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        self.query_params = get_query_params(kwargs, context=self.valid_types)
+        self.query_params = get_query_params(kwargs, context=self.params_context)
 
         if kwargs.get('slug') is None:
             raise exceptions.MethodNotAllowed('PATCH')
@@ -100,24 +100,34 @@ class EnumerationTitleAPIView(
         return super().update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        self.query_params = get_query_params(kwargs, context=self.valid_types)
+        self.params_context['is_definition_is_needed'] = True
+        self.params_context['content_slug_is_only_needed'] = True
+        kwargs['enumeration_title_slug'] = kwargs.get('slug')
+        self.query_params = get_query_params(kwargs, context=self.params_context)
 
         if kwargs.get('slug') is None:
             raise exceptions.MethodNotAllowed('DELETE')
+
+        super().destroy(request, *args, **kwargs)
 
         payload = {'detail': 'Title has been deleted.'}
         return Response(payload, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return Title.titles.filter(enum_title=self.query_params.get('title'))
+        return Title.titles.filter(slug=self.query_params.get('title').slug)
 
     def perform_create(self, serializer):
         title = serializer.save(
             owner=self.request.user,
             reviewer=self.query_params.get('reviewer'),
-            enum_title=self.query_params.get('title')
+            enum_title=self.query_params.get('title'),
+            type=Title.Type.ENUMERATION_TITLE,
         )
         EnumerationTitle.titles.create(title=title)
+
+    def perform_destroy(self, instance):
+        is_definition = self.query_params.get('is_definition')
+        delete_enum_title(is_definition, instance)
 
 
 class TitleAPIView(

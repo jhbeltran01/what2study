@@ -1,8 +1,11 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals'
 import Title from './Title'
+import * as constants from './constants'
+
+export const TitleContext = createContext()
 
 function Main() {
   const reviewer = useSelector(state => state.reviewer.value)
@@ -44,9 +47,18 @@ function Main() {
     <div>
       <h1 className='mb-[2rem]'>{reviewer.name}</h1>
 
-      <ul>
-        {titles.map((title, index) => <Title title={title} key={index} />)}
-      </ul>
+      <TitleContext.Provider value={[titles, setTitles]}>
+        <ul>
+          {titles.map((title, index) => {
+            const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
+            const hasNoDefinition = title.content.length == 0;
+            if (isEnumerationTitle && hasNoDefinition) {
+              return ''
+            }
+            return <Title title={title} index={index} key={index} />
+          })}
+        </ul>
+      </TitleContext.Provider>
     </div>
   )
 }

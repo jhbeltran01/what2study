@@ -1,6 +1,6 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
 import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
@@ -40,7 +40,7 @@ function Definition({definition, titleSlug, deleteAContent, index}) {
   }
 
   const deleteADefinition = async () => {
-    const isSuccessful = await performDeleteDefinition(
+    const [isSuccessful] = await performDeleteDefinition(
       reviewer.reviewer,
       titleSlug,
       definition.slug,
