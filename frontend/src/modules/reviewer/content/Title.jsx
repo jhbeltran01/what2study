@@ -6,7 +6,7 @@ import axios from 'axios';
 import { apiRootURL } from '@root/globals';
 import { useSelector } from 'react-redux';
 import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle } from './services';
-import { TitleContext } from './Main';
+import { EnumTitleContext, TitleContext } from './Main';
 
 /**
  * @TODO when updating a title, do not include the content on the returned data 
@@ -23,12 +23,15 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   const [willAddAContent, setWillAddAContent] = useState(false)
   const [newContentValue, setNewContentValue] = useState('')
   const [titles, setTitles] = useContext(TitleContext)
+  const [enumTitle, setEnumTitle] = useContext(EnumTitleContext)
 
   useEffect(() => {
-    if (isEnumerationTitleWithDefinition && !isEnumerationTitle) {
-      // setInputText(title.text)
-    }
-  }, [titles])
+    if (!enumTitle.isUpdated || title.slug != enumTitle.slug) { return }
+
+    setInputText(enumTitle.text)
+    setEnumTitle({isUpdated: false, slug: '', text: ''})
+    console.log(enumTitle)
+  }, [enumTitle])
 
   const updateTitle = () => {
     if (inputText == text) { return }
@@ -42,53 +45,11 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
         const text = response.data.text
         setText(text)
         setInputText(text)
-        updateMainTitleText(title.slug, text)
-        updateEnumerationTitleText(title.slug, text)
+        setEnumTitle({isUpdated: true, slug: title.slug, text: text})
       })
       .catch(err => {
         console.log(err)
       })
-  }
-
-  const updateMainTitleText = (slug, text) => {
-    if (!isEnumerationTitle) { return }
-
-    const updatedTitles = titles.map(title => 
-      title.slug === slug ? { ...title, text: text} : title
-    );
-
-    setTitles(updatedTitles)
-  }
-
-  const updateEnumerationTitleText = (slug, text) => {
-    if (!isEnumerationTitleWithDefinition) { return }
-
-    const tempTitles = [...titles]
-    let has_been_updated = false
-    
-    for (let index = 0; index < titles.length; ++index) {
-      if (titles[index].t_type != constants.ENUMERATION) { continue }
-      
-      const content = titles[index].content
-
-      for (let inner_index = 0; inner_index < content.length; ++inner_index) {
-        if (slug != content[inner_index].slug) { continue }
-        
-        const tempContent = [...titles[index].content]
-        tempContent[inner_index] = {...tempContent[inner_index], text: text}
-        tempTitles[index].content = tempContent
-        console.log(text)
-        console.log(tempContent)
-        has_been_updated = true 
-        break
-      }
-
-      if (has_been_updated) { break }
-    }
-    
-    console.log(tempTitles)
-
-    setTitles(tempTitles)
   }
 
   const addAContent = async () => {

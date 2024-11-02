@@ -6,10 +6,12 @@ import Title from './Title'
 import * as constants from './constants'
 
 export const TitleContext = createContext()
+export const EnumTitleContext = createContext()
 
 function Main() {
   const reviewer = useSelector(state => state.reviewer.value)
   const [titles, setTitles] = useState([])
+  const [text, setText] = useState({isUpdated: false, slug: '', text: ''})
 
   useEffect(() => {
     /** Get the content of the reviewer */
@@ -47,18 +49,20 @@ function Main() {
     <div>
       <h1 className='mb-[2rem]'>{reviewer.name}</h1>
 
-      <TitleContext.Provider value={[titles, setTitles]}>
-        <ul>
-          {titles.map((title, index) => {
-            const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
-            const hasNoDefinition = title.content.length == 0;
-            if (isEnumerationTitle && hasNoDefinition) {
-              return ''
-            }
-            return <Title title={title} index={index} key={index} />
-          })}
-        </ul>
-      </TitleContext.Provider>
+      <EnumTitleContext.Provider value={[text, setText]}>
+        <TitleContext.Provider value={[titles, setTitles]}>
+          <ul>
+            {titles.map((title, index) => {
+              const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
+              const hasNoDefinition = title.content.length == 0;
+              if (isEnumerationTitle && hasNoDefinition) {
+                return ''
+              }
+              return <Title title={title} index={index} key={index} />
+            })}
+          </ul>
+        </TitleContext.Provider>
+      </EnumTitleContext.Provider>
     </div>
   )
 }
