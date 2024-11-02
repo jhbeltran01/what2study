@@ -227,3 +227,20 @@ def get_query_params(kwargs, context=None):
     )
     query_params_serializer.is_valid(raise_exception=True)
     return query_params_serializer.data
+
+
+def delete_enum_title(is_definition, instance):
+    is_enum_title = not is_definition
+
+    if is_definition and instance.enum_title is not None:
+        instance.definitions.all().delete()
+        return
+
+    has_definition = instance.definitions.all().first() is not None
+
+    if is_enum_title and has_definition:
+        instance.enum_title = None
+        instance.save()
+        return
+
+    instance.delete()

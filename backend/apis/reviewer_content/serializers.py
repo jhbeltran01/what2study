@@ -10,6 +10,8 @@ from common.models import (
 class ReviewerContentQueryParamSerializer(serializers.Serializer):
     reviewer_slug = serializers.CharField(max_length=50)
     title_slug = serializers.CharField(max_length=50, allow_null=True)
+    enumeration_title_slug = serializers.CharField(max_length=50, default='')
+    is_definition = serializers.BooleanField(required=False)
     reviewer = serializers.SerializerMethodField(read_only=True)
     title = serializers.SerializerMethodField(read_only=True)
 
@@ -17,16 +19,24 @@ class ReviewerContentQueryParamSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
         self.valid_title_types = [Title.Type.DEFINITION, Title.Type.ENUMERATION_TITLE]
         self.title_slug_is_needed = True
+        self.content_slug_is_only_needed = False
+        self.is_definition_is_needed = False
 
         if self.context is not None:
             self.valid_title_types = self.context.pop('valid_title_types')
             self.title_slug_is_needed = self.context.pop('title_slug_is_needed', True)
+            self.is_definition_is_needed = self.context.get('is_definition_is_needed', False)
+            self.content_slug_is_only_needed = self.context.get('content_slug_is_only_needed', False)
 
         self.reviewer = None
         self.title = None
         self.definition = None
+        self.enum_title = None
 
     def validate_reviewer_slug(self, value):
+        if self.content_slug_is_only_needed:
+            return None
+
         self.reviewer = Reviewer.reviewers.filter(slug=value).first()
 
         if self.reviewer is None:
@@ -35,6 +45,9 @@ class ReviewerContentQueryParamSerializer(serializers.Serializer):
         return value
 
     def validate_title_slug(self, value):
+        if self.content_slug_is_only_needed:
+            return None
+
         if not self.title_slug_is_needed:
             return value
 
@@ -48,10 +61,26 @@ class ReviewerContentQueryParamSerializer(serializers.Serializer):
 
         return value
 
+    def validate_enumeration_title_slug(self, value):
+        if not self.content_slug_is_only_needed:
+            return value
+
+        if value is None or value == '':
+            raise serializers.ValidationError('This field is required')
+
+        self.enum_title = Title.titles.filter(slug=value).first()
+
+        if self.enum_title is None:
+            raise serializers.ValidationError('Enumeration Title not found.')
+
+        return value
+
     def get_reviewer(self, instance):
         return self.reviewer
 
     def get_title(self, instance):
+        if self.content_slug_is_only_needed:
+            return self.enum_title
         return self.title
 
 

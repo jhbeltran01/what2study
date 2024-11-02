@@ -41,7 +41,8 @@ ReviewerCard.propTypes = {
     owner: PropTypes.shape({
         username: PropTypes.string.isRequired,
     }).isRequired,
-    profile_picture: PropTypes.string
+    profile_picture: PropTypes.string,
+    slug: PropTypes.string.isRequired
   }).isRequired,
 };
 

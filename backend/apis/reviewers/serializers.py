@@ -146,6 +146,7 @@ class TitleSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField(read_only=True)
     is_in_order = serializers.SerializerMethodField(read_only=True)
     t_type = serializers.SerializerMethodField(read_only=True)
+    type = serializers.CharField(required=False)
 
     class Meta:
         model = Title
