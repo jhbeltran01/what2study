@@ -1,0 +1,9 @@
+@use '../abstract/variables' as var;
+
+.header-1 {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 250px;
+  background-color: var.$white-2;
+}

@@ -187,13 +187,22 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
         })}
         <li>
           {
-            willAddAContent 
+            willAddAContent && !isEnumeration
             && <textarea 
               className='w-[100%] text-red-700'
               value={newContentValue}
               onChange={handleNewContentChange}
               onBlur={addAContent}
             ></textarea> 
+          }
+          {
+            willAddAContent && isEnumeration
+            && <input 
+              className='w-[100%] text-red-700'
+              value={newContentValue}
+              onChange={handleNewContentChange}
+              onBlur={addAContent}
+            ></input> 
           }
         </li>
       </ul>

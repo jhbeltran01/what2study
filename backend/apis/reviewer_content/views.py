@@ -85,12 +85,14 @@ class EnumerationTitleAPIView(
         super().__init__(*args, **kwargs)
         self.query_params = None
         self.params_context = {'valid_title_types': [Title.Type.ENUMERATION]}
+        self.is_update = False
 
     def post(self, request, *args, **kwargs):
         self.query_params = get_query_params(kwargs, context=self.params_context)
         return super().create(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        self.is_update = True
         self.query_params = get_query_params(kwargs, context=self.params_context)
 
         if kwargs.get('slug') is None:
@@ -114,7 +116,13 @@ class EnumerationTitleAPIView(
         return Response(payload, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return Title.titles.filter(slug=self.query_params.get('title').slug)
+        return Title.titles.filter(enum_title=self.query_params.get('title'))
+
+    def get_object(self):
+        return Title.titles.filter(slug=self.query_params.get('enumeration_title_slug')).first()
+
+    def get_serializer_context(self):
+        return {'is_update': self.is_update}
 
     def perform_create(self, serializer):
         title = serializer.save(
@@ -149,6 +157,8 @@ class TitleAPIView(
             ],
             'title_slug_is_needed': True
         }
+        self.is_updated = False
+        self.serialized_new_content = []
 
     def dispatch(self, request, *args, **kwargs):
         kwargs['title_slug'] = kwargs.get('slug')
@@ -160,11 +170,11 @@ class TitleAPIView(
         serializer = ReviewerContentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({'details': 'Adding a content is successful.'}, status=status.HTTP_200_OK)
+        return Response(self.serialized_new_content, status=status.HTTP_200_OK)
 
     def patch(self, request, *args, **kwargs):
         self.query_params = get_query_params(kwargs, context=self.custom_context)
-
+        self.is_updated = True
         if kwargs.get('slug') is None:
             raise exceptions.MethodNotAllowed('PATCH')
 
@@ -190,8 +200,11 @@ class TitleAPIView(
         return reviewer.titles.all()
 
     def perform_create(self, serializer):
-        document = Document(owner=self.request.user)
         reviewer = self.query_params.get('reviewer')
+        document = Document(
+            owner=self.request.user,
+            reviewer=reviewer
+        )
         content = serializer.data.get('content')
 
         document.convert_text_to_content(reviewer, content=content)
@@ -199,3 +212,11 @@ class TitleAPIView(
         reviewer.content += content
         reviewer.available_question_types = document.question_types
         reviewer.save()
+
+        self._set_serialized_new_content(document.new_titles)
+
+    def get_serializer_context(self):
+        return {'is_update': self.is_updated}
+
+    def _set_serialized_new_content(self, titles):
+        self.serialized_new_content = TitleSerializer(titles, many=True).data
