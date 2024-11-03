@@ -23,6 +23,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   const [newContentValue, setNewContentValue] = useState('')
   const [titles, setTitles] = useContext(TitleContext)
   const [enumTitle, setEnumTitle] = useContext(EnumTitleContext)
+  const [contentParentInContext] = useContext(ContentContext) || [null, () => {}];
 
   useEffect(() => {
     if (!enumTitle.isUpdated || title.slug != enumTitle.slug) { return }
@@ -33,8 +34,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
 
   useEffect(() => {
     setInputText(title.text)
-    console.log('hello content')
-  }, [content])
+  }, [contentParentInContext])
 
   const updateTitle = () => {
     if (inputText == text) { return }
