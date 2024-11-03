@@ -152,7 +152,7 @@ class Title(SlugField):
     )
     enum_title = models.ForeignKey(
         'self',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         editable=False,
         default=None,
         null=True,
@@ -175,6 +175,17 @@ class Title(SlugField):
         if self.slug is None:
             self.slug = generate_unique_id()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        answers = self.answers.all()
+        to_be_deleted = []
+
+        for answer in answers:
+            if answer.definitions.all().first is None:
+                to_be_deleted.append(answer.id)
+
+        Title.titles.filter(id__in=to_be_deleted).delete()
+        super().delete(*args, **kwargs)
 
 
 class EnumerationTitle(SlugField):
