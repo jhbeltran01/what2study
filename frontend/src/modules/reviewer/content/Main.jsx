@@ -68,7 +68,7 @@ function Main() {
                 
                 const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
                 const hasNoDefinition = title.content.length == 0;
-                if (isEnumerationTitle && hasNoDefinition) {
+                if (isEnumerationTitle && hasNoDefinition && title.is_in_enumeration) {
                   return ''
                 }
 

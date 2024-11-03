@@ -1,9 +1,11 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
 import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
+import { TitleContext } from './Main';
+import { ContentContext } from './Title';
 
 /** @TODO strip the text before saving to the database */
 function Definition({definition, titleSlug, deleteAContent, index}) {
@@ -11,6 +13,11 @@ function Definition({definition, titleSlug, deleteAContent, index}) {
   const [text, setText] = useState(definition.text)
   const reviewer = useSelector(state => state.reviewer.value)
   const [deleteIsHovered, setDeleteIsHovered] = useState(false)
+  const [content] = useContext(ContentContext)
+
+  useEffect(() => {
+    setInputText(definition.text)
+  }, [content])
 
   const updateDefinition = (event) => {
     handleDefinitionTextChange(event)

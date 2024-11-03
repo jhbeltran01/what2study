@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import * as constants from './constants'
 import Definition from './Definition'
 import axios from 'axios';
@@ -8,11 +8,10 @@ import { useSelector } from 'react-redux';
 import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle, performDeleteTitle } from './services';
 import { EnumTitleContext, TitleContext } from './Main';
 
-/**
- * @TODO when deleting an enumeration, set the enum title to none if the enum title has no definition, if not, delete it.
-*/
+export const ContentContext = createContext()
+
 function Title({title, index=null, titleSlug=null, setContentParent=null, contentParent=null}) {
-  const isEnumerationTitle = title.content.length === 0 && title.t_type != constants.DEFINITION
+  const isEnumerationTitle = title.content.length === 0 && title.t_type != constants.DEFINITION && title.is_in_enumeration
   const isEnumerationTitleWithDefinition = title.t_type == constants.ENUMERATION_TITLE && title.content.length > 0
   const isEnumeration = title.t_type === constants.ENUMERATION
   const isDefinitionTitle = title.t_type === constants.DEFINITION
@@ -31,6 +30,11 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     setInputText(enumTitle.text)
     setEnumTitle({isUpdated: false, slug: '', text: ''})
   }, [enumTitle])
+
+  useEffect(() => {
+    setInputText(title.text)
+    console.log('hello content')
+  }, [content])
 
   const updateTitle = () => {
     if (inputText == text) { return }
@@ -110,13 +114,13 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     return isSuccessful
   }
 
-  const deleteAContent = (index) => {
+  const deleteAContent = (innerIndex) => {
     /** When deleting an Enumeration content. Delete on the enumeration content */
     const isParentContent =  setContentParent != null
     let newContent = isParentContent ? [...contentParent] : [...content]
     const contentSetter = isParentContent ? setContentParent : setContent
 
-    newContent.splice(index, 1)
+    newContent.splice(innerIndex, 1)
     contentSetter(newContent)
   }
 
@@ -125,7 +129,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     makeTextareaHeightToBeResponsive(event.target)
   }
 
-  const deleteAnEnumTitle = async (index) => {
+  const deleteAnEnumTitle = async (innerIndex) => {
     const [isSuccessful] = await performDeleteEnumerationTitle(
       reviewer.reviewer,
       titleSlug,
@@ -141,10 +145,10 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
       return
     }
 
-    deleteAContent(index, )
+    deleteAContent(innerIndex)
   }
 
-  const deleteATitle = async (index) => {
+  const deleteATitle = async (innerIndex) => {
     const [isSuccessful] = await performDeleteTitle(
       reviewer.reviewer,
       title.slug
@@ -152,11 +156,11 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
 
     if (!isSuccessful) { return }
 
-    deleteATitleInTheList(index)
+    deleteATitleInTheList(innerIndex)
   }
 
   const deleteATitleInTheList = (delIndex) => {
-    const tempTitles = titles.map((title, index) => index != delIndex && title)
+    const tempTitles = titles.map((title, innerIndex) => innerIndex != delIndex && title)
     setTitles(tempTitles)
   }
 
@@ -165,66 +169,68 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     : deleteATitle
 
     return (
-    <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
-      <div className='flex gap-[10px]'>
-        <input 
-          className='w-[100%]'
-          type="text" 
-          value={inputText} 
-          onChange={(e) => setInputText(e.target.value)}
-          onBlur={updateTitle}
-        />
+    <ContentContext.Provider value={[content]}>
+      <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
         <div className='flex gap-[10px]'>
-          <button onClick={() => setWillAddAContent(true) }>Add</button>
-          <button onClick={() => deleteTitleFunction(index)}>Delete</button>
-          {isEnumeration && <button>Order</button>}
+          <input
+            className='w-[100%]'
+            type="text"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onBlur={updateTitle}
+          />
+          <div className='flex gap-[10px]'>
+            <button onClick={() => setWillAddAContent(true) }>Add</button>
+            <button onClick={() => deleteTitleFunction(index)}>Delete</button>
+            {isEnumeration && <button>Order</button>}
+          </div>
         </div>
-      </div>
-      <ul className='px-[1em]'>
-        {content.map((data, index) => {
-          switch(title.t_type) {
-            case constants.DEFINITION:
-            case constants.ENUMERATION_TITLE:
-              return <Definition 
-                        definition={data} 
-                        titleSlug={title.slug} 
-                        deleteAContent={deleteAContent}
-                        index={index}
-                        key={index}
-                      />
-            case constants.ENUMERATION:
-              return <Title 
-                        title={data} 
-                        index={index}
-                        titleSlug={title.slug} 
-                        setContentParent={setContent}
-                        contentParent={content}
-                        key={index} 
-                      />
-          }
-        })}
-        <li>
-          {
-            willAddAContent && !isEnumeration
-            && <textarea 
-              className='w-[100%] text-red-700'
-              value={newContentValue}
-              onChange={handleNewContentChange}
-              onBlur={addAContent}
-            ></textarea> 
-          }
-          {
-            willAddAContent && isEnumeration
-            && <input 
-              className='w-[100%] text-red-700'
-              value={newContentValue}
-              onChange={handleNewContentChange}
-              onBlur={addAContent}
-            ></input> 
-          }
-        </li>
-      </ul>
-    </li>
+        <ul className='px-[1em]'>
+          {content.map((data, index) => {
+            switch(title.t_type) {
+              case constants.DEFINITION:
+              case constants.ENUMERATION_TITLE:
+                return <Definition
+                          definition={data}
+                          titleSlug={title.slug}
+                          deleteAContent={deleteAContent}
+                          index={index}
+                          key={index}
+                        />
+              case constants.ENUMERATION:
+                return <Title
+                          title={data}
+                          index={index}
+                          titleSlug={title.slug}
+                          setContentParent={setContent}
+                          contentParent={content}
+                          key={index}
+                        />
+            }
+          })}
+          <li>
+            {
+              willAddAContent && !isEnumeration
+              && <textarea
+                className='w-[100%] text-red-700'
+                value={newContentValue}
+                onChange={handleNewContentChange}
+                onBlur={addAContent}
+              ></textarea>
+            }
+            {
+              willAddAContent && isEnumeration
+              && <input
+                className='w-[100%] text-red-700'
+                value={newContentValue}
+                onChange={handleNewContentChange}
+                onBlur={addAContent}
+              ></input>
+            }
+          </li>
+        </ul>
+      </li>
+    </ContentContext.Provider>
   )
 }
 
