@@ -53,8 +53,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
 
   const addAContent = async () => {
     let addingIsSuccessful = false
-
-    if (isDefinitionTitle || isEnumerationTitle) {
+    if (isDefinitionTitle || isEnumerationTitle || isEnumerationTitleWithDefinition) {
       addingIsSuccessful = await addDefinition()
     }
 
@@ -69,14 +68,13 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   }
 
   const addDefinition = async () => {
-    
     const [isSuccessful, newDefinition] = await performAddNewDefinition(
       reviewer.reviewer, 
       title.slug, 
       newContentValue
     )
 
-    if (isSuccessful && !isEnumerationTitle) { 
+    if (isSuccessful && (!isEnumerationTitle || isDefinitionTitle)) { 
       setContent([...content, newDefinition])
     }
 
