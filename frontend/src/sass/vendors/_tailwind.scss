@@ -659,6 +659,10 @@ video {
   flex-direction: column;
 }
 
+.place-content-center {
+  place-content: center;
+}
+
 .items-center {
   align-items: center;
 }
@@ -683,9 +687,21 @@ video {
   padding: 1rem;
 }
 
+.p-\[1em\] {
+  padding: 1em;
+}
+
 .px-\[1em\] {
   padding-left: 1em;
   padding-right: 1em;
+}
+
+.pt-\[2em\] {
+  padding-top: 2em;
+}
+
+.pt-\[3em\] {
+  padding-top: 3em;
 }
 
 .text-center {

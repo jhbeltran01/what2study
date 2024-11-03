@@ -44,6 +44,7 @@ class Document:
             self.ENUMERATION_TITLE_MARK,
             self.DEFINITION_TITLE_MARK,
         ]
+        self.new_titles = []
 
     def generate_text(self):
         for file in self.files:
@@ -61,7 +62,6 @@ class Document:
     def convert_text_to_content(self, reviewer, content=None):
         content = self.text_content.split('\n') if content is None else content.split('\n')
         content = self._clean_text_content(content)
-
         self.reviewer = reviewer
 
         for index, text in enumerate(content):
@@ -75,8 +75,9 @@ class Document:
 
     def _clean_text_content(self, content):
         index = -1
-        while index < len(content):
+        while index + 1 < len(content):
             index += 1
+
             text = content[index]
             prev_text = content[index - 1]
 
@@ -98,13 +99,13 @@ class Document:
         return content
 
     def _identify_content_type(self, marker):
-
         match marker:
             case self.DEFINITION_MARK:
                 self._add_to_definitions()
                 self._add_identification_to_question_types()
             case self.ENUMERATION_MARK:
                 self.new_enum_title = self._create_title(title_type=Title.Type.ENUMERATION)
+                self.new_titles.append(self.new_enum_title)
                 self._add_to_enum_title()
                 self._add_enumeration_to_question_types()
             case self.ENUMERATION_TITLE_MARK:
@@ -112,9 +113,11 @@ class Document:
                     title_type=Title.Type.ENUMERATION_TITLE,
                     enum_title=self.new_enum_title
                 )
+                self.new_titles.append(self.new_title)
                 self.number_of_title += 1
             case self.DEFINITION_TITLE_MARK:
                 self.new_title = self._create_title(title_type=Title.Type.DEFINITION)
+                self.new_titles.append(self.new_title)
                 self.number_of_title += 1
 
     def _create_title(self, title_type='', enum_title=None):
@@ -127,6 +130,7 @@ class Document:
         )
 
     def _add_to_definitions(self):
+        print(self.new_title)
         self.definitions.append(Definition(
             owner=self.owner,
             reviewer=self.reviewer,

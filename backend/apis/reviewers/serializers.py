@@ -164,6 +164,7 @@ class TitleSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_enum_content = self.context.pop('is_enum_content', False)
+        self.is_update = self.context.pop('is_update', False)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -177,7 +178,7 @@ class TitleSerializer(serializers.ModelSerializer):
         return instance.get_type_display()
 
     def get_content(self, instance):
-        if instance is None or self.is_enum_content:
+        if instance is None or self.is_enum_content or self.is_update:
             return []
 
         match instance.type:
