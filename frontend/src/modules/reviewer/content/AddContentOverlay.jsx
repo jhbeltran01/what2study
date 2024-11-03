@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 /**@TODO when deleting an enumeration, it is not deleted on the UI */
 function AddContentOverlay({reviewer}) {
   const [titles, setTitles] = useContext(TitleContext)
-  const [willAddContent, setWillAddContent] = useContext(WillAddAContentContext)
+  const [_, setWillAddContent] = useContext(WillAddAContentContext)
   const [contentInputText, setContentInputText] = useState('')
 
   const addNewContent = (event) => {
@@ -32,23 +32,38 @@ function AddContentOverlay({reviewer}) {
 
   return (
     <div className='overlay-1 flex justify-center items-center'>
-      <form onSubmit={addNewContent}  className='form-1'>
-        <label htmlFor="content"></label>
-        <textarea 
-          className='textarea-2 mb-[1rem]'
-          id="content"
-          onChange={e => setContentInputText(e.target.value)}
-          onBlur={addNewContent}
-        ></textarea> <br />
-        <div className='text-right'>
+      <div className='form-1'>
+        <div className='text-right mb-[1rem]'>
           <button 
-            className='btn-3' 
-            type='submit'
+            className='btn-3'
+            onClick={() => setWillAddContent(false)}
           >
-            Add Content
+            Close
           </button>
         </div>
-      </form>
+
+        <form onSubmit={addNewContent}>
+          <div>
+            <label htmlFor="content"></label>
+
+            <textarea
+              className='textarea-2 mb-[1rem]'
+              id="content"
+              onChange={e => setContentInputText(e.target.value)}
+              onBlur={addNewContent}
+            ></textarea> <br />
+          </div>
+        
+          <div className='text-right'>
+            <button
+              className='btn-3'
+              type='submit'
+            >
+              Add Content
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

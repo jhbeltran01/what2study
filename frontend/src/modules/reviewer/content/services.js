@@ -4,7 +4,6 @@ import { apiRootURL } from '@root/globals'
 const tryCatch = (request) => {
   try {
     const response = request
-    console.log('hello')
     return [true, response.data];
   } catch (err) {
     return [false, {}];
@@ -26,6 +25,7 @@ export const performAddNewDefinition = async (reviewer, title, text) => {
 };
 
 export const performDeleteDefinition = async (reviewer, title, definition) => {
+  console.log('performDeleteDefinition')
   return tryCatch(
     await axios.delete(
       `${apiRootURL}/reviewers/${reviewer}/content/titles/`
@@ -48,6 +48,14 @@ export const performDeleteEnumerationTitle = async (reviewer, title, enumTitle, 
     await axios.delete(
       `${apiRootURL}/reviewers/${reviewer ? reviewer : 'not-needed'}/content/titles/${title ? title : 'not-needed'}/enumeration-titles`
       + `/${enumTitle}/${isDefinition ? 1 : 0}/`,
+    )
+  )
+}
+
+export const performDeleteTitle = async (reviewer, title) => {
+  return tryCatch(
+    await axios.delete(
+      `${apiRootURL}/reviewers/${reviewer}/content/titles/${title}/`
     )
   )
 }
