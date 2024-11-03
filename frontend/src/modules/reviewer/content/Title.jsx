@@ -5,18 +5,18 @@ import Definition from './Definition'
 import axios from 'axios';
 import { apiRootURL } from '@root/globals';
 import { useSelector } from 'react-redux';
-import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle } from './services';
+import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle, performDeleteTitle } from './services';
 import { EnumTitleContext, TitleContext } from './Main';
 
 /**
- * @TODO when updating a title, do not include the content on the returned data 
+ * @TODO when deleting an enumeration, set the enum title to none if the enum title has no definition, if not, delete it.
 */
 function Title({title, index=null, titleSlug=null, setContentParent=null, contentParent=null}) {
   const isEnumerationTitle = title.content.length === 0 && title.t_type != constants.DEFINITION
-  const isEnumerationTitleWithDefinition = title.content.length > 0
+  const isEnumerationTitleWithDefinition = title.t_type == constants.ENUMERATION_TITLE && title.content.length > 0
   const isEnumeration = title.t_type === constants.ENUMERATION
   const isDefinitionTitle = title.t_type === constants.DEFINITION
-  const [content, setContent] = useState(title.content);
+  const [content, setContent] = useState(title.content ? title.content : []);
   const [inputText, setInputText] = useState(title.text)
   const [text, setText] = useState(title.text)
   const reviewer = useSelector(state => state.reviewer.value)
@@ -30,7 +30,6 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
 
     setInputText(enumTitle.text)
     setEnumTitle({isUpdated: false, slug: '', text: ''})
-    console.log(enumTitle)
   }, [enumTitle])
 
   const updateTitle = () => {
@@ -114,6 +113,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   }
 
   const deleteAContent = (index) => {
+    /** When deleting an Enumeration content. Delete on the enumeration content */
     const isParentContent =  setContentParent != null
     let newContent = isParentContent ? [...contentParent] : [...content]
     const contentSetter = isParentContent ? setContentParent : setContent
@@ -140,13 +140,33 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
       const tempTitles = [...titles]
       tempTitles[index].content = []
       setTitles(tempTitles)
+      return
     }
 
-    deleteAContent(index)
+    deleteAContent(index, )
   }
-  const deleteTitleFunction = (isEnumerationTitle || isEnumerationTitleWithDefinition) && deleteAnEnumTitle
 
-  return (
+  const deleteATitle = async (index) => {
+    const [isSuccessful] = await performDeleteTitle(
+      reviewer.reviewer,
+      title.slug
+    )
+
+    if (!isSuccessful) { return }
+
+    deleteATitleInTheList(index)
+  }
+
+  const deleteATitleInTheList = (delIndex) => {
+    const tempTitles = titles.map((title, index) => index != delIndex && title)
+    setTitles(tempTitles)
+  }
+
+  const deleteTitleFunction = (isEnumerationTitle || isEnumerationTitleWithDefinition) 
+    ? deleteAnEnumTitle
+    : deleteATitle
+
+    return (
     <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
       <div className='flex gap-[10px]'>
         <input 

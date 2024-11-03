@@ -47,11 +47,16 @@ function Main() {
         console.log(err)
       })
   }, [])
+  
+  const setTitlesN = (titles) => {
+    console.log(titles)
+    setTitles(titles)
+  }
 
   return (
     <WillAddAContentContext.Provider value={[willAddContent, setWillAddContent]}>
       <EnumTitleContext.Provider value={[text, setText]}>
-        <TitleContext.Provider value={[titles, setTitles]}>
+        <TitleContext.Provider value={[titles, setTitlesN]}>
           <div className='relative pt-[3em]'>
             <div className='p-[1em] flex justify-between header-1'>
               <h1>{reviewer.name}</h1>
@@ -59,11 +64,14 @@ function Main() {
             </div>
             <ul>
               {titles.map((title, index) => {
+                if (title.content == undefined) { return '' }
+                
                 const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
                 const hasNoDefinition = title.content.length == 0;
                 if (isEnumerationTitle && hasNoDefinition) {
                   return ''
                 }
+
                 return <Title title={title} index={index} key={index} />
               })}
             </ul>
