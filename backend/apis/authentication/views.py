@@ -18,6 +18,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import RedirectView
+from django.contrib.auth import logout
 
 from .services import ResponseWithCookies
 from ..studypods.services import decrypt_data
@@ -108,6 +109,12 @@ class LogoutAPIView(APIView):
         response.delete_cookie('refresh')
         response.delete_cookie('isLoggedIn')
         return response
+
+
+class LogoutUserLoginUsingSessionAuthAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return Response({'detail': 'User has been logged out.'})
 
 
 class LoginUsingUserID(APIView):

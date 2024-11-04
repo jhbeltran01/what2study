@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
 import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
-import { TitleContext } from './Main';
 import { ContentContext } from './Title';
 
 /** @TODO strip the text before saving to the database */
