@@ -272,6 +272,7 @@ CSRF_COOKIE_SECURE = True
 #     "allauth.account.auth_backends.AuthenticationBackend"
 # )
 
+LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "/app/"
 LOGOUT_REDIRECT_URL = "/auth/login/"
 

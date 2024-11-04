@@ -147,6 +147,7 @@ class TitleSerializer(serializers.ModelSerializer):
     is_in_order = serializers.SerializerMethodField(read_only=True)
     t_type = serializers.SerializerMethodField(read_only=True)
     type = serializers.CharField(required=False)
+    is_in_enumeration = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Title
@@ -157,6 +158,7 @@ class TitleSerializer(serializers.ModelSerializer):
             'content',
             'slug',
             'is_in_order',
+            'is_in_enumeration',
             'created_at',
             'updated_at',
         ]
@@ -200,3 +202,6 @@ class TitleSerializer(serializers.ModelSerializer):
 
         enum_title = EnumerationTitle.titles.filter(title=instance).first()
         return enum_title.is_in_order
+
+    def get_is_in_enumeration(self, instance):
+        return instance.enum_title is not None

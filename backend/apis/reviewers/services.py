@@ -130,7 +130,6 @@ class Document:
         )
 
     def _add_to_definitions(self):
-        print(self.new_title)
         self.definitions.append(Definition(
             owner=self.owner,
             reviewer=self.reviewer,

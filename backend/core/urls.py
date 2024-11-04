@@ -26,6 +26,7 @@ urlpatterns = [
     path('apis/notes/', include('apis.notes.urls')),
     path('apis/todo/', include('apis.todo.urls')),
     path('apis/questions/', include('apis.questions.urls')),
+    path('apis/settings/', include('apis.settings.urls')),
     path('', include('apps.pages.urls')),
     path('auth/', include('apps.custom_auth.urls')),
     re_path(r'^app/.*', include('apps.spa.urls')),

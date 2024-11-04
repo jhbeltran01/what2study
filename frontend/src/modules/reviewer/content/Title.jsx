@@ -240,6 +240,7 @@ Title.propTypes = {
     t_type: PropTypes.string.isRequired,
     content: PropTypes.array.isRequired,
     slug: PropTypes.string.isRequired,
+    is_in_enumeration: PropTypes.bool.isRequired,
   }).isRequired,
   index: PropTypes.number,
   titleSlug: PropTypes.string,
