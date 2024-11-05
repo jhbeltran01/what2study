@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,3 +32,9 @@ urlpatterns = [
     re_path(r'^app/.*', include('apps.spa.urls')),
     path("accounts/", include("allauth.urls")),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]

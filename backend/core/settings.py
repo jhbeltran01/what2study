@@ -68,6 +68,11 @@ INSTALLED_APPS = [
     'common',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += [
+        'django_browser_reload',
+    ]
+
 # # Retrieve environment variables
 FERNET_KEY = config('FERNET_KEY')
 
@@ -101,8 +106,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    'allauth.account.middleware.AccountMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
 
 ROOT_URLCONF = 'core.urls'
 

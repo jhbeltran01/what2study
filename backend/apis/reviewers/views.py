@@ -96,7 +96,10 @@ class ReviewersAPIView(
         return Reviewer.reviewers.filter(owner=self.request.user)
     
     def get_object(self):
-        reviewer = Reviewer.reviewers.filter(slug=self.slug).first()
+        reviewer = Reviewer.reviewers.filter(
+            slug=self.slug,
+            owner=self.request.user,
+        ).first()
         if reviewer is None:
             raise exceptions.NotFound('Reviewer not found.')
         return reviewer
