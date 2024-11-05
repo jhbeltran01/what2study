@@ -60,13 +60,13 @@ class Document:
         self.text_content += '\n'
 
     def convert_text_to_content(self, reviewer, content=None):
-        content = self.text_content.split('\n') if content is None else content.split('\n')
+        content = self.text_content.split('\n') if content is None else content.splitlines()
         content = self._clean_text_content(content)
         self.reviewer = reviewer
 
-        for index, text in enumerate(content):
-            self.text = text
-            self._identify_content_type(text[0])
+        for text in content:
+            self.text = text.strip()
+            self._identify_content_type(self.text[0])
 
         self._add_multiple_choice_to_question_types()
 
@@ -78,7 +78,7 @@ class Document:
         while index + 1 < len(content):
             index += 1
 
-            text = content[index]
+            text = content[index].strip()
             prev_text = content[index - 1]
 
             if  text == '':
