@@ -14,7 +14,7 @@
 
 .sidebar-section {
     // background: linear-gradient(180deg, #FEA61F, #FED65D);
-    background-color: #e2e8f0;
+    background-color: #ffffff;;
     color: black;
     font-family: 'Josefin Sans', sans-serif;
     height: 100vh;
@@ -23,7 +23,6 @@
     left: 0;
     width: 250px; /* Fixed width for sidebar */
     overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 
     & .radius:has(+ .sidebar-link-active) {
         border-bottom-right-radius: 50px;
@@ -36,7 +35,7 @@
 }
 
 .sidebar-link-active {
-    background-color: #e2e8f0;
+    background-color: #ffffff;;
     padding: 0.5rem 1rem;
     width: 85%;
     height: 40px;
@@ -70,8 +69,8 @@
     transition: background-color 0.3s ease;
 }
 
-.sidebar-link-hover:hover {
-    background-color: #e2e8f0;
+.sidebar-link-hover:not(.sidebar-link-active ):hover {
+    background: #e2e8f0;
 }
 
 .sidebar-icon {
