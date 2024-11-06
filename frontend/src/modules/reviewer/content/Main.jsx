@@ -31,23 +31,6 @@ function Main() {
         console.log(err)
       })
   },[])
-
-  useEffect(() => {
-    if (!reviewer.is_public) { return }
-    
-    /** add reviewer to recently viewed */
-    axios
-      .post(
-        `${apiRootURL}/reviewers/public/recently-viewed/add/`
-        + `?reviewer=${reviewer.slug}`
-      )
-      .then(response => {
-        console.log(response.status)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
   
   return (
     <WillAddAContentContext.Provider value={[willAddContent, setWillAddContent]}>

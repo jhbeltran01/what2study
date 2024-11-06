@@ -7,7 +7,6 @@ import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './ser
 import { ContentContext } from './Title';
 import { TitleContext } from './Main';
 
-/** @TODO strip the text before saving to the database */
 function Definition({definition, titleSlug}) {
   const [inputText, setInputText] = useState(definition.text)
   const [text, setText] = useState(definition.text)

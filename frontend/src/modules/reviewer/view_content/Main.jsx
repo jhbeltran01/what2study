@@ -9,6 +9,23 @@ function Main() {
   const [titles, setTitles]  = useState([])
 
   useEffect(() => {
+    if (!reviewer.is_public) { return }
+    
+    /** add reviewer to recently viewed */
+    axios
+      .post(
+        `${apiRootURL}/reviewers/public/recently-viewed/add/`
+        + `?reviewer=${reviewer.slug}`
+      )
+      .then(response => {
+        console.log(response.status)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
+
+  useEffect(() => {
     /** Get the content of the reviewer */
     axios
       .get(

@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle, performDeleteTitle } from './services';
 import { EnumTitleContext, TitleContext } from './Main';
 
-/**@TODO delete the enumeration title definition and then delete the enumeration, the title must be deleted */
 
 export const ContentContext = createContext()
 
