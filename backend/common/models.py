@@ -57,9 +57,10 @@ class Reviewer(SlugField):
 
 
 class PublicReviewer(SlugField):
-    reviewer = models.ForeignKey(
+    reviewer = models.OneToOneField(
         Reviewer,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='public'
     )
     name = models.CharField(max_length=50)
 
@@ -298,7 +299,7 @@ class PublicReviewerCategory(SlugField):
     )
     public_reviewer = models.ForeignKey(
         PublicReviewer,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     reviewers = models.Manager()

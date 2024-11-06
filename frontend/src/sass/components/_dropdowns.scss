@@ -1,0 +1,18 @@
+@use '../abstract/variables' as var;
+
+.dropdown-1 {
+  &__content {
+    position: absolute;
+    right: 10px;
+    top: 3px;
+    background-color: var.$black-3;
+    color: var.$white-1;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+  }
+  
+
+  &:hover &__content {
+    display: block;
+  }
+}

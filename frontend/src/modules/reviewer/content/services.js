@@ -25,7 +25,6 @@ export const performAddNewDefinition = async (reviewer, title, text) => {
 };
 
 export const performDeleteDefinition = async (reviewer, title, definition) => {
-  console.log('performDeleteDefinition')
   return tryCatch(
     await axios.delete(
       `${apiRootURL}/reviewers/${reviewer}/content/titles/`

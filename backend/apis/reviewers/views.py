@@ -116,6 +116,7 @@ class PublicizeReviewerAPIView(
     CreateModelMixin,
     DestroyModelMixin,
     ListModelMixin,
+    RetrieveModelMixin,
     GenericAPIView
 ):
     lookup_field = 'slug'
@@ -126,14 +127,20 @@ class PublicizeReviewerAPIView(
         self.slug = None
         self.is_get_method = False
         self.category = None
+        self.is_get_content = False
+        self.is_partial = False
 
     def dispatch(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug')
         self.is_get_method = request.method == 'GET'
         self.category = request.GET.get('category')
+        self.is_get_content = request.GET.get('is_get_content', False)
+        self.is_partial = request.GET.get('is_partial', False)
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        if kwargs.get('slug') is not None:
+            return super().retrieve(request, *args, **kwargs)
         return super().list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -154,7 +161,11 @@ class PublicizeReviewerAPIView(
         return PublicReviewer.reviewers.filter(reviewer__owner=self.request.user)
 
     def get_serializer_context(self):
-        return {'owner': self.request.user}
+        return {
+            'owner': self.request.user,
+            'is_get_content': self.is_get_content,
+            'is_partial': self.is_partial,
+        }
 
 
 class RecentViewedReviewerAPIView(APIView):

@@ -16,6 +16,7 @@ from apis.authentication.serializers import UserInfoSerializer
 class ReviewerSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
     titles = serializers.SerializerMethodField(read_only=True)
+    is_public = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Reviewer
@@ -24,11 +25,12 @@ class ReviewerSerializer(serializers.ModelSerializer):
             'owner',
             'description',
             'slug',
+            'is_public',
             'titles',
             'created_at',
             'updated_at',
         ]
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context.pop('owner', None)
@@ -50,7 +52,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('files', None)
         return super().create(validated_data)
-    
+
     def validate_name(self, value):
         slug = slugify('{}-{}'.format(value, self.owner.id))
         reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
@@ -58,7 +60,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
         if reviewer_exists:
             raise serializers.ValidationError("Reviewer exists.")
         return value
-    
+
     def get_owner(self, instance):
         if self.is_partial:
             return None
@@ -71,6 +73,13 @@ class ReviewerSerializer(serializers.ModelSerializer):
         titles = Title.titles.filter(reviewer=instance)
         return TitleSerializer(titles, many=True).data
 
+    def get_is_public(self, instance):
+        try:
+            _ = instance.public
+            return True
+        except:
+            print('hello')
+            return False
 
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
     reviewer = serializers.CharField(max_length=100)
@@ -83,6 +92,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
     reviewer = serializers.SlugRelatedField(queryset=Reviewer.reviewers.all(), slug_field='slug')
     name = serializers.CharField(default='')
     is_bookmarked = serializers.SerializerMethodField(read_only=True)
+    titles = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = PublicReviewer
@@ -93,6 +103,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             'owner',
             'description',
             'is_bookmarked',
+            'titles',
             'created_at',
             'updated_at',
         ]
@@ -100,6 +111,20 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context.pop('owner')
+        self.is_get_content = self.context.pop('is_get_content', False)
+        self.is_partial = self.context.pop('is_partial', False)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if self.is_partial:
+            keys = ['reviewer','name', 'owner', 'description', 'slug', 'created_at', 'updated_at', 'is_bookmarked']
+            return remove_items_in_dictionary(representation, keys)
+
+        if not self.is_get_content:
+            representation.pop('titles', None)
+
+        return representation
 
     def validate_name(self, value):
         reviewer_slug = self.initial_data['reviewer']
@@ -125,6 +150,16 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             owner=self.owner,
         ).first()
         return bookmarked_reviewer is not None
+
+    def get_titles(self, instance):
+        data = ReviewerSerializer(
+            instance.reviewer,
+            context={
+                'is_get_content': True,
+                'is_partial': True,
+            }
+        ).data
+        return data.get('titles', [])
 
 
 class RecentlyViewedQueryParamSerializer(serializers.Serializer):

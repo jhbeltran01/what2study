@@ -1,8 +1,7 @@
 import searchIcon from '@assets/search.png';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Ensure this is imported correctly
-import '../../sass/pages/_reviewer.scss';
-import { apiRootURL } from '../../globals';
+import { apiRootURL } from '@root/globals';
 import axios from 'axios';
 import ReviewerCard from './ReviewerCard';
 
@@ -18,6 +17,7 @@ const Reviewer = () => {
       .get(reviewersUrl)
       .then(response => {
         setReviewers(response.data.results)
+        console.log(response.data.results)
       })
       .catch(err => {
         console.log(err)

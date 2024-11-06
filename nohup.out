@@ -1,0 +1,146 @@
+Warning: Not allowed as a service: java.awt.Window.CustomTitleBarPeer
+	at com.jetbrains.JBR$WindowDecorations__Holder.<clinit>(JBR.java:642)
+	at com.jetbrains.JBR.getWindowDecorations(JBR.java:662)
+	at com.intellij.platform.ide.bootstrap.StartupUtil$startApplication$3.invokeSuspend(startup.kt:171)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+Warning: Service not supported: com.jetbrains.WindowDecorations
+	at com.jetbrains.JBR$WindowDecorations__Holder.<clinit>(JBR.java:642)
+	at com.jetbrains.JBR.getWindowDecorations(JBR.java:662)
+	at com.intellij.platform.ide.bootstrap.StartupUtil$startApplication$3.invokeSuspend(startup.kt:171)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-05 14:55:22,703 [   2816]   WARN - #c.i.e.t.TargetBasedSdks - SDK target configuration data is absent
+2024-11-05 14:55:23,108 [   3221]   WARN - #c.i.e.t.TargetBasedSdks - SDK target configuration data is absent
+2024-11-05 14:55:23,211 [   3324]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=com.jetbrains.rdserver.toolWindow.BackendServerToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,216 [   3329]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.users.BackendUserManager, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,264 [   3377]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.ports.CwmPortForwardingToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,291 [   3404]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.users.BackendCWMUserFocusHost, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,305 [   3418]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.FollowMeManagerService, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,345 [   3458]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.BackendProjectViewSync, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,402 [   3515]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.BackendFollowMeEditorsHost, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,425 [   3538]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.BackendFollowMeDebuggerHost, plugin=com.jetbrains.codeWithMe)
+2024-11-05 14:55:23,472 [   3585]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.FollowMeLookupSynchronizer, plugin=com.jetbrains.codeWithMe)
+Warning: Not allowed as a service: com.jetbrains.RoundedCornersManager
+	at com.jetbrains.JBR$RoundedCornersManager__Holder.<clinit>(JBR.java:514)
+	at com.jetbrains.JBR.isRoundedCornersManagerSupported(JBR.java:524)
+	at com.intellij.ui.WindowRoundedCornersManager.isAvailable(WindowRoundedCornersManager.java:36)
+	at com.intellij.ui.popup.AbstractPopup.show(AbstractPopup.java:1033)
+	at com.intellij.ui.popup.AbstractPopup.show(AbstractPopup.java:654)
+	at com.intellij.ide.HelpTooltip.lambda$scheduleShow$2(HelpTooltip.java:621)
+	at com.intellij.util.concurrency.QueueProcessor.runSafely(QueueProcessor.java:255)
+	at com.intellij.util.Alarm$Request.runSafely(Alarm.java:377)
+	at com.intellij.util.Alarm$Request.run(Alarm.java:356)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at com.intellij.util.concurrency.SchedulingWrapper$MyScheduledFutureTask.run(SchedulingWrapper.java:272)
+	at com.intellij.openapi.application.TransactionGuardImpl.runWithWritingAllowed(TransactionGuardImpl.java:229)
+	at com.intellij.openapi.application.TransactionGuardImpl.access$100(TransactionGuardImpl.java:22)
+	at com.intellij.openapi.application.TransactionGuardImpl$1.run(TransactionGuardImpl.java:191)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runIntendedWriteActionOnCurrentThread$lambda$1(AnyThreadWriteThreadingSupport.kt:184)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWriteIntentReadAction(AnyThreadWriteThreadingSupport.kt:84)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runIntendedWriteActionOnCurrentThread(AnyThreadWriteThreadingSupport.kt:183)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:836)
+	at com.intellij.openapi.application.impl.ApplicationImpl$2.run(ApplicationImpl.java:424)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWithImplicitRead(AnyThreadWriteThreadingSupport.kt:122)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runWithImplicitRead(ApplicationImpl.java:1162)
+	at com.intellij.openapi.application.impl.FlushQueue.doRun(FlushQueue.java:78)
+	at com.intellij.openapi.application.impl.FlushQueue.runNextEvent(FlushQueue.java:119)
+	at com.intellij.openapi.application.impl.FlushQueue.flushNow(FlushQueue.java:41)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:781)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:728)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:750)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.kt:696)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent$lambda$16(IdeEventQueue.kt:590)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWithoutImplicitRead(AnyThreadWriteThreadingSupport.kt:117)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.kt:590)
+	at com.intellij.ide.IdeEventQueue.access$_dispatchEvent(IdeEventQueue.kt:73)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1$1$1.compute(IdeEventQueue.kt:357)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1$1$1.compute(IdeEventQueue.kt:356)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:843)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1$1.invoke(IdeEventQueue.kt:356)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1$1.invoke(IdeEventQueue.kt:351)
+	at com.intellij.ide.IdeEventQueueKt$performActivity$runnableWithWIL$1.invoke$lambda$0(IdeEventQueue.kt:1035)
+	at com.intellij.openapi.application.WriteIntentReadAction.lambda$run$0(WriteIntentReadAction.java:24)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWriteIntentReadAction(AnyThreadWriteThreadingSupport.kt:84)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runWriteIntentReadAction(ApplicationImpl.java:910)
+	at com.intellij.openapi.application.WriteIntentReadAction.compute(WriteIntentReadAction.java:55)
+	at com.intellij.openapi.application.WriteIntentReadAction.run(WriteIntentReadAction.java:23)
+	at com.intellij.ide.IdeEventQueueKt$performActivity$runnableWithWIL$1.invoke(IdeEventQueue.kt:1035)
+	at com.intellij.ide.IdeEventQueueKt$performActivity$runnableWithWIL$1.invoke(IdeEventQueue.kt:1035)
+	at com.intellij.ide.IdeEventQueueKt.performActivity$lambda$1(IdeEventQueue.kt:1036)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:106)
+	at com.intellij.ide.IdeEventQueueKt.performActivity(IdeEventQueue.kt:1036)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent$lambda$10(IdeEventQueue.kt:351)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.kt:397)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+2024-11-05 14:55:29,049 [   9162]   WARN - #c.i.e.t.TargetBasedSdks - SDK target configuration data is absent
+2024-11-05 14:55:30,061 [  10174]   WARN - #c.i.u.j.JBCefAppArmorUtils - Unprivileged user namespaces check failed: unshare: write failed /proc/self/uid_map: Operation not permitted
+
+2024-11-05 14:55:31,916 [  12029]   WARN - #c.j.p.PythonHelpersLocator - File coveragepy_old.zip does not exist in helpers root
+2024-11-05 14:55:31,940 [  12053]   WARN - #c.j.p.PythonHelpersLocator - File coveragepy_new.zip does not exist in helpers root
+2024-11-05 14:55:31,970 [  12083]   WARN - #c.j.p.PythonHelpersLocator - File coverage_runner.zip does not exist in helpers root
+2024-11-05 14:55:32,006 [  12119]   WARN - #c.j.p.PythonHelpersLocator - File pydev.zip does not exist in helpers root
+2024-11-05 14:55:32,054 [  12167]   WARN - #c.j.p.PythonHelpersLocator - File pydev.zip does not exist in helpers root
+2024-11-05 14:55:32,093 [  12206]   WARN - #c.j.p.PythonHelpersLocator - File profiler.zip does not exist in helpers root
+2024-11-05 14:55:32,123 [  12236]   WARN - #c.j.p.PythonHelpersLocator - File profiler.zip does not exist in helpers root
+2024-11-05 14:55:32,149 [  12262]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,200 [  12313]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,231 [  12344]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,290 [  12403]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,314 [  12427]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,323 [  12436]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,375 [  12488]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,397 [  12510]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,439 [  12552]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,469 [  12582]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,479 [  12592]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,490 [  12603]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,545 [  12658]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,598 [  12711]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,640 [  12753]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,664 [  12777]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,585 [  12698]   WARN - #o.j.p.t.TextMateService - Cannot find referenced file `./syntaxes/asp-vb-net.tmLanguage.json` in bundle `/snap/pycharm-community/425/plugins/textmate/lib/bundles/vb`
+2024-11-05 14:55:32,711 [  12824]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:32,763 [  12876]   WARN - #c.j.p.PythonHelpersLocator - File pycharm.zip does not exist in helpers root
+2024-11-05 14:55:41,094 [  21207]   WARN - #c.i.o.v.i.l.NativeFileWatcherImpl - File watcher is still alive, doing a force quit.
+2024-11-05 14:55:41,210 [  21323] SEVERE - #c.i.u.c.SchedulingWrapper - Cannot invoke "com.intellij.openapi.application.Application.getService(java.lang.Class)" because the return value of "com.intellij.openapi.application.ApplicationManager.getApplication()" is null
+java.lang.NullPointerException: Cannot invoke "com.intellij.openapi.application.Application.getService(java.lang.Class)" because the return value of "com.intellij.openapi.application.ApplicationManager.getApplication()" is null
+	at com.intellij.openapi.progress.ProgressManager.getInstance(ProgressManager.java:33)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.checkCancelledEvenWithPCEDisabled(ProgressIndicatorUtils.java:433)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.awaitWithCheckCanceled(ProgressIndicatorUtils.java:447)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.executeSynchronously(NonBlockingReadActionImpl.java:518)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.executeSynchronously(NonBlockingReadActionImpl.java:220)
+	at com.jetbrains.python.defaultProjectAwareService.PyDefaultProjectAwareModuleConfiguratorImpl.autodetectSettings(PyDefaultProjectAwareModuleConfiguratorImpl.java:68)
+	at com.jetbrains.python.defaultProjectAwareService.PyDefaultProjectAwareModuleConfiguratorImpl.lambda$configureModule$0(PyDefaultProjectAwareModuleConfiguratorImpl.java:55)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at com.intellij.util.concurrency.ContextCallable.call(ContextCallable.java:32)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at com.intellij.util.concurrency.SchedulingWrapper$MyScheduledFutureTask.run(SchedulingWrapper.java:272)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:735)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:732)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:732)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-11-05 14:55:41,223 [  21336] SEVERE - #c.i.u.c.SchedulingWrapper - PyCharm 2024.2.4  Build #PC-242.23726.102
+2024-11-05 14:55:41,233 [  21346] SEVERE - #c.i.u.c.SchedulingWrapper - JDK: 21.0.4; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2024-11-05 14:55:41,258 [  21371] SEVERE - #c.i.u.c.SchedulingWrapper - OS: Linux

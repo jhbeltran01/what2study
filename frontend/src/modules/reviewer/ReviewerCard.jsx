@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { setReviewer, setReviewerSlug } from '@redux/reviewer';
-import * as routes from '../../routes/constants';
+import * as routes from '@root/routes/constants';
 import { useNavigate } from 'react-router-dom';
 
 function ReviewerCard({reviewer}) {

@@ -33,7 +33,7 @@ function ReviewerCard({reviewer}) {
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
     dispatch(setReviewerIsPublic(true))
-    navigate(routes.VIEW_REVIEWER_CONTENT)
+    navigate(routes.VIEW_CONTENT_WITHOUT_EDIT)
   }
 
   return (
