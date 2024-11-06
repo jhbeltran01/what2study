@@ -5,6 +5,7 @@ import { apiRootURL } from '@root/globals'
 import Title from './Title'
 import * as constants from './constants'
 import AddContentOverlay from './AddContentOverlay'
+import Options from './Options'
 
 export const TitleContext = createContext()
 export const EnumTitleContext = createContext()
@@ -48,19 +49,19 @@ function Main() {
       })
   }, [])
   
-  const setTitlesN = (titles) => {
-    console.log(titles)
-    setTitles(titles)
-  }
-
   return (
     <WillAddAContentContext.Provider value={[willAddContent, setWillAddContent]}>
       <EnumTitleContext.Provider value={[text, setText]}>
-        <TitleContext.Provider value={[titles, setTitlesN]}>
+        <TitleContext.Provider value={[titles, setTitles]}>
           <div className='relative pt-[3em]'>
-            <div className='p-[1em] flex justify-between header-1'>
+            <div className='p-[1em] flex items-center justify-between header-1'>
               <h1>{reviewer.name}</h1>
-              <button onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
+
+              <div className='flex items-center gap-[10px]'>
+                <button onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
+
+                  <Options reviewer={reviewer} />
+              </div>
             </div>
             <ul>
               {titles.map((title, index) => {
@@ -72,7 +73,7 @@ function Main() {
                   return ''
                 }
 
-                return <Title title={title} index={index} key={index} />
+                return <Title title={title} index={index} key={title.slug} />
               })}
             </ul>
           </div>

@@ -5,6 +5,7 @@ import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
 import ReviewerContent from '@modules/reviewer/content/Main'
+import ReviewerContentNoEdit from '@modules/reviewer/view_content/Main'
 import React from "react";
 // import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
@@ -54,7 +55,12 @@ const pagesData = [
         path: routes.ROUTES.VIEW_REVIEWER_CONTENT,
         element:  <ReviewerContent />,
         title: routes.VIEW_REVIEWER_CONTENT
-      }
+      },
+      {
+        path: routes.ROUTES.VIEW_CONTENT_WITHOUT_EDIT,
+        element:  <ReviewerContentNoEdit />,
+        title: routes.VIEW_REVIEWER_CONTENT
+      },
     ]
   },
 ];

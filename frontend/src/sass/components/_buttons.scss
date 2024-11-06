@@ -22,3 +22,11 @@
 .btn-3 {
   background-color: var.$white-1;
 }
+
+.btn-options {
+  font-size: 1.2rem;
+
+  &:hover .dropdown-1 {
+    display: hidden;
+  }
+}

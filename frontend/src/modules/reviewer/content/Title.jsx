@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle, performDeleteTitle } from './services';
 import { EnumTitleContext, TitleContext } from './Main';
 
+/**@TODO when editing a definition and adding one there is a bug */
+
 export const ContentContext = createContext()
 
 function Title({title, index=null, titleSlug=null, setContentParent=null, contentParent=null}) {
@@ -115,7 +117,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   }
 
   const deleteAContent = (innerIndex) => {
-    /** When deleting an Enumeration content. Delete on the enumeration content */
+    //  When deleting an Enumeration content. Delete on the enumeration content 
     const isParentContent =  setContentParent != null
     let newContent = isParentContent ? [...contentParent] : [...content]
     const contentSetter = isParentContent ? setContentParent : setContent
@@ -195,7 +197,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
                           titleSlug={title.slug}
                           deleteAContent={deleteAContent}
                           index={index}
-                          key={index}
+                          key={data.slug}
                         />
               case constants.ENUMERATION:
                 return <Title
@@ -204,7 +206,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
                           titleSlug={title.slug}
                           setContentParent={setContent}
                           contentParent={content}
-                          key={index}
+                          key={data.slug}
                         />
             }
           })}
