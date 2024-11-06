@@ -18,14 +18,11 @@ function Title({title}) {
       
       <ul>
         {contents.map(content => {
-            console.log(title.t_type)
             if (isDefinition || isEnumerationTitleWithDefinition) {
-              return <Definition definition={content} />
+              return <Definition definition={content} key={content.slug} />
             }
             
-            return (
-              <Title title={content} />
-            )
+            return <Title title={content} key={content.slug} />
         })}
       </ul>
     </li>
@@ -35,6 +32,8 @@ function Title({title}) {
 Title.propTypes = {
   title: PropTypes.shape({
     text: PropTypes.string.isRequired,
+    content: PropTypes.array.isRequired,
+    t_type: PropTypes.string.isRequired
   }).isRequired
 }
 

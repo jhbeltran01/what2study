@@ -1,24 +1,27 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
 import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
 import { ContentContext } from './Title';
+import { TitleContext } from './Main';
 
 /** @TODO strip the text before saving to the database */
-function Definition({definition, titleSlug, deleteAContent, index}) {
+function Definition({definition, titleSlug}) {
   const [inputText, setInputText] = useState(definition.text)
   const [text, setText] = useState(definition.text)
   const reviewer = useSelector(state => state.reviewer.value)
+  const [titles, setTitles] = useContext(TitleContext)
   const [deleteIsHovered, setDeleteIsHovered] = useState(false)
-  const [content] = useContext(ContentContext)
+  const textareaRef = useRef()
 
   useEffect(() => {
-    setInputText(definition.text)
-  }, [content])
+    makeTextareaHeightToBeResponsive(textareaRef.current)
+    setInputText(textareaRef.current.value)
+  }, [])
 
-  const updateDefinition = (event) => {
+  const updateDefinition = (event, titleSlug, definitionSlug) => {
     handleDefinitionTextChange(event)
 
     if (inputText == text) { return }
@@ -30,14 +33,34 @@ function Definition({definition, titleSlug, deleteAContent, index}) {
         {text: inputText}
       )
       .then(response => {
+        updateUIOnDefinitionUpdate(response.data.text, titleSlug, definitionSlug)
         setText(response.data.text)
-        setInputText(response.data.text)
       })
       .catch(err => {
         console.log(err.request.data)
       })
     
     setDeleteIsHovered(false)
+  }
+
+  const updateUIOnDefinitionUpdate = (text, titleSlug, definitionSlug) => {
+    const tempTitles = titles.map(title => {
+      if (!title.slug == titleSlug) {
+        return title
+      }
+
+      const tempTitle = {...title}
+        
+      tempTitle.content = title.content.map(content => {
+        if (definitionSlug == content.slug) {
+          return {...content, text: text}
+        }
+        return content
+      })
+
+      return tempTitle
+    })
+    setTitles(tempTitles)
   }
 
   const handleDefinitionTextChange = (event) => {
@@ -54,7 +77,19 @@ function Definition({definition, titleSlug, deleteAContent, index}) {
     if (!isSuccessful) { return }
 
     setDeleteIsHovered(false)
-    deleteAContent(index)
+    updateUIOnDefinitionDelete(definition.slug, titleSlug)
+  }
+
+  const updateUIOnDefinitionDelete = (definitionSlug, titleSlug) => {
+    const tempTitles = titles.map(title => {
+      if (title.slug != titleSlug) { return title }
+
+      const tempTitle = {...title}
+      tempTitle.content = title.content.filter(content => content.slug != definitionSlug)
+      return tempTitle
+    })
+
+    setTitles(tempTitles)
   }
   
   return (
@@ -65,7 +100,8 @@ function Definition({definition, titleSlug, deleteAContent, index}) {
           onChange={handleDefinitionTextChange}
           onFocus={handleDefinitionTextChange}
           value={inputText}
-          onBlur={updateDefinition}
+          onBlur={(e) => updateDefinition(e, titleSlug, definition.slug)}
+          ref={textareaRef}
         ></textarea>
         <button 
           className={`delete ${!deleteIsHovered && 'hidden'}`}

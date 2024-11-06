@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux';
 import { makeTextareaHeightToBeResponsive, performAddNewDefinition, performAddNewEnumerationTitle, performDeleteEnumerationTitle, performDeleteTitle } from './services';
 import { EnumTitleContext, TitleContext } from './Main';
 
-/**@TODO when editing a definition and adding one there is a bug */
+/**@TODO delete the enumeration title definition and then delete the enumeration, the title must be deleted */
 
 export const ContentContext = createContext()
 
-function Title({title, index=null, titleSlug=null, setContentParent=null, contentParent=null}) {
-  const isEnumerationTitle = title.content.length === 0 && title.t_type != constants.DEFINITION && title.is_in_enumeration
+function Title({title, index=null, titleSlug=null}) {
+  const isEnumerationTitle = title.content.length === 0 && title.is_in_enumeration
   const isEnumerationTitleWithDefinition = title.t_type == constants.ENUMERATION_TITLE && title.content.length > 0
   const isEnumeration = title.t_type === constants.ENUMERATION
   const isDefinitionTitle = title.t_type === constants.DEFINITION
@@ -25,21 +25,17 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
   const [newContentValue, setNewContentValue] = useState('')
   const [titles, setTitles] = useContext(TitleContext)
   const [enumTitle, setEnumTitle] = useContext(EnumTitleContext)
-  const [contentParentInContext] = useContext(ContentContext) || [null, () => {}];
 
   useEffect(() => {
     if (!enumTitle.isUpdated || title.slug != enumTitle.slug) { return }
-
     setInputText(enumTitle.text)
-    setEnumTitle({isUpdated: false, slug: '', text: ''})
   }, [enumTitle])
 
-  useEffect(() => {
-    setInputText(title.text)
-  }, [contentParentInContext])
-
-  const updateTitle = () => {
-    if (inputText == text) { return }
+  const updateTitle = (slug, isInEnumerationContent=false, titleSlug='') => {
+    if (inputText == text || inputText == '') { 
+      setInputText(text)
+      return 
+    }
 
     axios
       .patch(
@@ -48,23 +44,52 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
       )
       .then(response => {
         const text = response.data.text
+        if (isInEnumerationContent) {
+          updateUIOnUpdateEnumerationTitle(text, slug, titleSlug)
+        } else {
+          updateUIOnUpdateTitle(text, slug)
+        }
         setText(text)
-        setInputText(text)
-        setEnumTitle({isUpdated: true, slug: title.slug, text: text})
       })
       .catch(err => {
         console.log(err)
       })
   }
 
-  const addAContent = async () => {
+  const updateUIOnUpdateTitle = (text, slug) => {
+    setTitles(titles.map(title => title.slug == slug ? {...title, text: text} : title))
+  }
+
+  const updateUIOnUpdateEnumerationTitle = (text, slug, titleSlug) => {
+    const tempTitles = titles.map(title => {
+      if (title.slug == slug) {
+        return {...title, text:text}
+      }
+
+      if (title.slug != titleSlug) { return title }
+
+      const tempTitle = {...title}
+
+      tempTitle.content = tempTitle.content.map(
+        content => content.slug == slug ? {...content, text:text} : content
+      )
+
+      return tempTitle
+    })
+
+    setTitles(tempTitles)
+    setEnumTitle({isUpdated: true, slug: slug, text: text})
+  }
+
+  const addAContent = async (slug) => {
     let addingIsSuccessful = false
+
     if (isDefinitionTitle || isEnumerationTitle || isEnumerationTitleWithDefinition) {
-      addingIsSuccessful = await addDefinition()
+      addingIsSuccessful = await addDefinition(slug)
     }
 
     if (isEnumeration) {
-      addingIsSuccessful = await addEnumerationTitle()
+      addingIsSuccessful = await addEnumerationTitle(slug)
     }
 
     if (!addingIsSuccessful) { return }
@@ -73,57 +98,38 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     setNewContentValue('')
   }
 
-  const addDefinition = async () => {
+  const addDefinition = async (slug) => {
     const [isSuccessful, newDefinition] = await performAddNewDefinition(
       reviewer.reviewer, 
       title.slug, 
       newContentValue
     )
-
-    if (isSuccessful && (!isEnumerationTitle || isDefinitionTitle)) { 
-      setContent([...content, newDefinition])
-    }
-
-    if (isSuccessful && isEnumerationTitle) {
-      addDefinitionToEnumerationTitleContent(newDefinition, title.slug)
-    }
-
+    updateUIOnAddContent(slug, newDefinition)
     return isSuccessful
   }
 
-  const addDefinitionToEnumerationTitleContent = (definition, selectedTitleSlug) => {
-    const tempTitles = [...titles]
-    for (let index = 0; index < tempTitles.length; ++index) {
-      if (selectedTitleSlug == tempTitles[index].slug) {
-        tempTitles[index].content.push(definition)
-        break;
-      }
-    }
-    setTitles(tempTitles)
-  }
-
-  const addEnumerationTitle = async () => {
+  const addEnumerationTitle = async (slug) => {
     const [isSuccessful, newEnumTitle] = await performAddNewEnumerationTitle(
       reviewer.reviewer, 
       title.slug, 
       newContentValue
     )
 
-    if (isSuccessful) {
-      setContent([...content, newEnumTitle])
-    }
-
+    updateUIOnAddContent(slug, newEnumTitle)
     return isSuccessful
   }
 
-  const deleteAContent = (innerIndex) => {
-    //  When deleting an Enumeration content. Delete on the enumeration content 
-    const isParentContent =  setContentParent != null
-    let newContent = isParentContent ? [...contentParent] : [...content]
-    const contentSetter = isParentContent ? setContentParent : setContent
+  const updateUIOnAddContent = (titleSlug, newContent) => {
+    const tempTitles = titles.map(title => {
+      if (title.slug != titleSlug) { return title }
 
-    newContent.splice(innerIndex, 1)
-    contentSetter(newContent)
+      const newTitle = {...title}
+      newTitle.content = [...newTitle.content, newContent]
+
+      return newTitle
+    })
+
+    setTitles(tempTitles)
   }
 
   const handleNewContentChange = (event) => {
@@ -131,7 +137,7 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     makeTextareaHeightToBeResponsive(event.target)
   }
 
-  const deleteAnEnumTitle = async (innerIndex) => {
+  const deleteAnEnumTitle = async () => {
     const [isSuccessful] = await performDeleteEnumerationTitle(
       reviewer.reviewer,
       titleSlug,
@@ -140,17 +146,14 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     )
     if (!isSuccessful) { return }
 
-    if (isSuccessful && isEnumerationTitleWithDefinition) {
-      const tempTitles = [...titles]
-      tempTitles[index].content = []
-      setTitles(tempTitles)
-      return
+    if (isEnumerationTitleWithDefinition) {
+      updateUIOnDeleteTitle(title.slug)
+    } else {
+      updateUIOnEnumTitleDelete(titleSlug, title.slug)
     }
-
-    deleteAContent(innerIndex)
   }
 
-  const deleteATitle = async (innerIndex) => {
+  const deleteATitle = async () => {
     const [isSuccessful] = await performDeleteTitle(
       reviewer.reviewer,
       title.slug
@@ -158,12 +161,23 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
 
     if (!isSuccessful) { return }
 
-    deleteATitleInTheList(innerIndex)
+    updateUIOnDeleteTitle(title.slug)
   }
 
-  const deleteATitleInTheList = (delIndex) => {
-    const tempTitles = titles.map((title, innerIndex) => innerIndex != delIndex && title)
+  const updateUIOnEnumTitleDelete = (titleSlug, slug) => {
+    const tempTitles = titles.map(title => {
+      if (title.slug != titleSlug) { return title }
+
+      const tempTitle = {...title}
+      tempTitle.content = title.content.filter(content => content.slug != slug)
+      return tempTitle
+    })
+
     setTitles(tempTitles)
+  }
+
+  const updateUIOnDeleteTitle = (slug) => {
+    setTitles(titles.filter(title => title.slug != slug))
   }
 
   const deleteTitleFunction = (isEnumerationTitle || isEnumerationTitleWithDefinition) 
@@ -171,69 +185,69 @@ function Title({title, index=null, titleSlug=null, setContentParent=null, conten
     : deleteATitle
 
     return (
-    <ContentContext.Provider value={[content]}>
-      <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
-        <div className='flex gap-[10px]'>
-          <input
-            className='w-[100%]'
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onBlur={updateTitle}
-          />
+      <ContentContext.Provider value={[content]}>
+        <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
           <div className='flex gap-[10px]'>
-            <button onClick={() => setWillAddAContent(true) }>Add</button>
-            <button onClick={() => deleteTitleFunction(index)}>Delete</button>
-            {isEnumeration && <button>Order</button>}
+            <input
+              className='w-[100%]'
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onBlur={() => updateTitle(title.slug, isEnumerationTitle, titleSlug)}
+            />
+            <div className='flex gap-[10px]'>
+              <button onClick={() => setWillAddAContent(true) }>Add</button>
+              <button onClick={() => deleteTitleFunction(index)}>Delete</button>
+              {isEnumeration && <button>Order</button>}
+            </div>
           </div>
-        </div>
-        <ul className='px-[1em]'>
-          {content.map((data, index) => {
-            switch(title.t_type) {
-              case constants.DEFINITION:
-              case constants.ENUMERATION_TITLE:
-                return <Definition
-                          definition={data}
-                          titleSlug={title.slug}
-                          deleteAContent={deleteAContent}
-                          index={index}
-                          key={data.slug}
-                        />
-              case constants.ENUMERATION:
-                return <Title
-                          title={data}
-                          index={index}
-                          titleSlug={title.slug}
-                          setContentParent={setContent}
-                          contentParent={content}
-                          key={data.slug}
-                        />
-            }
-          })}
-          <li>
-            {
-              willAddAContent && !isEnumeration
-              && <textarea
-                className='w-[100%] text-red-700'
-                value={newContentValue}
-                onChange={handleNewContentChange}
-                onBlur={addAContent}
-              ></textarea>
-            }
-            {
-              willAddAContent && isEnumeration
-              && <input
-                className='w-[100%] text-red-700'
-                value={newContentValue}
-                onChange={handleNewContentChange}
-                onBlur={addAContent}
-              ></input>
-            }
-          </li>
-        </ul>
-      </li>
-    </ContentContext.Provider>
-  )
+          <ul className='px-[1em]'>
+            {title.content.map((data, index) => {
+              switch(title.t_type) {
+                case constants.DEFINITION:
+                case constants.ENUMERATION_TITLE:
+                  return <Definition
+                            definition={data}
+                            titleSlug={title.slug}
+                            deleteAContent={() => {}}
+                            index={index}
+                            key={data.slug}
+                          />
+                case constants.ENUMERATION:
+                  return <Title
+                            title={data}
+                            index={index}
+                            titleSlug={title.slug}
+                            setContentParent={setContent}
+                            contentParent={content}
+                            key={data.slug}
+                          />
+              }
+            })}
+            <li>
+              {
+                willAddAContent && !isEnumeration
+                && <textarea
+                  className='w-[100%] text-red-700'
+                  value={newContentValue}
+                  onChange={handleNewContentChange}
+                  onBlur={() => addAContent(title.slug)}
+                ></textarea>
+              }
+              {
+                willAddAContent && isEnumeration
+                && <input
+                  className='w-[100%] text-red-700'
+                  value={newContentValue}
+                  onChange={handleNewContentChange}
+                  onBlur={() => addAContent(title.slug)}
+                ></input>
+              }
+            </li>
+          </ul>
+        </li>
+      </ContentContext.Provider>
+    )
 }
 
 Title.propTypes = {
