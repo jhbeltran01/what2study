@@ -182,7 +182,7 @@ class Title(SlugField):
         to_be_deleted = []
 
         for answer in answers:
-            if answer.definitions.all().first is None:
+            if answer.definitions.all().first() is None:
                 to_be_deleted.append(answer.id)
 
         Title.titles.filter(id__in=to_be_deleted).delete()
