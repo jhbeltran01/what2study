@@ -16,24 +16,24 @@ const Sidebar = () => {
     }
 
     return (
-        <section className="sidebar-section">
-            <div className="app-name">StudyHive</div> {/* App name*/}
+        <section className="sidebar-section flex flex-col min-h-[100%]">
+            <div className="app-name radius">StudyHive</div>
             {
                 SidebarData.map((item, index) => (
-                    <div key={index}>
-                        <NavLink
-                            to={item.path}
-                            className={({ isActive }) =>
-                                isActive ? 'sidebar-link-active sidebar-link-hover' : 'sidebar-link-normal sidebar-link-hover'
-                            }
-                        >
-                            <img src={item.icon} alt={item.title} className="sidebar-icon" />
-                            <span>{item.title}</span>
-                        </NavLink>
-                    </div>
+                    <NavLink
+                        to={item.path}
+                        className={({ isActive }) =>
+                            `relative radius sidebar-link-hover ${isActive ? 'sidebar-link-active': 'sidebar-link-normal' }`
+                        }
+                        key={index}
+                    >
+                        <img src={item.icon} alt={item.title} className="sidebar-icon" />
+                        <span>{item.title}</span>
+                    </NavLink>
                 ))
             }
             <button onClick={logoutUser} className='sidebar-link-normal sidebar-link-hover'>Logout</button>
+            <div className='filler'></div>
         </section>
     );
 };

@@ -1,0 +1,8 @@
+@use './variables' as var;
+
+@mixin sync-background {
+  background: var.$orange-1; 
+  // background: url('@assets/sky.png');
+  background-size: cover;
+  background-attachment: fixed;
+}
