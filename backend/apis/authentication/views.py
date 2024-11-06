@@ -115,7 +115,6 @@ class LogoutUserLoginUsingSessionAuthAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(request.user.is_authenticated)
         logout(request)
         return Response({'detail': 'User has been logged out.'})
 

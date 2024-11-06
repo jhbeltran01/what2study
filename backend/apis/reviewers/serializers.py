@@ -78,7 +78,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
             _ = instance.public
             return True
         except:
-            print('hello')
             return False
 
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
