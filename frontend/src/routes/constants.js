@@ -4,8 +4,11 @@ const REVIEWERS = "/reviewers/";
 const CREATE_REVIEWER = "/reviewers/create-reviewer/"; 
 const STUDYPODS = "/study-pods/";
 const JOIN_CALL = "/study-pods/join-call/";
-const VIEW_REVIEWER_CONTENT = '/reviewer/content/'
+const VIEW_REVIEWER_CONTENT = '/reviewers/content/'
 const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
+const NOTES = '/notes'
+const NOTES_TAB = ''
+const NOTE_CONTENT = '/notes/content/'
 
 const ROUTES = {
   HOME_PAGE,
@@ -15,7 +18,10 @@ const ROUTES = {
   STUDYPODS,
   JOIN_CALL,
   VIEW_REVIEWER_CONTENT,
-  VIEW_CONTENT_WITHOUT_EDIT
+  VIEW_CONTENT_WITHOUT_EDIT,
+  NOTES,
+  NOTES_TAB,
+  NOTE_CONTENT
 };
 
 export { 
@@ -27,6 +33,9 @@ export {
   ROUTES, 
   STUDYPODS, 
   VIEW_REVIEWER_CONTENT,
-  VIEW_CONTENT_WITHOUT_EDIT
+  VIEW_CONTENT_WITHOUT_EDIT,
+  NOTES,
+  NOTES_TAB,
+  NOTE_CONTENT
 };
 

@@ -6,19 +6,11 @@ import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
 import ReviewerContent from '@modules/reviewer/content/Main'
 import ReviewerContentNoEdit from '@modules/reviewer/view_content/Main'
+import Notes from '@modules/notes/Main'
+import NoteContent from '@modules/notes/notes-tab/content/Main'
 import React from "react";
-// import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
 
-// const AppRoutes = () => {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-
-//   return isAuthenticated ? (
-//     <Homepage />
-//   ) : (
-//     <Auth onAuthSuccess={() => setIsAuthenticated(true)} />
-//   );
-// };
 
 const pagesData = [
   {
@@ -60,6 +52,16 @@ const pagesData = [
         path: routes.ROUTES.VIEW_CONTENT_WITHOUT_EDIT,
         element:  <ReviewerContentNoEdit />,
         title: routes.VIEW_REVIEWER_CONTENT
+      },
+      {
+        path: routes.ROUTES.NOTES,
+        element:  <Notes />,
+        title: routes.NOTES,
+      },
+      {
+        path: routes.ROUTES.NOTE_CONTENT,
+        element:  <NoteContent />,
+        title: routes.NOTE_CONTENT,
       },
     ]
   },
