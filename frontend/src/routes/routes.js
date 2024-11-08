@@ -8,6 +8,7 @@ import ReviewerContent from '@modules/reviewer/content/Main'
 import ReviewerContentNoEdit from '@modules/reviewer/view_content/Main'
 import Notes from '@modules/notes/Main'
 import NoteContent from '@modules/notes/notes-tab/content/Main'
+import TodosContent from '@modules/notes/todos-tab/content/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -62,6 +63,11 @@ const pagesData = [
         path: routes.ROUTES.NOTE_CONTENT,
         element:  <NoteContent />,
         title: routes.NOTE_CONTENT,
+      },
+      {
+        path: routes.ROUTES.TODOS_CONTENT,
+        element:  <TodosContent />,
+        title: routes.TODOS_CONTENT,
       },
     ]
   },

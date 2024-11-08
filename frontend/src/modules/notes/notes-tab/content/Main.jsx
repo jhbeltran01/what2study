@@ -28,18 +28,8 @@ function Main() {
   
   const getNote = (event) => {
     const selectedNoteSlug = event.target.value
-    
-    axios
-      .get(`${apiRootURL}/notes/${selectedNoteSlug}/`)
-      .then(response => {
-        const data = response.data
-        
-        dispatch(setNote(data))
-        setContentInputText(data.content)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    const note = notes.filter(note => note.slug == selectedNoteSlug)[0]
+    dispatch(setNote(note))
   }
 
   return (

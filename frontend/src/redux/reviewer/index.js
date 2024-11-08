@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import reducers from './reducers'
 
-const initialState = {}
+const initialState = {value: {}}
 
 export const reviewerSlice = createSlice({
   name: 'reviewer',

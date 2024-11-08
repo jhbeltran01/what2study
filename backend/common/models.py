@@ -284,11 +284,38 @@ class Todo(SlugField):
 
     todos = models.Manager()
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.slug
 
     def save(self, **kwargs):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+        super().save(**kwargs)
+
+
+class TodoItem(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        editable=False,
+    )
+    todo = models.ForeignKey(
+        Todo,
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+    text = models.CharField(max_length=200)
+
+    items = models.Manager()
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def save(self, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
         super().save(**kwargs)
 
 

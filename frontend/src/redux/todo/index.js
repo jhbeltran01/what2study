@@ -3,15 +3,14 @@ import reducers from './reducers'
 
 const initialState = {value: {}}
 
-export const noteSlice = createSlice({
-  name: 'note',
+export const todoSlice = createSlice({
+  name: 'todo',
   initialState,
   reducers: reducers
 })
 
 export const { 
-  setNote,
-  updateNote,
-} = noteSlice.actions
+  setTodo,
+} = todoSlice.actions
 
-export default noteSlice.reducer
+export default todoSlice.reducer

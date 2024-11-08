@@ -17,7 +17,6 @@ const Reviewer = () => {
       .get(reviewersUrl)
       .then(response => {
         setReviewers(response.data.results)
-        console.log(response.data.results)
       })
       .catch(err => {
         console.log(err)

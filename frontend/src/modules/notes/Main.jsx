@@ -3,7 +3,7 @@ import NotesTab from './notes-tab/Main'
 import TodosTab from './todos-tab/Main'
 
 function Main() {
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(1)
   const tabs = ['My Notes', 'Todo']
   const tabContent = [<NotesTab key={1} />, <TodosTab key={2} />]
 
