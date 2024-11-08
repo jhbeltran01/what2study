@@ -34,7 +34,6 @@ function Main() {
       )
       .then(response => {
         setTitles(response.data.titles)
-        console.log(response.data)
       })
       .catch(err => {
         console.log(err)

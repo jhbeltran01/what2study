@@ -1,4 +1,5 @@
 # [STUD-015] To-Do API {views.py}
+from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.mixins import (
     CreateModelMixin,  
     ListModelMixin,    
@@ -9,8 +10,9 @@ from rest_framework.mixins import (
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from .serializers import TodoSerializer
-from common.models import Todo
+from .serializers import TodoSerializer, TodoItemSerializer
+from common.models import Todo, TodoItem
+
 
 class TodoAPIView(
     CreateModelMixin,  # Mixin to handle object creation
@@ -22,7 +24,6 @@ class TodoAPIView(
 ):
     serializer_class = TodoSerializer # Specifies the serializer to use for handling the request and response data
     lookup_field = 'slug'  # Uses the 'slug' field to look up individual Todo items
-    parser_classes = (MultiPartParser, FormParser)  # Specifies parsers to handle file uploads and form data
 
     #  Initializes the view and tracks slug, is_get_note, and files.
     def __init__(self, *args, **kwargs): 
@@ -38,7 +39,6 @@ class TodoAPIView(
 
     # Handles file uploads and creates a new Todo.
     def post(self, request, *args, **kwargs):
-        self.files = request.FILES.getlist('files')  
         return self.create(request, *args, **kwargs)
     
     # Retrieves a single Todo if a slug is provided; otherwise, lists all Todos.
@@ -60,12 +60,70 @@ class TodoAPIView(
     
     # Filters Todos to only those owned by the current user.
     def get_queryset(self):
-        return Todo.todo.filter(owner=self.request.user)
+        return Todo.todos.filter(owner=self.request.user)
     
     # Retrieves a specific Todo by slug.
     def get_object(self):
-        return Todo.todo.get(slug=self.slug)
+        return Todo.todos.get(slug=self.slug)
     
     # Passes the current user as owner to the serializer.
     def get_serializer_context(self):
         return {'owner': self.request.user}
+
+
+class TodoItemAPIView(
+    CreateModelMixin,
+    DestroyModelMixin,
+    UpdateModelMixin,
+    RetrieveModelMixin,
+    ListModelMixin,
+    GenericAPIView
+):
+    serializer_class = TodoItemSerializer
+    lookup_field = 'slug'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.todo = None
+        self.todo_item = None
+
+    def dispatch(self, request, *args, **kwargs):
+        kwargs['slug'] = kwargs.get('item', None)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self._set_todo(kwargs)
+
+        if kwargs['slug'] is not None:
+            return super().retrieve(request, *args, **kwargs)
+
+        return super().list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self._set_todo(kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self._set_todo(kwargs)
+        return super().destroy(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        self._set_todo(kwargs)
+        return super().update(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(
+            owner=self.request.user,
+            todo=self.todo,
+        )
+
+    def get_queryset(self):
+        return TodoItem.items.filter(
+            owner=self.request.user,
+            todo=self.todo,
+        )
+
+    def _set_todo(self, kwargs):
+        self.todo = Todo.todos.filter(slug=kwargs['todo']).first()
+        if self.todo is None:
+            raise NotFound('Todo is not found.')

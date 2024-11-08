@@ -24,7 +24,7 @@ urlpatterns = [
     path('apis/reviewers/', include('apis.reviewers.urls')),
     path('apis/studypods/', include('apis.studypods.urls')),
     path('apis/notes/', include('apis.notes.urls')),
-    path('apis/todo/', include('apis.todo.urls')),
+    path('apis/todos/', include('apis.todo.urls')),
     path('apis/questions/', include('apis.questions.urls')),
     path('apis/settings/', include('apis.settings.urls')),
     path('', include('apps.pages.urls')),

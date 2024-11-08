@@ -7,8 +7,8 @@ const JOIN_CALL = "/study-pods/join-call/";
 const VIEW_REVIEWER_CONTENT = '/reviewers/content/'
 const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
 const NOTES = '/notes'
-const NOTES_TAB = ''
 const NOTE_CONTENT = '/notes/content/'
+const TODOS_CONTENT = '/notes/todos/content'
 
 const ROUTES = {
   HOME_PAGE,
@@ -20,8 +20,8 @@ const ROUTES = {
   VIEW_REVIEWER_CONTENT,
   VIEW_CONTENT_WITHOUT_EDIT,
   NOTES,
-  NOTES_TAB,
-  NOTE_CONTENT
+  NOTE_CONTENT,
+  TODOS_CONTENT
 };
 
 export { 
@@ -35,7 +35,7 @@ export {
   VIEW_REVIEWER_CONTENT,
   VIEW_CONTENT_WITHOUT_EDIT,
   NOTES,
-  NOTES_TAB,
-  NOTE_CONTENT
+  NOTE_CONTENT,
+  TODOS_CONTENT
 };
 
