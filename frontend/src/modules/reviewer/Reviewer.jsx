@@ -62,7 +62,7 @@ const Reviewer = () => {
         </button>
       </div>
 
-      <div className="reviewer-content h-[100%] grid grid-responsive">
+      <div className="reviewer-content h-[100%] grid grid-responsive-1">
         {reviewers.map((reviewer) => {
           return <ReviewerCard reviewer={reviewer} key={reviewer.slug} />
         })}

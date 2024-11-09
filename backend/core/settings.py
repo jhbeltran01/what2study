@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'apis.notes',
     'apis.todo',
     'apis.questions',
+    'apis.subjects',
     'apps.pages',
     'apps.custom_auth',
     'asgi.asgi_auth',
