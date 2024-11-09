@@ -9,6 +9,7 @@ const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
 const NOTES = '/notes'
 const NOTE_CONTENT = '/notes/content/'
 const TODOS_CONTENT = '/notes/todos/content'
+const SETTINGS = '/settings/'
 
 const ROUTES = {
   HOME_PAGE,
@@ -21,7 +22,8 @@ const ROUTES = {
   VIEW_CONTENT_WITHOUT_EDIT,
   NOTES,
   NOTE_CONTENT,
-  TODOS_CONTENT
+  TODOS_CONTENT,
+  SETTINGS
 };
 
 export { 
@@ -36,6 +38,7 @@ export {
   VIEW_CONTENT_WITHOUT_EDIT,
   NOTES,
   NOTE_CONTENT,
-  TODOS_CONTENT
+  TODOS_CONTENT,
+  SETTINGS,
 };
 

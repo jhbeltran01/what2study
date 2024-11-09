@@ -9,6 +9,7 @@ import ReviewerContentNoEdit from '@modules/reviewer/view_content/Main'
 import Notes from '@modules/notes/Main'
 import NoteContent from '@modules/notes/notes-tab/content/Main'
 import TodosContent from '@modules/notes/todos-tab/content/Main'
+import Settings from '@modules/settings/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -68,6 +69,11 @@ const pagesData = [
         path: routes.ROUTES.TODOS_CONTENT,
         element:  <TodosContent />,
         title: routes.TODOS_CONTENT,
+      },
+      {
+        path: routes.ROUTES.SETTINGS,
+        element:  <Settings />,
+        title: routes.SETTINGS,
       },
     ]
   },

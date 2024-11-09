@@ -32,7 +32,7 @@ const Sidebar = () => {
                     </NavLink>
                 ))
             }
-            <button onClick={logoutUser} className='sidebar-link-normal sidebar-link-hover'>Logout</button>
+            <button onClick={logoutUser} className='sidebar-link-normal sidebar-link-hover radius'>Logout</button>
             <div className='filler'></div>
         </section>
     );

@@ -7,7 +7,7 @@ import { setNotes } from '@redux/notes'
 
 function Form() {
   const notes = useSelector(state => state.notes.value)
-  const [showForm, setShowForm] = useContext(ShowFormContext)
+  const setShowForm = useContext(ShowFormContext)[1]
   const [name, setName] = useState('')
   const dispatch = useDispatch()
 
