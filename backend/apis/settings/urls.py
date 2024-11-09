@@ -5,7 +5,7 @@ from . import views
 app_name = 'apis_settings'
 
 urlpatterns = [
-    path('user-info/<str:username>/',
+    path('user-info/',
             views.UserInfoAPIView.as_view(),
                 name='user-info'),
 ]

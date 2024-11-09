@@ -13,7 +13,6 @@ class UserInfoAPIView(
     GenericAPIView,
 ):
     serializer_class = SettingsUserInfoSerializer
-    lookup_field = 'username'
     queryset = User.objects.all()
 
     def patch(self, request, *args, **kwargs):
@@ -33,3 +32,6 @@ class UserInfoAPIView(
             serializer.validated_data['password'] = make_password(password)
 
         serializer.save()
+
+    def get_object(self):
+        return self.request.user

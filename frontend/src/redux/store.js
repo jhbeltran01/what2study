@@ -5,6 +5,7 @@ import noteReducer from './note'
 import notesReducer from './notes'
 import todosReducer from './todos'
 import todoReducer from './todo'
+import userInfoReducer from './user_info'
 import { loadState, saveState } from './utils' 
 
 const persistedState = loadState()
@@ -16,7 +17,8 @@ const store = configureStore({
     note: noteReducer,
     notes: notesReducer,
     todos: todosReducer,
-    todo: todoReducer
+    todo: todoReducer,
+    userInfo: userInfoReducer
   },
   preloadedState: persistedState
 })
@@ -29,6 +31,7 @@ store.subscribe(() => {
     notes: store.getState().notes,
     todos: store.getState().todos,
     todo: store.getState().todo,
+    userInfo: store.getState().userInfo
   })
 })
 

@@ -3,3 +3,7 @@
   grid-auto-rows: minmax(max-content, max-content);
   gap: 10px;
 }
+
+.grid-2-column-1 {
+  grid-template-columns: 1.5fr 1fr;
+}
