@@ -374,3 +374,34 @@ class Subject(SlugField):
     def save(self, *args, **kwargs):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(*args, **kwargs)
+
+
+class SubjectReviewer(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subject_reviewers'
+    )
+    reviewer = models.OneToOneField(
+        Reviewer,
+        on_delete=models.CASCADE,
+        related_name='subject'
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name='reviewers'
+    )
+
+    reviewers = models.Manager()
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
