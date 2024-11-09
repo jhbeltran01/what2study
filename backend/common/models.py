@@ -91,13 +91,16 @@ class StudyPod(SlugField):
 
     groups = models.Manager()
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.slug
 
     def save(self, **kwargs):
-        if self.slug == '':
+        if self.slug is None or self.slug == '':
             self.access_code = generate_access_code()
-
+            self.members = [self.owner.id]
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
 

@@ -2,14 +2,10 @@ import React from 'react'
 
 function Header() {
   return (
-    <div>
-      <header>
-        <h3>My Study Pod</h3>
-        <button>
-          Create
-        </button>
-      </header>
-    </div>
+    <header className='flex justify-between'>
+      <h3>Study Pod</h3>
+      <input type="text" placeholder='Search' />
+    </header>
   )
 }
 
