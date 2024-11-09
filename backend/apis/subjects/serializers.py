@@ -42,7 +42,7 @@ class SubjectSerializer(serializers.ModelSerializer):
         return UserInfoSerializer(instance.owner).data
 
     def get_number_of_reviewers(self, instance):
-        return 0
+        return instance.reviewers.count()
 
     def get_number_of_notes(self, instance):
         return 0

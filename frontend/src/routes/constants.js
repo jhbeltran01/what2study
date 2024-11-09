@@ -12,6 +12,8 @@ const NOTE_CONTENT = '/notes/content/'
 const TODOS_CONTENT = '/notes/todos/content'
 const SETTINGS = '/settings/'
 const SUBJECTS = '/subjects/'
+const SUBJECT_CONTENT = '/subjects/content/'
+const SUBJECT_CREATE_REVIEWER = '/subjects/content/reviewers/create/'
 
 const ROUTES = {
   HOME_PAGE,
@@ -28,6 +30,8 @@ const ROUTES = {
   SETTINGS,
   STUDYPOD_CREATE,
   SUBJECTS,
+  SUBJECT_CONTENT,
+  SUBJECT_CREATE_REVIEWER
 };
 
 export { 
@@ -46,5 +50,7 @@ export {
   SETTINGS,
   STUDYPOD_CREATE,
   SUBJECTS,
+  SUBJECT_CONTENT,
+  SUBJECT_CREATE_REVIEWER,
 };
 

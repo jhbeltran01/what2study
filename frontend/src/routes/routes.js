@@ -12,6 +12,8 @@ import TodosContent from '@modules/notes/todos-tab/content/Main'
 import Settings from '@modules/settings/Main'
 import CreateStudypod from '@modules/study_pod/components/study_pods/create_form/Main'
 import Subjects from '@modules/subjects/Main'
+import SubjectContent from '@modules/subjects/content/Main'
+import CreateSubjectReviewer from '@modules/subjects/create_reviewer/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -86,6 +88,16 @@ const pagesData = [
         path: routes.ROUTES.SUBJECTS,
         element:  <Subjects />,
         title: routes.SUBJECTS,
+      },
+      {
+        path: routes.ROUTES.SUBJECT_CONTENT,
+        element:  <SubjectContent />,
+        title: routes.SUBJECT_CONTENT,
+      },
+      {
+        path: routes.ROUTES.SUBJECT_CREATE_REVIEWER,
+        element:  <CreateSubjectReviewer />,
+        title: routes.SUBJECT_CREATE_REVIEWER,
       },
     ]
   },
