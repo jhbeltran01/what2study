@@ -353,3 +353,24 @@ class RecentViewedPublicReviewer(PublicReviewerCategory):
 
 class BookmarkedPublicReviewer(PublicReviewerCategory):
     pass
+
+
+class Subject(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subjects'
+    )
+    name = models.CharField(max_length=50)
+
+    subjects = models.Manager()
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
+        super().save(*args, **kwargs)
