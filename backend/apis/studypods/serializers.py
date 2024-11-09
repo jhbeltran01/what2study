@@ -9,11 +9,11 @@ from common.models import StudyPod, StudypodReviewer, Reviewer
 
 class StudypodSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
+    access_code = serializers.CharField(required=False)
 
     class Meta:
         model = StudyPod
         fields = [
-            'id',
             'owner',
             'name',
             'size',
@@ -38,7 +38,7 @@ class StudypodSerializer(serializers.ModelSerializer):
         return value
 
     def get_owner(self, instance):
-        return UserInfoSerializer(self.owner).data
+        return UserInfoSerializer(instance.owner).data
 
 
 class StudypodAccessCodeSerializer(serializers.Serializer):

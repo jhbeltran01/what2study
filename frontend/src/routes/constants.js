@@ -3,6 +3,7 @@ const HOME_SCREEN = "/";
 const REVIEWERS = "/reviewers/";
 const CREATE_REVIEWER = "/reviewers/create-reviewer/"; 
 const STUDYPODS = "/study-pods/";
+const STUDYPOD_CREATE = '/study-pods/create/'
 const JOIN_CALL = "/study-pods/join-call/";
 const VIEW_REVIEWER_CONTENT = '/reviewers/content/'
 const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
@@ -23,7 +24,8 @@ const ROUTES = {
   NOTES,
   NOTE_CONTENT,
   TODOS_CONTENT,
-  SETTINGS
+  SETTINGS,
+  STUDYPOD_CREATE,
 };
 
 export { 
@@ -40,5 +42,6 @@ export {
   NOTE_CONTENT,
   TODOS_CONTENT,
   SETTINGS,
+  STUDYPOD_CREATE,
 };
 

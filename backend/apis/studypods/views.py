@@ -70,7 +70,7 @@ class StudyPodAPIView(
         return Response(payload, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return StudyPod.groups.filter(owner=self.request.user)
+        return StudyPod.groups.filter(members__contains=self.request.user.id)
 
     def get_serializer_context(self):
         return {'owner': self.request.user}
@@ -91,7 +91,6 @@ class JoinStudypodAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         add_user_to_studypod(serializer.studypod, self.request.user.id)
-
         payload = StudypodSerializer(serializer.studypod).data
         return Response(payload, status=status.HTTP_200_OK)
 

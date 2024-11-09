@@ -10,6 +10,7 @@ import Notes from '@modules/notes/Main'
 import NoteContent from '@modules/notes/notes-tab/content/Main'
 import TodosContent from '@modules/notes/todos-tab/content/Main'
 import Settings from '@modules/settings/Main'
+import CreateStudypod from '@modules/study_pod/components/study_pods/create_form/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -74,6 +75,11 @@ const pagesData = [
         path: routes.ROUTES.SETTINGS,
         element:  <Settings />,
         title: routes.SETTINGS,
+      },
+      {
+        path: routes.ROUTES.STUDYPOD_CREATE,
+        element:  <CreateStudypod />,
+        title: routes.STUDYPOD_CREATE,
       },
     ]
   },
