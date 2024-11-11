@@ -5,14 +5,14 @@ import { setReviewer, setReviewerSlug } from '@redux/reviewer';
 import * as routes from '@root/routes/constants';
 import { useNavigate } from 'react-router-dom';
 
-function ReviewerCard({reviewer}) {
+function ReviewerCard({reviewer, contentRoute=routes.VIEW_REVIEWER_CONTENT}) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
     dispatch(setReviewerSlug(reviewer.slug))
-    navigate(routes.VIEW_REVIEWER_CONTENT)
+    navigate(contentRoute)
   }
 
   return (

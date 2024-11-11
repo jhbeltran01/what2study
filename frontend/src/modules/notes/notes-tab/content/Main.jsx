@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals'
 import { updateNote, setNote } from '@redux/note'
+import { setNotes } from '@redux/notes'
 
 function Main() {
   const note = useSelector(state => state.note.value)
@@ -19,17 +20,29 @@ function Main() {
         {content: content}
       )
       .then(response => {
-        dispatch(updateNote({content: content}))
+        dispatch(updateNote(response.data))
+        updateNotes(response.data)
       })
       .catch(err => {
         console.log(err)
       })
   }
+
+  const updateNotes = (newNote) => {
+    const tempNotes = notes.map(note => {
+      if (note.slug != newNote.slug) { return note }
+      return newNote
+    })
+
+    dispatch(setNotes(tempNotes))
+  }
   
   const getNote = (event) => {
     const selectedNoteSlug = event.target.value
     const note = notes.filter(note => note.slug == selectedNoteSlug)[0]
+
     dispatch(setNote(note))
+    setContentInputText(note.content)
   }
 
   return (
@@ -44,7 +57,7 @@ function Main() {
               value={note.slug}
               key={note.slug}
             >
-              {note.name}
+              {note.name} 1
             </option>
           )}
         </select>
