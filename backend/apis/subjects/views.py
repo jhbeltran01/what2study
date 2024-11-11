@@ -1,14 +1,26 @@
 from rest_framework.exceptions import MethodNotAllowed, NotFound
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, \
+from rest_framework.mixins import (
+    CreateModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
     DestroyModelMixin
+)
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 
+from apis.notes.serializers import NotesSerializer
 from apis.reviewers.serializers import ReviewerSerializer
 from apis.subjects.serializers import SubjectSerializer
-from common.models import Subject, Reviewer, SubjectReviewer
+from common.models import (
+    Subject,
+    Reviewer,
+    SubjectReviewer,
+    SubjectNote,
+    Note
+)
 
 
 class SubjectAPIView(
@@ -121,3 +133,66 @@ class SubjectReviewerAPIView(
     def get_queryset(self):
         reviewers_id = [subject.reviewer.id for subject in self.subject.reviewers.all()]
         return Reviewer.reviewers.filter(id__in=reviewers_id).order_by('-created_at')
+
+
+class SubjectNoteAPIView(
+    CreateModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+    GenericAPIView
+):
+    serializer_class = NotesSerializer
+    lookup_field = 'slug'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.subject = None
+
+    def dispatch(self, request, *args, **kwargs):
+        kwargs['slug'] = kwargs.get('note', None)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self._set_subject(kwargs)
+
+        if kwargs['slug'] is not None:
+            return super().retrieve(request, *args, **kwargs)
+
+        return super().list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self._set_subject(kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self._set_subject(kwargs)
+
+        if kwargs['slug'] is None:
+            raise MethodNotAllowed('DELETE')
+
+        super().destroy(request, *args, **kwargs)
+        return Response({'detail': 'Note has been deleted'}, status=status.HTTP_200_OK)
+
+    def perform_create(self, serializer):
+        note = serializer.save(
+            owner=self.request.user
+        )
+        SubjectNote.notes.create(
+            owner=self.request.user,
+            note=note,
+            subject=self.subject
+        )
+
+    def get_serializer_context(self):
+        return {'owner': self.request.user}
+
+    def get_queryset(self):
+        notes_id = [subject.note.id for subject in self.subject.notes.all()]
+        return Note.notes.filter(id__in=notes_id)
+
+    def _set_subject(self, kwargs):
+        self.subject = Subject.subjects.filter(slug=kwargs['subject']).first()
+
+        if self.subject is None:
+            raise NotFound('Subject not found')

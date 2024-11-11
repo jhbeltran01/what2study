@@ -99,6 +99,16 @@ const pagesData = [
         element:  <CreateSubjectReviewer />,
         title: routes.SUBJECT_CREATE_REVIEWER,
       },
+      {
+        path: routes.ROUTES.SUBJECT_NOTE,
+        element:  <NoteContent />,
+        title: routes.SUBJECT_NOTE,
+      },
+      {
+        path: routes.ROUTES.SUBJECT_REVIEWER,
+        element:  <ReviewerContent />,
+        title: routes.SUBJECT_REVIEWER
+      },
     ]
   },
 ];

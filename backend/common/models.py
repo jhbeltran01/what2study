@@ -48,6 +48,10 @@ class Reviewer(SlugField):
 
     reviewers = models.Manager()
 
+
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.slug
 
@@ -65,6 +69,9 @@ class PublicReviewer(SlugField):
     name = models.CharField(max_length=50)
 
     reviewers = models.Manager()
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.slug
@@ -397,6 +404,34 @@ class SubjectReviewer(SlugField):
 
     class Meta:
         ordering = ['-created_at']
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
+
+
+class SubjectNote(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subject_notes'
+    )
+    note = models.OneToOneField(
+        Note,
+        on_delete=models.CASCADE,
+        related_name='subject_notes'
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name='notes'
+    )
+
+    notes = models.Manager()
 
     def __str__(self):
         return self.slug
