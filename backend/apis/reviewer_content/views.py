@@ -19,6 +19,7 @@ from .serializers import (
     DefinitionSerializer,
     ReviewerContentQueryParamSerializer, ReviewerContentSerializer,
 )
+from .services import QuestionType
 from ..reviewers.serializers import TitleSerializer
 from ..reviewers.services import get_query_params, Document, delete_enum_title
 
@@ -70,6 +71,19 @@ class DefinitionAPIView(
             title=self.query_params.get('title'),
             slug=generate_unique_id()
         )
+        self._update_available_question_types()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        self._update_available_question_types()
+
+    def _update_available_question_types(self):
+        question_type = QuestionType(
+            reviewer=self.query_params.get('reviewer', None),
+            owner=self.request.user,
+            for_definition=True
+        )
+        question_type.update()
 
 
 class EnumerationTitleAPIView(
@@ -132,10 +146,21 @@ class EnumerationTitleAPIView(
             type=Title.Type.ENUMERATION_TITLE,
         )
         EnumerationTitle.titles.create(title=title)
+        self._update_available_question_types()
 
     def perform_destroy(self, instance):
         is_definition = self.query_params.get('is_definition')
         delete_enum_title(is_definition, instance)
+        self._update_available_question_types()
+
+    def _update_available_question_types(self):
+        question_type = QuestionType(
+            reviewer=self.query_params.get('reviewer', None),
+            owner=self.request.user,
+            for_enumeration=True,
+            for_definition=True,
+        )
+        question_type.update()
 
 
 class TitleAPIView(
@@ -210,13 +235,26 @@ class TitleAPIView(
         document.convert_text_to_content(reviewer, content=content)
 
         reviewer.content += content
-        reviewer.available_question_types = document.question_types
         reviewer.save()
 
         self._set_serialized_new_content(document.new_titles)
+        self._update_available_question_types()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        self._update_available_question_types()
 
     def get_serializer_context(self):
         return {'is_update': self.is_updated}
 
     def _set_serialized_new_content(self, titles):
         self.serialized_new_content = TitleSerializer(titles, many=True).data
+
+    def _update_available_question_types(self, instance=None):
+        question_type = QuestionType(
+            reviewer=self.query_params.get('reviewer', None),
+            owner=self.request.user,
+            for_enumeration=True,
+            for_definition=True,
+        )
+        question_type.update()

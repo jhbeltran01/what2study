@@ -34,9 +34,6 @@ class ReviewerContentQueryParamSerializer(serializers.Serializer):
         self.enum_title = None
 
     def validate_reviewer_slug(self, value):
-        if self.content_slug_is_only_needed:
-            return None
-
         self.reviewer = Reviewer.reviewers.filter(slug=value).first()
 
         if self.reviewer is None:

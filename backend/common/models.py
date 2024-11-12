@@ -1,7 +1,8 @@
-
+"""@TODO when generate_unique_id, add the owner id"""
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from rest_framework.exceptions import ValidationError
 
 from apis.authentication.models import User
 
@@ -200,7 +201,7 @@ class Title(SlugField):
 
 
 class EnumerationTitle(SlugField):
-    title = models.ForeignKey(
+    title = models.OneToOneField(
         Title,
         on_delete=models.CASCADE,
         editable=False,
@@ -233,6 +234,7 @@ class Definition(SlugField):
         Reviewer,
         on_delete=models.CASCADE,
         editable=False,
+        related_name='definitions'
     )
     title = models.ForeignKey(
         Title,
@@ -259,6 +261,64 @@ class Definition(SlugField):
     @property
     def answer(self):
         return self.title.text
+
+
+class IsCorrectlyAnswered(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+    )
+    is_correctly_answered = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = '{}{}'.format(generate_unique_id(), self.owner.id)
+        super().save(*args, **kwargs)
+
+
+class DefinitionIsCorrectlyAnswered(IsCorrectlyAnswered):
+    definition = models.ForeignKey(
+        Definition,
+        on_delete=models.CASCADE,
+        related_name='statuses'
+    )
+
+    definitions = models.Manager()
+
+    class Meta:
+        unique_together = ('owner', 'reviewer', 'definition')
+
+
+class EnumerationIsCorrectlyAnswered(IsCorrectlyAnswered):
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        related_name='statuses'
+    )
+
+    titles = models.Manager()
+
+    class Meta:
+        unique_together = ('owner', 'reviewer', 'title')
+
+    def save(self, *args, **kwargs):
+        if self.title.type != Title.Type.ENUMERATION:
+            raise ValidationError('The title must be of type "Enumeration"')
+
+        if self.slug is None:
+            self.slug = '{}{}'.format(generate_unique_id(), self.owner.id)
+
+        super().save(*args, **kwargs)
 
 
 class Note(SlugField):

@@ -14,7 +14,7 @@ from common.models import (
     Reviewer,
     PublicReviewer,
     RecentViewedPublicReviewer,
-    BookmarkedPublicReviewer,
+    BookmarkedPublicReviewer, DefinitionIsCorrectlyAnswered, EnumerationIsCorrectlyAnswered,
 )
 from common.services import generate_unique_id
 
@@ -25,7 +25,9 @@ class Document:
         self.reviewer = reviewer
         self.files = files
         self.text_content = ''
-        self.definitions = []
+        self.definition = None
+        self.definition_is_answered_correctly_objs = []
+        self.enumeration_is_answered_correctly_objs = []
         self.enum_titles = []
         self.new_title = None
         self.new_enum_title = None
@@ -70,7 +72,8 @@ class Document:
 
         self._add_multiple_choice_to_question_types()
 
-        Definition.definitions.bulk_create(self.definitions)
+        DefinitionIsCorrectlyAnswered.definitions.bulk_create(self.definition_is_answered_correctly_objs)
+        EnumerationIsCorrectlyAnswered.titles.bulk_create(self.enumeration_is_answered_correctly_objs)
         EnumerationTitle.titles.bulk_create(self.enum_titles)
 
     def _clean_text_content(self, content):
@@ -103,11 +106,12 @@ class Document:
             case self.DEFINITION_MARK:
                 self._add_to_definitions()
                 self._add_identification_to_question_types()
+                self._add_to_definition_is_answered_correctly_objs()
             case self.ENUMERATION_MARK:
                 self.new_enum_title = self._create_title(title_type=Title.Type.ENUMERATION)
                 self.new_titles.append(self.new_enum_title)
                 self._add_to_enum_title()
-                self._add_enumeration_to_question_types()
+                self._add_to_enumeration_is_answered_correctly_objs()
             case self.ENUMERATION_TITLE_MARK:
                 self.new_title = self._create_title(
                     title_type=Title.Type.ENUMERATION_TITLE,
@@ -115,6 +119,7 @@ class Document:
                 )
                 self.new_titles.append(self.new_title)
                 self.number_of_title += 1
+                self._add_enumeration_to_question_types()
             case self.DEFINITION_TITLE_MARK:
                 self.new_title = self._create_title(title_type=Title.Type.DEFINITION)
                 self.new_titles.append(self.new_title)
@@ -130,13 +135,23 @@ class Document:
         )
 
     def _add_to_definitions(self):
-        self.definitions.append(Definition(
+        self.definition = Definition.definitions.create(
             owner=self.owner,
             reviewer=self.reviewer,
             title=self.new_title,
             text=self._get_text(self.text),
             slug=generate_unique_id(),
-        ))
+        )
+
+    def _add_to_definition_is_answered_correctly_objs(self):
+        self.definition_is_answered_correctly_objs.append(
+            DefinitionIsCorrectlyAnswered(
+                owner=self.owner,
+                reviewer=self.reviewer,
+                definition=self.definition,
+                slug=generate_unique_id(),
+            )
+        )
 
     def _add_to_enum_title(self):
         self.enum_titles.append(EnumerationTitle(
@@ -144,13 +159,22 @@ class Document:
             slug=generate_unique_id(),
         ))
 
+    def _add_to_enumeration_is_answered_correctly_objs(self):
+        self.enumeration_is_answered_correctly_objs.append(
+            EnumerationIsCorrectlyAnswered(
+                owner=self.owner,
+                reviewer=self.reviewer,
+                title=self.new_enum_title,
+                slug=generate_unique_id(),
+            )
+        )
+
     def _add_identification_to_question_types(self):
         if not self.has_identification and self.number_of_title > 0:
             self.has_identification = True
             self.question_types.append(Reviewer.QuestionType.IDENTIFICATION)
 
     def _add_enumeration_to_question_types(self):
-        """@TODO make sure that the enumeration has an enumeration title"""
         if not self.has_enumeration:
             self.has_enumeration = True
             self.question_types.append(Reviewer.QuestionType.ENUMERATION)
