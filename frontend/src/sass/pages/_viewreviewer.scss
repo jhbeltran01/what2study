@@ -84,3 +84,60 @@
     justify-self: center; /* Center the line horizontally */
   }
 
+  .view-notes-section {
+    margin-top: 30px;
+  }
+  
+  .view-notes-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .view-notes-container {
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 700px; /* Adjust max-width as needed */
+    margin: 0 auto; /* Center align */
+    box-shadow: none;
+  }
+  
+  .view-notes-input {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #333;
+    resize: vertical;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .view-notes-input:focus {
+    border-color: #cfcc18;
+  }
+
+  .start-button-container {
+    margin-top: 20px; /* Space between Notes and Start Button */
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+  }
+  
+  .start-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Ensure text is centered inside the button */
+  }
+  
+  .start-button:hover {
+    background-color: #0056b3;
+  }

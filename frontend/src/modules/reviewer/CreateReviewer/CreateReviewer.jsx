@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 const CreateReviewer = () => {
   // State variables to hold form input values
   const [reviewerName, setReviewerName] = useState(''); // Reviewer name input
-  const [reviewerType, setReviewerType] = useState('Enumeration'); // Default type of question
+  const [reviewerType, setReviewerType] = useState('Multiple Choice'); // Default type of question
   const [numQuestions, setNumQuestions] = useState(10); // Default number of questions
   const [description, setDescription] = useState(''); // Reviewer description input
   const [uploadedFile, setUploadedFile] = useState(null); // Uploaded file (if any)
@@ -31,7 +31,7 @@ const CreateReviewer = () => {
   const navigate = useNavigate(); // Navigation hook to handle page redirects
 
   // Arrays to define options for question types and visibility settings
-  const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type']; // Question types
+  const questionTypes = ['Enumeration', 'Multiple Choice', 'Identification']; // Question types
   const visibilityOptions = ['Private', 'Public']; // Reviewer visibility options
 
   // Handle the click to create a reviewer object

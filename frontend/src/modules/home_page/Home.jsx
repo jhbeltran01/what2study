@@ -1,25 +1,9 @@
-/***********************************************************************************************************************************
-Subject: ITMC311 Integrative Programming 2
-Mentor: Sir Kevin G. Vega
-App Name: StudyHive
-Company Name: BCDP
-
-Company Members:
-Nicole B. Castillo
-Marie Angeline Pelausa
-Joy Milangela Dacuba
-Harold Beltran
-___________________________________________________________________________________________________________________________________
-
-Ticket Information: [STUD-006] Homepage UI
-Purpose: Allows users to view the public, recently viewed and bookmarked reviewers, and search for a particular reviewer.
-***********************************************************************************************************************************/
 
 import React, { useEffect, useState } from 'react'; // Import necessary React components and hooks
-import { Link } from 'react-router-dom'; // Import Link for navigation
 import searchIcon from '@assets/search.png'; // Import the search icon
 import bookmarksIcon from '@assets/bookmark.png'; // Import the unbookmarked icon
 import bookmarkedIcon from '@assets/bookmarked.png'; // Import the bookmarked icon
+import { useNavigate } from 'react-router-dom'; // Importing navigation hook from react-router-dom
 
 const Home = () => {
   const [active, setActive] = useState('public-reviewers'); // State to track the active section
@@ -29,6 +13,7 @@ const Home = () => {
   const [bookmarks, setBookmarks] = useState([]); // State for bookmarks
   const [showNotification, setShowNotification] = useState(false); // State to control notification visibility
   const [notificationMessage, setNotificationMessage] = useState(''); // State for notification message
+  const navigate = useNavigate(); // Hook for navigation
 
   // Effect to load bookmarks from local storage
   useEffect(() => {
@@ -51,6 +36,20 @@ const Home = () => {
   const handleClick = (section) => {
     setActive(section);
   };
+
+    // Navigate to view details of a specific reviewer
+    const handleViewClick = (index) => {
+      const reviewer = publicReviewers[index]; // Make sure you're passing the correct array (e.g., publicReviewers)
+      
+      if (!reviewer) {
+        console.error('No reviewer found at this index');
+        return;
+      }
+      
+      navigate('/reviewers/view-reviewer', { state: { reviewer } });
+    };
+    
+
 
   // Function to handle search form submission
   const handleSearchSubmit = (event) => {
@@ -105,7 +104,7 @@ const Home = () => {
     <div className="reviewer-content">
       <ul>
         {data.length > 0 ? ( // Check if there's data to display
-          data.map((item) => (
+          data.map((item, index) => (
             <li key={item.id} className="reviewer-entry">
               <div className="reviewer-header">
                 <h3 className="reviewer-title">{item.name}</h3>
@@ -125,9 +124,9 @@ const Home = () => {
                   className="bookmarks-icon" 
                 />
               </button>
-              <Link to={`/view/${item.id}`} className="view-link">
-                View Details
-              </Link>
+              <button className="view-link" onClick={() => handleViewClick(index)}>
+              View
+            </button>
             </li>
           ))
         ) : (

@@ -1,62 +1,67 @@
-/*import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import '../../../sass/pages/_createnotes.scss';
 
 const CreateNotes = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const navigate = useNavigate();
+  const [noteTitle, setNoteTitle] = useState('');
+  const [noteText, setNoteText] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('Subjects');
 
-  const handleCreateClick = () => {
-    const newNote = {
-      title,
-      content,
-      date: new Date().toLocaleDateString(),
-    };
+  const handleSave = (e) => {
+    e.preventDefault();
 
-    const notes = JSON.parse(localStorage.getItem('notes')) || [];
-    notes.push(newNote);
-    localStorage.setItem('notes', JSON.stringify(notes));
+    if (noteTitle.trim() && noteText.trim()) {
+      const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+      const newNote = {
+        title: noteTitle,
+        content: noteText,
+        date: new Date().toLocaleDateString(), // Save the date
+      };
 
-    navigate('/notes');
+      savedNotes.push(newNote);
+      localStorage.setItem('notes', JSON.stringify(savedNotes));
+      console.log('Note saved!');
+
+      setNoteTitle('');
+      setNoteText('');
+    }
   };
 
   return (
-    <section className="create-notes">
-      <div className="create-note-container">
-
-        <div className="note-content">
-          <form className="note-form">
-            <div className="form-group note-form-group">
-              <label htmlFor="title">Title:</label>
-              <input
-                type="text"
-                id="title"
-                placeholder="Enter note title"
-                className="note-input-field"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="form-group note-form-group">
-              <label htmlFor="content">Content:</label>
-              <textarea
-                id="content"
-                placeholder="Enter note content"
-                className="note-input-field"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </div>
-            <div className="create-note-button-container">
-              <button type="button" className="note-create-button" onClick={handleCreateClick}>
-                Create
-              </button>
-            </div>
-          </form>
+    <section className="create-notes-section">
+      <form onSubmit={handleSave}>
+        <div className="subject-dropdown-container">
+          <select
+            className="subject-dropdown"
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+          >
+            <option value="Subjects">Subjects</option>
+            {/* Add more options here as needed */}
+          </select>
         </div>
-      </div>
+
+        <div className="notepad">
+          <input
+            type="text"
+            className="notepad-title"
+            placeholder="Title"
+            value={noteTitle}
+            onChange={(e) => setNoteTitle(e.target.value)}
+          />
+          <textarea
+            className="notepad-text"
+            placeholder="Type your notes here..."
+            value={noteText}
+            onChange={(e) => setNoteText(e.target.value)}
+          />
+        </div>
+
+        <button type="submit" className="save-button">
+          Save
+        </button>
+      </form>
     </section>
   );
 };
 
-export default CreateNotes;*/
+export default CreateNotes;

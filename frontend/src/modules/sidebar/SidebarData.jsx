@@ -36,7 +36,11 @@ export const SidebarData = [
         path: "/settings",
         icon: settingsIcon,
     },
-    // Add more items as needed
+    {
+        title: "Logout",
+        path: "/settings",
+        icon: settingsIcon,
+    },
 ];
 
 export default SidebarData;

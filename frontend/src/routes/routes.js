@@ -8,10 +8,14 @@ import React from 'react';
 import { useState } from 'react';
 import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import ViewReviewer from '@modules/reviewer/ViewReviewer/ViewReviewer';
-//import Notes from '../modules/notes/Notes';
-//import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
+import Notes from '../modules/notes/Notes';
+import CreateNotes from '../modules/notes/CreateNotes/CreateNotes';
+import StartReviewerMultipleChoice from '@modules/reviewer/StartReviewer/StartReviewerMultipleChoice';
 import Auth from "@modules/authentication/Auth";
 import * as routes from "./constants";
+import StartReviewerIdentification from '../modules/reviewer/StartReviewer/StartReviewerIdentification';
+import StartReviewerEnumeration from '../modules/reviewer/StartReviewer/StartReviewerEnumeration';
+
 
 const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -55,6 +59,31 @@ const pagesData = [
         title: routes.EDIT_REVIEWER, 
       },
       {
+        path: routes.ROUTES.START_REVIEWER_MULTIPLE_CHOICE, 
+        element: <StartReviewerMultipleChoice />,
+        title: routes.START_REVIEWER_MULTIPLE_CHOICE, 
+      },
+      {
+        path: routes.ROUTES.START_REVIEWER_IDENTIFICATION, 
+        element: <StartReviewerIdentification />,
+        title: routes.START_REVIEWER_IDENTIFICATION, 
+      },
+      {
+        path: routes.ROUTES.START_REVIEWER_ENUMERATION, 
+        element: <StartReviewerEnumeration />,
+        title: routes.START_REVIEWER_ENUMERATION, 
+      },
+      {
+        path: routes.ROUTES.NOTES, 
+        element: <Notes />,
+        title: routes.NOTES, 
+      },
+      {
+        path: routes.ROUTES.CREATE_NOTES, 
+        element: <CreateNotes />,
+        title: routes.CREATE_NOTES, 
+      },
+      {
         path: routes.ROUTES.VIEW_REVIEWER, 
         element: <ViewReviewer />,
         title: routes.VIEW_REVIEWER, 
@@ -68,7 +97,8 @@ const pagesData = [
         path: routes.ROUTES.JOIN_CALL,
         element: <JoinCall />,
         title: routes.JOIN_CALL,
-      }
+      },
+ 
     ]
   },
 ];

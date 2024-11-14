@@ -26,29 +26,35 @@ const ViewReviewer = () => {
 
   if (!reviewer) {
     navigate('/reviewers');
-    //return null;
   }
 
   const handleTitleClick = () => {
     navigate('/reviewers');
   };
 
-    const handleStartClick = () => {
-      navigate('/start-review');
-    };
+  const handleStartClick = () => {
+    if (reviewer.type === 'Multiple Choice') {
+      navigate('/reviewers/start-reviewer-multiple-choice');
+    } else if (reviewer.type === 'Enumeration') {
+      navigate('/reviewers/start-reviewer-enumeration');
+    } else if (reviewer.type === 'Identification') {
+      navigate('/reviewers/start-reviewer-identification');
+    } else {
+      navigate('/reviewers/start-reviewer-multiple-choice');
+    }
+  };
 
   return (
     <section className="homepage-section p-4 flex flex-col">
       <div className="reviewer-content">
 
-      <div className="header">
-            <button className="header-title" onClick={handleTitleClick}>
-              {'← Back to Reviewers'}
-            </button>
-          </div>
+        <div className="header">
+          <button className="header-title" onClick={handleTitleClick}>
+            {'← Back to Reviewers'}
+          </button>
+        </div>
 
         <div className="reviewer-entry">
-
           <div className="reviewer-header">
             <h2 className="reviewer-title">{reviewer.name}</h2>
             <div className="reviewer-info">
@@ -60,9 +66,7 @@ const ViewReviewer = () => {
             </p>
           </div>
 
-          <p className="reviewer-created-by">
-            Created by: {reviewer.createdBy}
-          </p>
+          <p className="reviewer-created-by">Created by: {reviewer.createdBy}</p>
 
           <hr className="divider" />
 
@@ -78,18 +82,35 @@ const ViewReviewer = () => {
               <div className="grade-title">Your Grade</div>
               <p className="grade-info">-</p>
             </div>
+          </div>
 
-            <div className="start-button-container">
+          <hr className="divider" />
+
+          {/* Notes Section */}
+          <div className="view-notes-section">
+            <div className="view-notes-title">Notes</div>
+            <div className="view-notes-container">
+              <textarea
+                className="view-notes-input"
+                placeholder="Write your notes here..."
+                rows="5"
+              />
+            </div>
+          </div>
+
+          {/* Start Button Section */}
+          <div className="start-button-container">
             <button className="start-button" onClick={handleStartClick}>
               Start
             </button>
           </div>
-          </div>
-            <hr className="divider" />
+
         </div>
+
       </div>
     </section>
   );
 };
 
 export default ViewReviewer;
+

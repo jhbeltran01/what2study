@@ -136,9 +136,9 @@ html, body {
 .update-button {
   background: linear-gradient(180deg, #FEA61F, #FED65D);
   color: #ffffff;
-  padding: 8px 16px; /* Reduced padding for a smaller button */
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   font-size: 0.875rem; /* Reduced font size */
   font-weight: bold;
   cursor: pointer;

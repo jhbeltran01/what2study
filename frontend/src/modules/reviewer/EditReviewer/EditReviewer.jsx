@@ -35,7 +35,7 @@ const EditReviewer = () => {
   const [notification, setNotification] = useState(''); // Message for updating success notification
 
   // Constants for dropdown options
-  const questionTypes = ['Enumeration', 'Multiple Choice', 'True or False', 'Matching Type']; // Question types available
+  const questionTypes = ['Enumeration', 'Multiple Choice', 'Identification']; // Question types available
   const visibilityOptions = ['Private', 'Public']; // Visibility options for the reviewer
 
   // Function to handle the update of reviewer details

@@ -31,7 +31,7 @@ const Reviewer = () => {
   const [deleteIndex, setDeleteIndex] = useState(null); // Index of the reviewer to delete
   const navigate = useNavigate(); // Hook for navigation
 
-  // Effect to load stored reviewers from local storage
+  // Effect to load stored reviewers from local storage 
   useEffect(() => {
     const storedReviewers = JSON.parse(localStorage.getItem('reviewers')) || [];
     setReviewers(storedReviewers);

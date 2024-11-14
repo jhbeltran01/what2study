@@ -17,7 +17,6 @@ Purpose: Allows users to log into their StudyHive accounts by providing their us
 import googleIcon from '@assets/google.png';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
 
 const validateUsernameOrEmail = (usernameOrEmail) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail) || usernameOrEmail.trim().length > 0;
 const validatePassword = (password) => password.trim().length > 0;
