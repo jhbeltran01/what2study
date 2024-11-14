@@ -9,7 +9,8 @@ class QuestionType:
         self.definition = None
         self.number_of_titles = None
         self.has_definition = None
-        self.available_question_types = self.reviewer.available_question_types
+        self.available_question_types_obj = reviewer.available_question_types.filter(owner=owner).first()
+        self.available_question_types = self.available_question_types_obj.available_question_types
         self.has_enumeration = None
         self.for_definition = for_definition
         self.for_enumeration = for_enumeration
@@ -55,7 +56,7 @@ class QuestionType:
             self.is_updated = True
 
         if self.has_definition and not identification_is_in_question_types:
-            self.reviewer.available_question_types.append(identification)
+            self.available_question_types.append(identification)
             self.is_updated = True
 
     def check_for_multiple_choice_questions(self):
@@ -87,5 +88,5 @@ class QuestionType:
         if not self.is_updated:
             return
 
-        self.reviewer.available_question_types = self.available_question_types
-        self.reviewer.save()
+        self.available_question_types_obj.available_question_types = self.available_question_types
+        self.available_question_types_obj.save()

@@ -1,6 +1,5 @@
 import random
 import numpy as np
-from sympy.polys.groebnertools import is_reduced
 
 from apis.questions.serializers import (
     IdentificationQuestionSerializer,
@@ -36,7 +35,8 @@ class Question:
         self.owner = owner
         self.reviewer = reviewer_obj
         self.number_of_questions = number_of_questions
-        self.available_question_types = self.reviewer.available_question_types
+        self.available_question_types_obj = self.reviewer.available_question_types.filter(owner=owner).first()
+        self.available_question_types = self.available_question_types_obj.available_question_types
         self.question_type = None
         self.question_type_class = ''
 
@@ -255,6 +255,6 @@ def update_question_types(
         reviewer=reviewer,
         owner=owner,
         for_definition=for_definition,
-        for_enumeration=for_enumeration
+        for_enumeration=for_enumeration,
     )
     question_type.update()

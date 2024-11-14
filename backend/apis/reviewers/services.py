@@ -170,18 +170,21 @@ class Document:
         )
 
     def _add_identification_to_question_types(self):
-        if not self.has_identification and self.number_of_title > 0:
-            self.has_identification = True
-            self.question_types.append(Reviewer.QuestionType.IDENTIFICATION)
+        if self.has_identification or self.number_of_title < 0:
+            return
+        self.has_identification = True
+        self.question_types.append(Reviewer.QuestionType.IDENTIFICATION)
 
     def _add_enumeration_to_question_types(self):
-        if not self.has_enumeration:
-            self.has_enumeration = True
-            self.question_types.append(Reviewer.QuestionType.ENUMERATION)
+        if self.has_enumeration:
+            return
+        self.has_enumeration = True
+        self.question_types.append(Reviewer.QuestionType.ENUMERATION)
 
     def _add_multiple_choice_to_question_types(self):
-        if self.number_of_title >= 4:
-            self.question_types.append(Reviewer.QuestionType.MULTIPLE_CHOICE)
+        if self.number_of_title < 4:
+            return
+        self.question_types.append(Reviewer.QuestionType.MULTIPLE_CHOICE)
 
     @staticmethod
     def _get_text(text):
