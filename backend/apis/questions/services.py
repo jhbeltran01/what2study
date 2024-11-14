@@ -1,11 +1,13 @@
 import random
-from unicodedata import category
+import numpy as np
 
 from apis.questions.serializers import (
     IdentificationQuestionSerializer,
     EnumerationQuestionSerializer,
     MultipleChoiceQuestionSerializer,
 )
+
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 
 from common.models import (
     Reviewer,
@@ -109,3 +111,25 @@ class EnumerationQuestion:
     def _get_titles(self):
         return [enum_title.title for enum_title in self.enumeration_titles]
 
+
+class Answers:
+    def __init__(self, answers):
+        self.answers = answers
+        self.embeddings = None
+
+    def check(self):
+        self._initialize_embeddings()
+
+        for index, answer in enumerate(self.answers):
+            embedded_correct_answer = self.embeddings.embed_query(answer[0])
+            embedded_user_answer = self.embeddings.embed_query(answer[1])
+            accuracy = np.dot(embedded_correct_answer, embedded_user_answer) * 100
+            is_correct = accuracy >= 95
+            self.answers[index].append(is_correct)
+
+    def _initialize_embeddings(self):
+        self.embeddings = HuggingFaceBgeEmbeddings(
+            model_name="BAAI/bge-small-en",
+            model_kwargs={"device": "cpu"},
+            encode_kwargs={"normalize_embeddings": True}
+        )
