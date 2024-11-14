@@ -1,4 +1,3 @@
-from pkg_resources import require
 from rest_framework import serializers
 
 from common.models import Reviewer, Definition, Title
@@ -128,3 +127,20 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
 
     def get_category(self, instance):
         return self.category
+
+
+class AnswersSerializer(serializers.Serializer):
+    """Correct Answer is at index 0 and User Answer is at index 1"""
+    answers = serializers.ListField(
+        child=serializers.ListField(
+            child=serializers.CharField()
+        )
+    )
+    checked_answers = serializers.SerializerMethodField(read_only=True)
+
+    def get_checked_answers(self, instance):
+        from apis.questions.services import Answers
+        answers = Answers(self.validated_data.get('answers'))
+        answers.check()
+
+        return answers.answers

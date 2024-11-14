@@ -8,4 +8,7 @@ urlpatterns = [
     path('generate/',
             views.GenerateQuestion.as_view(),
                 name='generate-question'),
+    path('check-answer/',
+            views.CheckAnswerAPIView.as_view(),
+                name='check-answer')
 ]

@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apis.questions.serializers import GenerateQuestionParamsSerializer
+from apis.questions.serializers import GenerateQuestionParamsSerializer, AnswersSerializer
 from apis.questions.services import Question
 
 
@@ -24,3 +24,10 @@ class GenerateQuestion(APIView):
             self.params_serializer.is_valid(raise_exception=True)
         except Exception as err:
             raise err
+
+
+class CheckAnswerAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = AnswersSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
