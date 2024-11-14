@@ -130,7 +130,6 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
 
 
 class AnswersSerializer(serializers.Serializer):
-    """Correct Answer is at index 0 and User Answer is at index 1"""
     answers = serializers.ListField(
         child=serializers.DictField(
            child=serializers.JSONField()
