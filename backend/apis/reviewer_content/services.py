@@ -33,7 +33,6 @@ class QuestionType:
             reviewer=self.reviewer,
             is_correctly_answered=False
         ).first()
-        print(self.definition)
         self.has_definition = self.definition is not None
 
     def set_number_of_titles(self):

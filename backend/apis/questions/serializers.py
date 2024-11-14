@@ -90,7 +90,7 @@ class EnumerationQuestionSerializer(serializers.ModelSerializer):
         return [answer.text for answer in instance.answers.all()]
 
     def get_is_in_order(self, instance):
-        return instance.enum.all().first().is_in_order
+        return instance.enum.is_in_order
 
     def get_category(self, instance):
         return self.category
@@ -132,15 +132,39 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
 class AnswersSerializer(serializers.Serializer):
     """Correct Answer is at index 0 and User Answer is at index 1"""
     answers = serializers.ListField(
-        child=serializers.ListField(
-            child=serializers.CharField()
+        child=serializers.DictField(
+           child=serializers.JSONField()
         )
     )
     checked_answers = serializers.SerializerMethodField(read_only=True)
+    number_of_items = serializers.SerializerMethodField(read_only=True)
+    score = serializers.SerializerMethodField(read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.answers = []
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation.pop('answers')
+        return representation
 
     def get_checked_answers(self, instance):
         from apis.questions.services import Answers
         answers = Answers(self.validated_data.get('answers'))
         answers.check()
+        self.answers = answers.answers
+        return self.answers
 
-        return answers.answers
+    def get_number_of_items(self, instance):
+        return len(self.validated_data.get('answers'))
+
+    def get_score(self, instance):
+        score = 0
+
+        for answer in self.answers:
+            is_correct = answer['is_correct']
+            if is_correct:
+                score += 1
+
+        return score
