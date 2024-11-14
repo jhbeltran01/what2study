@@ -241,6 +241,28 @@ class CorrectlyAnswered:
         ).update(is_correctly_answered=True)
 
 
+class Reset:
+    def __init__(self, reviewer, owner):
+        self.reviewer = reviewer
+        self.owner = owner
+
+    def execute(self):
+        self.reset_definitions()
+        self.reset_enumerations()
+
+    def reset_definitions(self):
+        DefinitionIsCorrectlyAnswered.definitions.filter(
+            owner=self.owner,
+            reviewer=self.reviewer
+        ).update(is_correctly_answered=False)
+
+    def reset_enumerations(self):
+        EnumerationIsCorrectlyAnswered.titles.filter(
+            owner=self.owner,
+            reviewer=self.reviewer
+        ).update(is_correctly_answered=False)
+
+
 def update_question_types(
     question_type_indicator='',
     reviewer=None,
@@ -258,3 +280,16 @@ def update_question_types(
         for_enumeration=for_enumeration,
     )
     question_type.update()
+
+
+def has_available_question_types(reviewer, owner):
+    available_question_types_obj = reviewer.available_question_types.filter(owner=owner).first()
+    return len(available_question_types_obj.available_question_types) > 0
+
+
+def has_available_content(reviewer):
+    has_definition = reviewer.definitions.all().first() is not None
+    has_enumeration = reviewer.titles.filter(type=Reviewer.QuestionType.ENUMERATION).first() is not None
+    return has_definition or has_enumeration
+
+

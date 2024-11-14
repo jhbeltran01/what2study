@@ -46,6 +46,7 @@ class IdentificationQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answer = serializers.SerializerMethodField(read_only=True)
     category = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Definition
@@ -53,6 +54,7 @@ class IdentificationQuestionSerializer(serializers.ModelSerializer):
             'question',
             'answer',
             'category',
+            'slug',
         ]
         
     def __init__(self, *args, **kwargs):
@@ -68,12 +70,16 @@ class IdentificationQuestionSerializer(serializers.ModelSerializer):
     def get_category(self, instance):
         return self.category
 
+    def get_slug(self, instance):
+        return instance.slug
+
 
 class EnumerationQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answers = serializers.SerializerMethodField(read_only=True)
     is_in_order = serializers.SerializerMethodField(read_only=True)
     category = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Title
@@ -82,6 +88,7 @@ class EnumerationQuestionSerializer(serializers.ModelSerializer):
             'answers',
             'is_in_order',
             'category',
+            'slug',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -100,12 +107,16 @@ class EnumerationQuestionSerializer(serializers.ModelSerializer):
     def get_category(self, instance):
         return self.category
 
+    def get_slug(self, instance):
+        return instance.slug
+
 
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     question = serializers.SerializerMethodField(read_only=True)
     answer = serializers.SerializerMethodField(read_only=True)
     choices = serializers.SerializerMethodField(read_only=True)
     category = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Definition
@@ -114,6 +125,7 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
             'answer',
             'choices',
             'category',
+            'slug'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -139,6 +151,9 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
 
     def get_category(self, instance):
         return self.category
+
+    def get_slug(self, instance):
+        return instance.slug
 
 
 class AnswersSerializer(serializers.Serializer):

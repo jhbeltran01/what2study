@@ -37,7 +37,7 @@ class QuestionType:
         self.has_definition = self.definition is not None
 
     def set_number_of_titles(self):
-        self.number_of_titles = min(self.reviewer.titles.count(), 4)
+        self.number_of_titles = min(self.reviewer.titles.exclude(type=Title.Type.ENUMERATION).count(), 4)
 
     def set_enum_title(self):
         enumeration = EnumerationIsCorrectlyAnswered.titles.filter(
