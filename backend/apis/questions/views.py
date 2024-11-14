@@ -1,9 +1,19 @@
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apis.questions.serializers import GenerateQuestionParamsSerializer, AnswersSerializer
-from apis.questions.services import Question, CorrectlyAnswered, update_question_types
+from apis.questions.serializers import (
+    GenerateQuestionParamsSerializer,
+    AnswersSerializer
+)
+from apis.questions.services import (
+    Question,
+    CorrectlyAnswered,
+    update_question_types,
+    has_available_question_types,
+    has_available_content, Reset
+)
 from apis.reviewer_content.services import QuestionType
 from common.models import Reviewer
 
@@ -13,11 +23,22 @@ class GenerateQuestion(APIView):
         super().__init__()
         self.reviewer = ''
         self.params_serializer = None
+        self.payload = None
+        self.http_status = None
+        self.will_generate_questions = True
+        self.reviewer = None
+        self.owner = None
 
     def get(self, request, *args, **kwargs):
         self._make_sure_that_needed_url_params_are_supplied()
-        question = Question(**self.params_serializer.data, owner=self.request.user)
-        return Response(question.generate(), status=status.HTTP_200_OK)
+        self.reviewer = self.params_serializer.reviewer_instance
+        self.owner = request.user
+
+        self._check_for_content()
+        self._check_for_question_types()
+        self._check_if_will_generate_questions()
+
+        return Response(self.payload, status=self.http_status)
 
     def _make_sure_that_needed_url_params_are_supplied(self):
         self.params_serializer = GenerateQuestionParamsSerializer(data=self.request.GET)
@@ -26,6 +47,30 @@ class GenerateQuestion(APIView):
             self.params_serializer.is_valid(raise_exception=True)
         except Exception as err:
             raise err
+
+    def _check_for_content(self):
+        if not has_available_content(self.reviewer):
+            self.payload = {
+                'message': 'There is no available content definition or enumeration content. Please add one.',
+                'has_content': False
+            }
+            self.http_status = status.HTTP_400_BAD_REQUEST
+            self.will_generate_questions = False
+
+    def _check_for_question_types(self):
+        if not has_available_question_types(self.reviewer, self.owner):
+            self.payload = {
+                'message': 'All questions has been answered correctly. Reset is needed to review again.',
+                'must_reset': True
+            }
+            self.http_status = status.HTTP_202_ACCEPTED
+            self.will_generate_questions = False
+
+    def _check_if_will_generate_questions(self):
+        if self.will_generate_questions:
+            question = Question(**self.params_serializer.data, owner=self.request.user)
+            self.payload = question.generate()
+            self.http_status = status.HTTP_200_OK
 
 
 class CheckAnswerAPIView(APIView):
@@ -54,3 +99,24 @@ class CheckAnswerAPIView(APIView):
             reviewer=serializer.reviewer,
             owner=self.request.user
         )
+
+
+class ResetQuestionsAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        reviewer = Reviewer.reviewers.filter(slug=kwargs['reviewer']).first()
+
+        if reviewer is None:
+            raise NotFound('Reviewer not found')
+
+        reset = Reset(reviewer, self.request.user)
+        reset.execute()
+
+        question_types = QuestionType(
+            reviewer=reviewer,
+            owner=self.request.user,
+            for_definition=True,
+            for_enumeration=True,
+        )
+        question_types.update()
+
+        return Response({'detail': 'Reset is successful.'}, status=status.HTTP_200_OK)

@@ -10,5 +10,8 @@ urlpatterns = [
                 name='generate-question'),
     path('check-answer/',
             views.CheckAnswerAPIView.as_view(),
-                name='check-answer')
+                name='check-answer'),
+    path('reset/<slug:reviewer>/',
+            views.ResetQuestionsAPIView.as_view(),
+                name='reset')
 ]
