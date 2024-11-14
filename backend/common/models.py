@@ -41,14 +41,9 @@ class Reviewer(SlugField):
     )
     name = models.TextField(max_length=50)
     content = models.TextField(default='')
-    available_question_types = models.JSONField(
-        default=list,
-        editable=True,
-    )
     description = models.TextField(default='')
 
     reviewers = models.Manager()
-
 
     class Meta:
         ordering = ['-created_at']
@@ -59,6 +54,36 @@ class Reviewer(SlugField):
     def save(self, **kwargs):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
+
+
+class ReviewerAvailableQuestionType(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='available_question_types'
+    )
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+        related_name='available_question_types'
+    )
+    available_question_types = models.JSONField(
+        default=list,
+        editable=True,
+    )
+
+    reviewers = models.Manager()
+
+    class Meta:
+        unique_together = ['owner', 'reviewer']
+
+    def __str__(self):
+        return self.reviewer.name
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = generate_unique_id()
+        super().save(*args, **kwargs)
 
 
 class PublicReviewer(SlugField):

@@ -16,7 +16,7 @@ from common.models import (
     Reviewer,
     PublicReviewer,
     RecentViewedPublicReviewer,
-    BookmarkedPublicReviewer,
+    BookmarkedPublicReviewer, ReviewerAvailableQuestionType,
 )
 
 from .serializers import (
@@ -83,8 +83,11 @@ class ReviewersAPIView(
             content=document.generate_text(),
         )
         document.convert_text_to_content(reviewer)
-        reviewer.available_question_types = document.question_types
-        reviewer.save()
+        ReviewerAvailableQuestionType.reviewers.create(
+            owner=self.request.user,
+            reviewer=reviewer,
+            available_question_types=document.question_types,
+        )
 
     def patch(self, request, *args, **kwargs):
         if self.slug is not None:
