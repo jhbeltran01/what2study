@@ -1,5 +1,9 @@
+import random
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+from django.db.models import Q
 
 from common.models import Reviewer, Definition, Title
 
@@ -123,8 +127,15 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
         return instance.answer
 
     def get_choices(self, instance):
-        titles = instance.reviewer.titles.exclude(type=Title.Type.ENUMERATION).order_by('?')[:3]
-        return [title.text for title in titles]
+        titles = instance.reviewer.titles.exclude(
+            Q(type=Title.Type.ENUMERATION)
+            | Q(id=instance.title.id)
+        ).order_by('?')[:3]
+        choices = [title.text for title in titles]
+
+        rand_index = random.randint(0, 3)
+        choices.insert(rand_index, instance.answer)
+        return choices
 
     def get_category(self, instance):
         return self.category
