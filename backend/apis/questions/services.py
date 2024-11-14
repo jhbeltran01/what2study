@@ -1,5 +1,6 @@
 import random
 import numpy as np
+from sympy.polys.groebnertools import is_reduced
 
 from apis.questions.serializers import (
     IdentificationQuestionSerializer,
@@ -16,6 +17,11 @@ from common.models import (
     EnumerationTitle,
 )
 
+embeddings = HuggingFaceBgeEmbeddings(
+    model_name="BAAI/bge-small-en",
+    model_kwargs={"device": "cpu"},
+    encode_kwargs={"normalize_embeddings": True}
+)
 
 class Question:
     def __init__(
@@ -114,22 +120,84 @@ class EnumerationQuestion:
 
 class Answers:
     def __init__(self, answers):
+        global embeddings
         self.answers = answers
-        self.embeddings = None
+        self.embeddings = embeddings
+        self.embedded_data: list[dict] = []
+        self.user_answers_key = 'user_answers'
+        self.correct_answers_key = 'correct_answers'
+        self.is_in_order_key = 'is_in_order'
 
     def check(self):
-        self._initialize_embeddings()
+        self._embed_data()
 
-        for index, answer in enumerate(self.answers):
-            embedded_correct_answer = self.embeddings.embed_query(answer[0])
-            embedded_user_answer = self.embeddings.embed_query(answer[1])
-            accuracy = np.dot(embedded_correct_answer, embedded_user_answer) * 100
-            is_correct = accuracy >= 95
-            self.answers[index].append(is_correct)
+        for index, answer in enumerate(self.embedded_data):
+            if answer['is_in_order']:
+                self.answers[index]['is_correct'] = self._check_is_in_order(index)
+                continue
 
-    def _initialize_embeddings(self):
-        self.embeddings = HuggingFaceBgeEmbeddings(
-            model_name="BAAI/bge-small-en",
-            model_kwargs={"device": "cpu"},
-            encode_kwargs={"normalize_embeddings": True}
-        )
+            self.answers[index]['is_correct'] = self._check_unordered(index)
+
+    def _embed_data(self):
+        for answer in self.answers:
+            embedded_data = {
+                self.correct_answers_key: self._embed_answer(answer[self.correct_answers_key], True),
+                self.user_answers_key: self._embed_answer(answer[self.user_answers_key]),
+                'is_in_order': answer.get('is_in_order', False)
+            }
+            self.embedded_data.append(embedded_data)
+
+    def _embed_answer(self, answers, is_array=False):
+        temp_answers = []
+
+        for text in answers:
+            if not is_array:
+                text = text['answer']
+            temp_answers.append(self.embeddings.embed_query(text))
+
+        return temp_answers
+
+    def _check_is_in_order(self, index):
+        correct_answers = self.embedded_data[index][self.correct_answers_key]
+        user_answers = self.embedded_data[index][self.user_answers_key]
+        answers_are_all_correct = True
+        checked_user_answers = self.answers[index][self.user_answers_key]
+
+        for user_answer_index, user_answer in enumerate(user_answers):
+            if self._is_correct(correct_answers[user_answer_index], user_answers[user_answer_index]):
+                checked_user_answers[user_answer_index]['is_correct'] = True
+                continue
+
+            checked_user_answers[user_answer_index]['is_correct'] = False
+            answers_are_all_correct = False
+
+        return answers_are_all_correct
+
+
+    def _check_unordered(self, index):
+        correct_answers = self.embedded_data[index][self.correct_answers_key]
+        user_answers = self.embedded_data[index][self.user_answers_key]
+        answers_are_all_correct = True
+        checked_user_answers = self.answers[index][self.user_answers_key]
+
+        for user_answer_index, user_answer in enumerate(user_answers):
+            answer_is_correct = False
+
+            for correct_answer_index, correct_answer in enumerate(correct_answers):
+                if self._is_correct(correct_answer, user_answer):
+                    correct_answers.pop(correct_answer_index)
+                    answer_is_correct = True
+                    break
+
+            checked_user_answers[user_answer_index]['is_correct'] = answer_is_correct
+
+            if answers_are_all_correct and not answer_is_correct:
+                answers_are_all_correct = False
+
+        return answers_are_all_correct
+
+
+    @staticmethod
+    def _is_correct(correct_answer, user_answer):
+        accuracy = np.dot(correct_answer, user_answer) * 100
+        return accuracy >= 96
