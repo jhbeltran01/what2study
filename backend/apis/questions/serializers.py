@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from common.models import Reviewer, Definition, Title
 
@@ -139,15 +140,25 @@ class AnswersSerializer(serializers.Serializer):
     number_of_items = serializers.SerializerMethodField(read_only=True)
     score = serializers.SerializerMethodField(read_only=True)
     question_type = serializers.CharField()
+    reviewer_slug = serializers.CharField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.answers = []
+        self.reviewer = None
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation.pop('answers')
         return representation
+
+    def validate_reviewer_slug(self, value):
+        self.reviewer = Reviewer.reviewers.filter(slug=value).first()
+
+        if self.reviewer is None:
+            raise ValidationError('Reviewer not found')
+
+        return value
 
     def get_checked_answers(self, instance):
         question_type = self.validated_data['question_type']

@@ -10,6 +10,7 @@ from apis.questions.serializers import (
 
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 
+from apis.reviewer_content.services import QuestionType
 from common.models import (
     Reviewer,
     Definition,
@@ -219,6 +220,10 @@ class CorrectlyAnswered:
             case Reviewer.QuestionType.ENUMERATION:
                 self._update_enumeration_statuses()
 
+    @property
+    def has_answered_an_item_correctly(self):
+        return len(self.slugs_of_correctly_answered)
+
     def _set_slugs_of_correctly_answered(self):
         for answer in self.checked_answers:
             if not answer['is_correct']:
@@ -234,3 +239,22 @@ class CorrectlyAnswered:
         EnumerationIsCorrectlyAnswered.titles.filter(
             title__slug__in=self.slugs_of_correctly_answered
         ).update(is_correctly_answered=True)
+
+
+def update_question_types(
+    question_type_indicator='',
+    reviewer=None,
+    owner=None
+):
+    question_type_obj = Reviewer.QuestionType
+    for_definition = question_type_indicator == question_type_obj.IDENTIFICATION or \
+                     question_type_indicator == question_type_obj.MULTIPLE_CHOICE
+    for_enumeration = question_type_indicator == question_type_obj.ENUMERATION
+
+    question_type = QuestionType(
+        reviewer=reviewer,
+        owner=owner,
+        for_definition=for_definition,
+        for_enumeration=for_enumeration
+    )
+    question_type.update()
