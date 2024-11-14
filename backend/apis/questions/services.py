@@ -14,7 +14,7 @@ from common.models import (
     Reviewer,
     Definition,
     Title,
-    EnumerationTitle,
+    EnumerationTitle, DefinitionIsCorrectlyAnswered, EnumerationIsCorrectlyAnswered,
 )
 
 embeddings = HuggingFaceBgeEmbeddings(
@@ -28,9 +28,11 @@ class Question:
         self,
         reviewer_obj=None,
         number_of_questions=1,
+        owner=None,
         *args,
         **kwargs
     ):
+        self.owner = owner
         self.reviewer = reviewer_obj
         self.number_of_questions = number_of_questions
         self.available_question_types = self.reviewer.available_question_types
@@ -44,6 +46,7 @@ class Question:
         question = globals()[self.question_type_class](
             reviewer=self.reviewer,
             number_of_questions=self.number_of_questions,
+            owner=self.owner
         )
         return question.generate()
 
@@ -62,24 +65,26 @@ class Question:
 
 
 class IdentificationQuestion:
-    def __init__(self, reviewer=None, number_of_questions=1):
+    def __init__(self, reviewer=None, number_of_questions=1, owner=None):
         self.reviewer = reviewer
         self.number_of_questions = number_of_questions
+        self.owner = owner
 
     def generate(self):
         return IdentificationQuestionSerializer(
             self._get_definitions(),
             many=True,
-            context={
-                'category': Reviewer.QuestionType.IDENTIFICATION.label
-            },
+            context={'category': Reviewer.QuestionType.IDENTIFICATION.label},
         ).data
 
     def _get_definitions(self):
-        return Definition.definitions.filter(
-            reviewer=self.reviewer,
-            is_answered_correctly=False,
-        ).order_by('?')[:self.number_of_questions]
+        definition_is_correctly_answered_obj = \
+            DefinitionIsCorrectlyAnswered.definitions.filter(
+                owner=self.owner,
+                reviewer=self.reviewer,
+                is_correctly_answered=False
+            ).order_by('?')[:self.number_of_questions]
+        return [obj.definition for obj in definition_is_correctly_answered_obj]
 
 
 class MultipleChoiceQuestion(IdentificationQuestion):
@@ -87,35 +92,32 @@ class MultipleChoiceQuestion(IdentificationQuestion):
         return MultipleChoiceQuestionSerializer(
             self._get_definitions(),
             many=True,
-            context={
-                'category': Reviewer.QuestionType.MULTIPLE_CHOICE.label
-            },
+            context={'category': Reviewer.QuestionType.MULTIPLE_CHOICE.label},
         ).data
 
 
 class EnumerationQuestion:
-    def __init__(self, reviewer=None, number_of_questions=1):
+    def __init__(self, reviewer=None, number_of_questions=1, owner=None):
         self.reviewer = reviewer
         self.number_of_questions = number_of_questions
+        self.owner = owner
 
     def generate(self):
-        self._set_enumeration_titles()
         return EnumerationQuestionSerializer(
             self._get_titles(),
             many=True,
-            context={
-                'category': Reviewer.QuestionType.ENUMERATION.label
-            },
+            context={'category': Reviewer.QuestionType.ENUMERATION.label},
         ).data
 
-    def _set_enumeration_titles(self):
-        self.enumeration_titles = EnumerationTitle.titles.filter(
-            title__reviewer=self.reviewer,
-            is_answered_correctly=False
-        ).order_by('?')[:self.number_of_questions]
 
     def _get_titles(self):
-        return [enum_title.title for enum_title in self.enumeration_titles]
+        enumeration_is_answered_correctly_obj = \
+            EnumerationIsCorrectlyAnswered.titles.filter(
+                owner=self.owner,
+                reviewer=self.reviewer,
+                is_correctly_answered=False
+            ).order_by('?')[:self.number_of_questions]
+        return [obj.title for obj in enumeration_is_answered_correctly_obj]
 
 
 class Answers:
@@ -164,7 +166,7 @@ class Answers:
         checked_user_answers = self.answers[index][self.user_answers_key]
 
         for user_answer_index, user_answer in enumerate(user_answers):
-            if self._is_correct(correct_answers[user_answer_index], user_answers[user_answer_index]):
+            if self._is_correct(correct_answers[user_answer_index], user_answer):
                 checked_user_answers[user_answer_index]['is_correct'] = True
                 continue
 
@@ -201,3 +203,34 @@ class Answers:
     def _is_correct(correct_answer, user_answer):
         accuracy = np.dot(correct_answer, user_answer) * 100
         return accuracy >= 96
+
+class CorrectlyAnswered:
+    def __init__(self, data):
+        self.checked_answers = data['checked_answers']
+        self.question_type = data['question_type']
+        self.slugs_of_correctly_answered = []
+
+    def update_status(self):
+        self._set_slugs_of_correctly_answered()
+
+        match self.question_type:
+            case Reviewer.QuestionType.IDENTIFICATION | Reviewer.QuestionType.MULTIPLE_CHOICE:
+                self._update_identification_statuses()
+            case Reviewer.QuestionType.ENUMERATION:
+                self._update_enumeration_statuses()
+
+    def _set_slugs_of_correctly_answered(self):
+        for answer in self.checked_answers:
+            if not answer['is_correct']:
+                continue
+            self.slugs_of_correctly_answered.append(answer['slug'])
+
+    def _update_identification_statuses(self):
+        DefinitionIsCorrectlyAnswered.definitions.filter(
+            definition__slug__in=self.slugs_of_correctly_answered
+        ).update(is_correctly_answered=True)
+
+    def _update_enumeration_statuses(self):
+        EnumerationIsCorrectlyAnswered.titles.filter(
+            title__slug__in=self.slugs_of_correctly_answered
+        ).update(is_correctly_answered=True)

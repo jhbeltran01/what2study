@@ -138,6 +138,7 @@ class AnswersSerializer(serializers.Serializer):
     checked_answers = serializers.SerializerMethodField(read_only=True)
     number_of_items = serializers.SerializerMethodField(read_only=True)
     score = serializers.SerializerMethodField(read_only=True)
+    question_type = serializers.CharField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -149,10 +150,19 @@ class AnswersSerializer(serializers.Serializer):
         return representation
 
     def get_checked_answers(self, instance):
+        question_type = self.validated_data['question_type']
+        submitted_answers = self.validated_data.get('answers')
+
+        if question_type == Reviewer.QuestionType.MULTIPLE_CHOICE:
+            self.answers = submitted_answers
+            return submitted_answers
+
         from apis.questions.services import Answers
-        answers = Answers(self.validated_data.get('answers'))
+
+        answers = Answers(submitted_answers)
         answers.check()
         self.answers = answers.answers
+
         return self.answers
 
     def get_number_of_items(self, instance):
