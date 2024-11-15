@@ -177,7 +177,6 @@ class Answers:
 
         return answers_are_all_correct
 
-
     def _check_unordered(self, index):
         correct_answers = self.embedded_data[index][self.correct_answers_key]
         user_answers = self.embedded_data[index][self.user_answers_key]

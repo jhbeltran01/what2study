@@ -25,7 +25,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
   }, [questions])
 
   useEffect(() => {
-    if (answers.answers[currentQuestion].user_answers.length == 0) { 
+    if (!answers.answers || answers.answers[currentQuestion].user_answers.length == 0) { 
       setAnswerText('')
       return 
     }
@@ -49,11 +49,6 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
     }
   };
 
-  // const handleSave = (e) => {
-  //   e.preventDefault();
-  //   alert('Answers saved!');
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(answers)
@@ -63,10 +58,12 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
         answers
       )
       .then(response => {
+        setAnswerText('')
         const tempCheckedAnswers = {...response.data}
         
         tempCheckedAnswers['answers'] = tempCheckedAnswers.checked_answers
         delete tempCheckedAnswers['checked_answers']
+        
         dispatch(setCheckedAnswers(tempCheckedAnswers))
         setIsSubmitted(true)
       })
@@ -87,8 +84,8 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
   const generateNewQuestions = () => {
     setIsSubmitted(false)
     generateQuestions()
-    setAnswerText('')
     setCurrentQuestion(0)
+    dispatch(setCheckedAnswers({}))
   }
 
   const displaySubmittedAnswer = isSubmitted && answers.answers[currentQuestion].user_answers.length > 0
@@ -162,7 +159,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
           <div className="question-number-wrapper">
             <p className='px-[1em] mb-[1rem]'>Question {currentQuestion+1}/{numberOfQuestions}</p>
             <div className="question-number-container">
-              {answers.answers.map((answer, index) => {
+              {answers.answers && answers.answers.map((answer, index) => {
                 const questionNumber = index + 1;
                 const hasAnswer = answer.user_answers.length > 0
                 const isCorrect = isSubmitted && hasAnswer && answer.user_answers[0].is_correct
@@ -173,9 +170,9 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
                       key={index}
                       type="button" // Make sure the button doesn't submit the form
                       className={`question-number-identification 
-                        ${!isSubmitted && currentQuestion+1 === questionNumber && 'active'} 
                         ${!isSubmitted && hasAnswer ? 'has-answer' : 'no-answer'}
-                        ${isSubmitted && isCorrect ? 'correct' : isSubmitted ? 'wrong' : ''}`
+                        ${isSubmitted && isCorrect ? 'correct' : isSubmitted ? 'wrong' : ''}
+                        ${currentQuestion+1 === questionNumber && 'active'}`
                       }
                       onClick={() => {
                         setCurrentQuestion(questionNumber-1);

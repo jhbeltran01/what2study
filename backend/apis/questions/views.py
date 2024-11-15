@@ -49,28 +49,34 @@ class GenerateQuestion(APIView):
             raise err
 
     def _check_for_content(self):
-        if not has_available_content(self.reviewer):
-            self.payload = {
-                'message': 'There is no available content definition or enumeration content. Please add one.',
-                'has_content': False
-            }
-            self.http_status = status.HTTP_400_BAD_REQUEST
-            self.will_generate_questions = False
+        if has_available_content(self.reviewer):
+            return
+
+        self.payload = {
+            'message': 'There is no available definition or enumeration content. Please add one.',
+            'has_content': False
+        }
+        self.http_status = status.HTTP_400_BAD_REQUEST
+        self.will_generate_questions = False
 
     def _check_for_question_types(self):
-        if not has_available_question_types(self.reviewer, self.owner):
-            self.payload = {
-                'message': 'All questions has been answered correctly. Reset is needed to review again.',
-                'must_reset': True
-            }
-            self.http_status = status.HTTP_202_ACCEPTED
-            self.will_generate_questions = False
+        if not self.will_generate_questions or has_available_question_types(self.reviewer, self.owner):
+            return
+
+        self.payload = {
+            'message': 'All questions has been answered correctly. Reset is needed to review again.',
+            'must_reset': True
+        }
+        self.http_status = status.HTTP_202_ACCEPTED
+        self.will_generate_questions = False
 
     def _check_if_will_generate_questions(self):
-        if self.will_generate_questions:
-            question = Question(**self.params_serializer.data, owner=self.request.user)
-            self.payload = question.generate()
-            self.http_status = status.HTTP_200_OK
+        if not self.will_generate_questions:
+            return
+
+        question = Question(**self.params_serializer.data, owner=self.request.user)
+        self.payload = question.generate()
+        self.http_status = status.HTTP_200_OK
 
 
 class CheckAnswerAPIView(APIView):
