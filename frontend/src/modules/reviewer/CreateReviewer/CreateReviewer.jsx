@@ -1,9 +1,8 @@
 import searchIcon from '@assets/search.png';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import '../../../sass/pages/_createreviewer.scss';
 import axios from 'axios';
-import { apiRootURL } from '../../../globals';
+import { apiRootURL } from '@root/globals';
 // import axios from 'axios';
 
 const initialReviewer = {

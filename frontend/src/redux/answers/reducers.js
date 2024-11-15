@@ -15,18 +15,36 @@ export default {
     state.value = tempAnswers
   },
   addUserAnswer: (state, action) => {
-    const {questionIndex, answerIndex, text} = action.payload
+    const {questionIndex, answerIndex, text, correctAnswer} = action.payload
     
-    let userAnswers = state.value.answers[questionIndex].user_answers
-    userAnswers = userAnswers.filter((_, index) => index != answerIndex)
-    userAnswers = [
-      ...userAnswers.splice(0, answerIndex),
-      {'answer': text},
-      ...userAnswers.splice(answerIndex)
-    ]
-    state.value.answers[questionIndex].user_answers = userAnswers
+    const isCorrect = correctAnswer == text
+    
+    const obj = state.value.answers[questionIndex]
+    obj['is_correct'] = isCorrect
+    
+    const answer = {
+      answer: text,
+      is_correct: correctAnswer == text
+    }
+
+    let userAnswers = obj.user_answers
+
+    if (userAnswers[answerIndex] == undefined) {
+      state.value.answers[questionIndex].user_answers.push(answer)
+      return
+    }
+
+    state.value.answers[questionIndex].user_answers[answerIndex] = answer
   },
   setCheckedAnswers: (state, action) => {
     state.value = action.payload
-  }
+  },
+  removeLastAnswer: (state, action) => {
+    const { questionIndex } = action.payload
+    state.value.answers[questionIndex].user_answers.pop()
+  },
+  pushAnItem: (state, action) => {
+    const { questionIndex } = action.payload
+    state.value.answers[questionIndex].user_answers.push({answer: ''})
+  },
 }

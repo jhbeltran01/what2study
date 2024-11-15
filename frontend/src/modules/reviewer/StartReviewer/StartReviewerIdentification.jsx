@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAnswers, addUserAnswer, setCheckedAnswers } from '@redux/answers'
 import axios from 'axios';
 import { apiRootURL } from '@root/globals'
+import Navigation from './Navigation';
+import Navigator from './Navigator';
 
 const StartReviewerIdentification = ({questions, generateQuestions}) => {
   const numberOfQuestions = questions.length
@@ -13,7 +15,6 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false)
   const dispatch = useDispatch()
-
 
   useEffect(() => {
     if (questions.length == 0) { return }
@@ -51,7 +52,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(answers)
+
     axios 
       .post(
         `${apiRootURL}/questions/check-answer/`,
@@ -66,6 +67,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
         
         dispatch(setCheckedAnswers(tempCheckedAnswers))
         setIsSubmitted(true)
+        setCurrentQuestion(0)
       })
       .catch(err => {
         console.log(err)
@@ -77,7 +79,6 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
       questionIndex: currentQuestion,
       answerIndex: 1,
       text: answerText,
-      answers: answers
     }))
   }
 
@@ -131,74 +132,21 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
           </div>
         </div>
 
-        {/* Navigation buttons moved below the question box */}
-        <div className="navigation-buttons">
-          <button type="button" className="prev-button" onClick={handlePrevious}>
-            Previous
-          </button>
-          <button type="button" className="next-button" onClick={handleNext}>
-            Next
-          </button>
-        </div>
-
-        {
-          isSubmitted
-          && <div className='max-w-[300px] mx-auto mt-[1.5rem]'>
-              <button
-                  className='submit-button'
-                  onClick={generateNewQuestions}
-                >
-                  Generate New Questions
-                </button>
-          </div>
-          }
+        <Navigator
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+          generateNewQuestions={generateNewQuestions}
+          isSubmitted={isSubmitted}
+        />
       </div>
 
-      <div className="right-section">
-        <div className="question-wrapper flex flex-col justify-between h-[100%]">
-          <div className="question-number-wrapper">
-            <p className='px-[1em] mb-[1rem]'>Question {currentQuestion+1}/{numberOfQuestions}</p>
-            <div className="question-number-container">
-              {answers.answers && answers.answers.map((answer, index) => {
-                const questionNumber = index + 1;
-                const hasAnswer = answer.user_answers.length > 0
-                const isCorrect = isSubmitted && hasAnswer && answer.user_answers[0].is_correct
-
-                return (
-                  <div className='flex justify-center' key={index}>
-                    <button
-                      key={index}
-                      type="button" // Make sure the button doesn't submit the form
-                      className={`question-number-identification 
-                        ${!isSubmitted && hasAnswer ? 'has-answer' : 'no-answer'}
-                        ${isSubmitted && isCorrect ? 'correct' : isSubmitted ? 'wrong' : ''}
-                        ${currentQuestion+1 === questionNumber && 'active'}`
-                      }
-                      onClick={() => {
-                        setCurrentQuestion(questionNumber-1);
-                      }}
-                    >
-                      {questionNumber}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {
-            !isSubmitted
-            && <div className="save-submit-buttons">
-                {/* <button type="button" className="save-button mb-[1rem]" onClick={handleSave}>
-                  Save Answers
-                </button> */}
-                <button type="submit" className="submit-button">
-                  Submit Answers
-                </button>
-              </div>
-          }
-        </div>
-      </div>
+      <Navigation
+        currentQuestion={currentQuestion}
+        numberOfQuestions={numberOfQuestions}
+        answers={answers.answers ? answers.answers : []} 
+        isSubmitted={isSubmitted}
+        setCurrentQuestion={setCurrentQuestion}
+      />
     </form>
   );
 };

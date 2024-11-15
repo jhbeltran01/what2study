@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals'
 import * as titleType from './constants'
 import StartReviewerIdentification from './StartReviewerIdentification'
+import StartReviewerEnumeration from './StartReviewerEnumeration'
+import StartReviewerMultipleChoice from './StartReviewerMultipleChoice'
 import ResetQuestions from './ResetQuestions'
 import NoContent from './NoContent'
 
@@ -55,11 +57,28 @@ function Main() {
           />
         )
         break
+      case titleType.ENUMERATION:
+        setQuestionUI(
+          <StartReviewerEnumeration 
+            questions={questions} 
+            generateQuestions={generateQuestions}
+            key={2}
+          />
+        )
+        break
+      case titleType.MULTIPLE_CHOICE:
+        setQuestionUI(
+          <StartReviewerMultipleChoice 
+            questions={questions} 
+            generateQuestions={generateQuestions}
+            key={3}
+          />
+        )
+        break
     }
   }, [questions])
 
   useEffect(() => {
-    console.log(messages.must_reset)
     if (!messages.must_reset) { return }
     setResetQuestions(messages.must_reset)
   }, [messages])

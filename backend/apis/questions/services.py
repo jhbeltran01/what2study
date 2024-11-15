@@ -162,42 +162,45 @@ class Answers:
         return temp_answers
 
     def _check_is_in_order(self, index):
-        correct_answers = self.embedded_data[index][self.correct_answers_key]
-        user_answers = self.embedded_data[index][self.user_answers_key]
-        answers_are_all_correct = len(user_answers) > 0
-        checked_user_answers = self.answers[index][self.user_answers_key]
+        self._set_needed_data(index)
 
-        for user_answer_index, user_answer in enumerate(user_answers):
-            if self._is_correct(correct_answers[user_answer_index], user_answer):
-                checked_user_answers[user_answer_index]['is_correct'] = True
+        for user_answer_index, user_answer in enumerate(self.user_answers):
+            if self._is_correct(self.correct_answers[user_answer_index], user_answer):
+                self.checked_user_answers[user_answer_index]['is_correct'] = True
                 continue
 
-            checked_user_answers[user_answer_index]['is_correct'] = False
-            answers_are_all_correct = False
+            self.checked_user_answers[user_answer_index]['is_correct'] = False
+            self.answers_are_all_correct = False
 
-        return answers_are_all_correct
+        return self.answers_are_all_correct
 
     def _check_unordered(self, index):
-        correct_answers = self.embedded_data[index][self.correct_answers_key]
-        user_answers = self.embedded_data[index][self.user_answers_key]
-        answers_are_all_correct = len(user_answers) > 0
-        checked_user_answers = self.answers[index][self.user_answers_key]
+        self._set_needed_data(index)
 
-        for user_answer_index, user_answer in enumerate(user_answers):
+        for user_answer_index, user_answer in enumerate(self.user_answers):
             answer_is_correct = False
 
-            for correct_answer_index, correct_answer in enumerate(correct_answers):
+            for correct_answer_index, correct_answer in enumerate(self.correct_answers):
                 if self._is_correct(correct_answer, user_answer):
-                    correct_answers.pop(correct_answer_index)
+                    self.correct_answers.pop(correct_answer_index)
                     answer_is_correct = True
                     break
 
-            checked_user_answers[user_answer_index]['is_correct'] = answer_is_correct
+            self.checked_user_answers[user_answer_index]['is_correct'] = answer_is_correct
 
-            if answers_are_all_correct and not answer_is_correct:
-                answers_are_all_correct = False
+            if self.answers_are_all_correct and not answer_is_correct:
+                self.answers_are_all_correct = False
 
-        return answers_are_all_correct
+        return self.answers_are_all_correct
+
+    def _set_needed_data(self, index):
+        self.correct_answers = self.embedded_data[index][self.correct_answers_key]
+        self.user_answers = self.embedded_data[index][self.user_answers_key]
+        self.checked_user_answers = self.answers[index][self.user_answers_key]
+
+        answered_all_items = len(self.correct_answers) == len(self.user_answers)
+        has_an_answer = len(self.user_answers) > 0
+        self.answers_are_all_correct = has_an_answer and answered_all_items
 
 
     @staticmethod

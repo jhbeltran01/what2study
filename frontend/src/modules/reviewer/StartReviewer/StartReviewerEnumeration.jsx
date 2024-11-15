@@ -1,24 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Navigation from './Navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAnswers, addUserAnswer, removeLastAnswer, pushAnItem, setCheckedAnswers } from '@redux/answers';
+import axios from 'axios';
+import { apiRootURL } from '@root/globals'
+import PropTypes from 'prop-types';
+import Navigator from './Navigator';
 
-const StartReviewerEnumeration = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(5);
-  const [answers, setAnswers] = useState({});
-  const [placeholders, setPlaceholders] = useState(['', '', '']); // initial 3 placeholders
+const StartReviewerEnumeration = ({questions, generateQuestions}) => {
+  const answers = useSelector(state => state.answers.value)
+  const reviewer = useSelector(state => state.reviewer.value)
+  const numberOfQuestions = questions.length
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [placeholders, setPlaceholders] = useState(['']);
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (questions.length == 0) { return }
+
+    dispatch(setAnswers({
+      questions: questions,
+      reviewerSlug: reviewer.slug,
+    }))
+
+    return () => {
+      setPlaceholders([''])
+    }
+  }, [questions])
+
+  useEffect(() => {
+    if (!answers.answers || answers.answers[currentQuestion].user_answers.length == 0) { 
+      setPlaceholders([''])
+      return 
+    }
+
+    setPlaceholders(getFilledAnswers())
+  }, [currentQuestion])
+
+  const getFilledAnswers = () => {
+    return answers.answers[currentQuestion].user_answers.map(answer => answer.answer)
+  }
 
   // Handle changes in answer fields
   const handleInputChange = (e, index) => {
     const updatedPlaceholders = [...placeholders];
     updatedPlaceholders[index] = e.target.value;
     setPlaceholders(updatedPlaceholders);
-    setAnswers({
-      ...answers,
-      [currentQuestion]: updatedPlaceholders,
-    });
   };
 
   // Add another placeholder for additional answer input
   const addPlaceholder = () => {
     setPlaceholders([...placeholders, '']);
+    dispatch(pushAnItem({questionIndex: currentQuestion}))
   };
 
   // Remove the last placeholder
@@ -26,141 +60,138 @@ const StartReviewerEnumeration = () => {
     if (placeholders.length > 1) {
       const updatedPlaceholders = placeholders.slice(0, -1);
       setPlaceholders(updatedPlaceholders); // remove the last placeholder
-      setAnswers({
-        ...answers,
-        [currentQuestion]: updatedPlaceholders, // update answers after removing the last placeholder
-      });
+      dispatch(removeLastAnswer({questionIndex: currentQuestion}))
     }
   };
 
   const handleNext = () => {
-    if (currentQuestion < 10) {
-      setAnswers({
-        ...answers,
-        [currentQuestion]: placeholders,
-      });
+    if (currentQuestion+1 < numberOfQuestions) {
       setCurrentQuestion(currentQuestion + 1);
-      setPlaceholders(answers[currentQuestion + 1] || ['', '', '']);
     }
   };
 
   const handlePrevious = () => {
-    if (currentQuestion > 1) {
-      setAnswers({
-        ...answers,
-        [currentQuestion]: placeholders,
-      });
+    if (currentQuestion >= 1) {
       setCurrentQuestion(currentQuestion - 1);
-      setPlaceholders(answers[currentQuestion - 1] || ['', '', '']);
     }
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    alert('Answers saved!');
-  };
+  const updateUserAnswer = (index) => {
+    dispatch(addUserAnswer({
+      questionIndex: currentQuestion,
+      answerIndex: index,
+      text: placeholders[index],
+    }))
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Validate answers before submission
-    if (Object.keys(answers).length === 0) {
-      alert('Please provide answers before submitting.');
-      return;
-    }
-    alert('Answers submitted: ' + JSON.stringify(answers));
+
+    axios
+      .post(
+        `${apiRootURL}/questions/check-answer/`,
+        answers
+      )
+      .then(response => {
+        getFilledAnswers()
+        const tempCheckedAnswers = {...response.data}
+        
+        tempCheckedAnswers['answers'] = tempCheckedAnswers.checked_answers
+        delete tempCheckedAnswers['checked_answers']
+        
+        dispatch(setCheckedAnswers(tempCheckedAnswers))
+        setIsSubmitted(true)
+        setCurrentQuestion(0)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   };
 
+  const generateNewQuestions = () => {
+    setIsSubmitted(false)
+    generateQuestions()
+    setCurrentQuestion(0)
+    dispatch(setCheckedAnswers({}))
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="question-container">
-      <div className="question-box">
-        <h2 className="question-title">Question {currentQuestion}</h2>
-        <p className="question-text">
-          Identify the protocol commonly used for building RESTful web services
-        </p>
-
-        <div className="answer-container-wrapper">
-          <div className="answer-container">
-            {placeholders.map((placeholder, index) => (
-              <div key={index} className="answer-row">
-                <textarea
-                  className="answer-box"
-                  placeholder={`Answer ${index + 1}`}
-                  value={placeholder}
-                  onChange={(e) => handleInputChange(e, index)}
-                  rows="2"
-                  aria-label={`Answer ${index + 1}`} // Accessibility improvement
-                  required // Make the textarea required
-                />
-              </div>
-            ))}
-
-            <div className="button-group">
-              {/* Button to add more placeholders */}
-              <button type="button" className="add-placeholder-button" onClick={addPlaceholder}>
-                + Add another answer
-              </button>
-
+    <form onSubmit={handleSubmit} className="question-container grid grid-2-column-2 gap-[10px]">
+      <div>
+        <div className="question-box">
+          <h2 className="question-title">Question {currentQuestion+1}</h2>
+          <p className="question-text">
+            {questions[currentQuestion].question}
+          </p>
+          <div className="answer-container-wrapper">
+            <div className="mb-4 flex justify-end gap-[5px]">
               {/* Single "Remove" button to remove the last placeholder */}
               {placeholders.length > 1 && (
                 <button type="button" className="remove-placeholder-button" onClick={removeLastPlaceholder}>
-                  Remove last answer
+                  -
                 </button>
               )}
+              {/* Button to add more placeholders */}
+              <button type="button" className="add-placeholder-button" onClick={addPlaceholder}>
+                +
+              </button>
             </div>
-          </div>
-        </div>
-
-        <div className="navigation-buttons">
-          <button type="button" className="prev-button" onClick={handlePrevious}>
-            Previous
-          </button>
-          <button type="button" className="next-button" onClick={handleNext}>
-            Next
-          </button>
-        </div>
-      </div>
-
-      <div className="right-section">
-        <div className="question-wrapper">
-          <div className="question-number-wrapper">
-            <div className="question-number-container">
-              {[...Array(10)].map((_, index) => {
-                const questionNumber = index + 1;
-                const hasAnswer = answers[questionNumber] && answers[questionNumber].some(answer => answer.trim() !== '');
+            <div className="answer-container">
+              {answers.answers != undefined && placeholders.map((placeholder, index) => {
+                const userAnswer = answers.answers[currentQuestion].user_answers[index]
+                const isCorrect = isSubmitted && userAnswer && userAnswer.is_correct == true
 
                 return (
-                  <button
-                    key={index}
-                    type="button" // Make sure the button doesn't submit the form
-                    className={`question-number-enumeration ${currentQuestion === questionNumber ? 'active' : ''} ${hasAnswer ? 'has-answer' : 'no-answer'}`}
-                    onClick={() => {
-                      setAnswers({
-                        ...answers,
-                        [currentQuestion]: placeholders,
-                      });
-                      setCurrentQuestion(questionNumber);
-                      setPlaceholders(answers[questionNumber] || ['', '', '']);
-                    }}
-                  >
-                    {questionNumber}
-                  </button>
-                );
+                  <div key={index} className="answer-row mb-[0.5rem]">
+                    {
+                      !isSubmitted
+                      && <input
+                        className="answer-box"
+                        type='text'
+                        placeholder={`Answer ${index + 1}`}
+                        value={placeholder}
+                        aria-label={`Answer ${index + 1}`} // Accessibility improvement
+                        required="required" // Make the textarea required
+                        onChange={(e) => handleInputChange(e, index)}
+                        onBlur={() => updateUserAnswer(index)}
+                      />
+                    }
+
+                    {
+                      isSubmitted
+                      && <div className={`user-answer ${isCorrect ? 'correct' : 'wrong'}`}>
+                          {userAnswer ? userAnswer.answer : 'No submitted answer'}
+                        </div>
+                    }
+                  </div>
+                )
               })}
             </div>
           </div>
-
-          <div className="save-submit-buttons">
-            <button type="button" className="save-button" onClick={handleSave}>
-              Save Answers
-            </button>
-            <button type="submit" className="submit-button">
-              Submit Answers
-            </button>
-          </div>
         </div>
+
+        <Navigator 
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+          generateNewQuestions={generateNewQuestions}
+          isSubmitted={isSubmitted}
+        />
       </div>
+
+      <Navigation 
+        currentQuestion={currentQuestion}
+        numberOfQuestions={numberOfQuestions}
+        answers={answers.answers ? answers.answers : []} 
+        isSubmitted={isSubmitted}
+        setCurrentQuestion={setCurrentQuestion}
+      />
     </form>
   );
 };
+
+StartReviewerEnumeration.propTypes = {
+  questions: PropTypes.array.isRequired,
+  generateQuestions: PropTypes.func.isRequired,
+}
 
 export default StartReviewerEnumeration;

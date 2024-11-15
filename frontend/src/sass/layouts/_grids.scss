@@ -11,3 +11,11 @@
 .grid-2-column-2 {
   grid-template-columns: 2fr 1fr;
 }
+
+.grid-2-column-3 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-2-col-span-1 {
+  grid-column: span 2; /* Spans 2 columns */
+}

@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Navigation from './Navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { setCheckedAnswers, addUserAnswer, setAnswers } from '@redux/answers'
+import Navigator from './Navigator';
+import axios from 'axios';
+import { apiRootURL } from '@root/globals'
 
-const StartReviewerMultipleChoice = () => {
-  const [selectedOption, setSelectedOption] = useState({});
-  const [currentQuestion, setCurrentQuestion] = useState(5);
+const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
+  const numberOfQuestions = questions.length
+  const reviewer = useSelector(state => state.reviewer.value)
+  const answers = useSelector(state => state.answers.value)
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const dispatch = useDispatch()
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption((prev) => ({
-      ...prev,
-      [currentQuestion]: option,
-    }));
+  useEffect(() => {
+    if (questions.length == 0) { return }
+
+    dispatch(setAnswers({
+      questions: questions,
+      reviewerSlug: reviewer.slug,
+    }))
+  }, [questions])
+
+  const handleOptionSelect = (text, correctAnswer) => {
+    dispatch(addUserAnswer({
+      questionIndex: currentQuestion,
+      answerIndex: 0,
+      text: text,
+      correctAnswer: correctAnswer,
+    }))
   };
 
   const handleNext = () => {
@@ -22,67 +44,99 @@ const StartReviewerMultipleChoice = () => {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
+  
+  const generateNewQuestions = () => {
+    setIsSubmitted(false)
+    generateQuestions()
+    setCurrentQuestion(0)
+    dispatch(setCheckedAnswers({}))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(answers)
+    axios
+      .post(
+        `${apiRootURL}/questions/check-answer/`,
+        answers
+      )
+      .then(response => {
+        const tempCheckedAnswers = {...response.data}
+        
+        tempCheckedAnswers['answers'] = tempCheckedAnswers.checked_answers
+        delete tempCheckedAnswers['checked_answers']
+        console.log(tempCheckedAnswers)
+        dispatch(setCheckedAnswers(tempCheckedAnswers))
+        setIsSubmitted(true)
+        setCurrentQuestion(0)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  };
+
+  const question = questions[currentQuestion]
 
   return (
-    <form className="question-container">
-      <div className="question-box">
-        <h2 className="question-title">Question {currentQuestion}</h2>
-        <p className="question-text">
-          What is the main purpose of using middleware in integrative programming?
-        </p>
-
-        <div className="options-container-wrapper">
-          <div className="options-container">
-            {['A', 'B', 'C', 'D'].map((option) => (
-              <button
-                key={option}
-                type="button"
-                className={`option ${selectedOption[currentQuestion] === option ? 'selected' : ''}`}
-                onClick={() => handleOptionSelect(option)}
-              >
-                <div className="circle">{option}</div>
-                <span>This is option {option}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="navigation-buttons">
-          <button className="prev-button" type="button" onClick={handlePrevious}>
-            Previous
-          </button>
-          <button className="next-button" type="button" onClick={handleNext}>
-            Next
-          </button>
-        </div>
-      </div>
-
-      <div className="right-section">
-        <div className="question-wrapper">
-          <div className="question-number-wrapper">
-            <div className="question-number-container">
-              {[...Array(10)].map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`question-number ${
-                    currentQuestion === index + 1 ? 'active' : ''
-                  } ${selectedOption[index + 1] ? 'answered' : ''}`} // Add answered class based on selection
-                  onClick={() => setCurrentQuestion(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+    <form onSubmit={handleSubmit} className="question-container grid grid-2-column-2 gap-[10px]">
+      <div>
+        <div className="question-box">
+          <h2 className="question-title">Question {currentQuestion+1}</h2>
+          <p className="question-text">
+            {question && question.question}
+          </p>
+          <div className="options-container-wrapper">
+            <div className="options-container">
+              {['A', 'B', 'C', 'D'].map((option, index) => {
+                const optionText = question.choices[index]
+                const hasAnswers =  answers.answers && answers.answers[currentQuestion].user_answers != undefined
+                const userAnswer = hasAnswers && answers.answers[currentQuestion].user_answers[0]
+                const hasAnswer = userAnswer != undefined 
+                const selectedAnswer =  hasAnswer && userAnswer.answer
+                const isCorrect = isSubmitted && hasAnswer && userAnswer.is_correct
+                const isTheAnswer = selectedAnswer == optionText
+                console.log()
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`option flex 
+                      ${!isSubmitted && isTheAnswer && 'selected'} 
+                      ${isSubmitted && isTheAnswer && isCorrect && 'correct'}
+                      ${isSubmitted && isTheAnswer && !isCorrect && 'wrong'}
+                    `}
+                    onClick={() => handleOptionSelect(optionText, question.answer)}
+                  >
+                    <div className="circle">{option}</div>
+                    <span>{optionText}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
-          <div className="save-submit-buttons">
-            <button className="save-button" type="button">Save Answers</button>
-            <button className="submit-button" type="button">Submit Answers</button>
-          </div>
         </div>
+        <Navigator
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+          generateNewQuestions={generateNewQuestions}
+          isSubmitted={isSubmitted}
+        />
       </div>
+      
+      <Navigation
+        currentQuestion={currentQuestion}
+        numberOfQuestions={numberOfQuestions}
+        answers={answers.answers ? answers.answers : []} 
+        isSubmitted={isSubmitted}
+        setCurrentQuestion={setCurrentQuestion}
+      />
     </form>
   );
 };
+
+StartReviewerMultipleChoice.propTypes = {
+  questions: PropTypes.array.isRequired,
+  generateQuestions: PropTypes.func.isRequired,
+}
 
 export default StartReviewerMultipleChoice;

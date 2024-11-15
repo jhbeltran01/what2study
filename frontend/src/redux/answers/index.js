@@ -17,6 +17,9 @@ export const {
   setAnswers,
   addUserAnswer,
   setCheckedAnswers,
+  removeLastAnswer,
+  pushAnItem,
+  addUserAnswerForMultipleChoice,
 } = answersSlice.actions
 
 export default answersSlice.reducer
