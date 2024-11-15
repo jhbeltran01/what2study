@@ -6,6 +6,8 @@ import Title from './Title'
 import * as constants from './constants'
 import AddContentOverlay from './AddContentOverlay'
 import Options from './Options'
+import { START_REVIEWING } from '@root/routes/constants'
+import { Link } from 'react-router-dom'
 
 export const TitleContext = createContext()
 export const EnumTitleContext = createContext()
@@ -41,9 +43,10 @@ function Main() {
               <h1>{reviewer.name}</h1>
 
               <div className='flex items-center gap-[10px]'>
+                <Link to={START_REVIEWING}>Review</Link>
                 <button onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
 
-                  <Options reviewer={reviewer} />
+                <Options reviewer={reviewer} />
               </div>
             </div>
             <ul>

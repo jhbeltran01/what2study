@@ -155,6 +155,7 @@ class Answers:
 
         for text in answers:
             if not is_array:
+                # user answer list is in type dict, only get the answer text
                 text = text['answer']
             temp_answers.append(self.embeddings.embed_query(text))
 
@@ -163,7 +164,7 @@ class Answers:
     def _check_is_in_order(self, index):
         correct_answers = self.embedded_data[index][self.correct_answers_key]
         user_answers = self.embedded_data[index][self.user_answers_key]
-        answers_are_all_correct = True
+        answers_are_all_correct = len(user_answers) > 0
         checked_user_answers = self.answers[index][self.user_answers_key]
 
         for user_answer_index, user_answer in enumerate(user_answers):
@@ -180,7 +181,7 @@ class Answers:
     def _check_unordered(self, index):
         correct_answers = self.embedded_data[index][self.correct_answers_key]
         user_answers = self.embedded_data[index][self.user_answers_key]
-        answers_are_all_correct = True
+        answers_are_all_correct = len(user_answers) > 0
         checked_user_answers = self.answers[index][self.user_answers_key]
 
         for user_answer_index, user_answer in enumerate(user_answers):

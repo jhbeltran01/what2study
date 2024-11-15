@@ -55,7 +55,7 @@ function Main() {
         location.reload()
       })
       .catch(err => {
-        console.log(errr)
+        console.log(err)
       })
   }
 

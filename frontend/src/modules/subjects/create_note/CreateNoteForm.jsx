@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { apiRootURL } from '@root/globals'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotes } from '@redux/notes'

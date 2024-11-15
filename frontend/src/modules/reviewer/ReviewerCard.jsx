@@ -44,6 +44,7 @@ ReviewerCard.propTypes = {
     profile_picture: PropTypes.string,
     slug: PropTypes.string.isRequired
   }).isRequired,
+  contentRoute: PropTypes.string
 };
 
 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 function Form() {
   const todos = useSelector(state => state.todos.value)
-  const [showForm, setShowForm] = useContext(ShowFormContext)
+  const setShowForm = useContext(ShowFormContext)[1]
   const [name, setName] = useState('')
   const dispatch = useDispatch()
 
