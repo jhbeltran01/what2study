@@ -138,7 +138,7 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
             </div>
             <div className="answer-container">
               {answers.answers != undefined && placeholders.map((placeholder, index) => {
-                const userAnswer = answers.answers[currentQuestion].user_answers[index]
+                const userAnswer = answers.answers.length > 0 && answers.answers[currentQuestion].user_answers[index]
                 const isCorrect = isSubmitted && userAnswer && userAnswer.is_correct == true
 
                 return (
