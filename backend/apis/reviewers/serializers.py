@@ -49,10 +49,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
 
         return representation
 
-    def create(self, validated_data):
-        validated_data.pop('files', None)
-        return super().create(validated_data)
-
     def validate_name(self, value):
         slug = slugify('{}-{}'.format(value, self.owner.id))
         reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
