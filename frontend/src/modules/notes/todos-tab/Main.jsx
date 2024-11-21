@@ -33,8 +33,9 @@ function Main() {
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
         <div className='flex gap-[10px]'>
-          <button
+        <button
             onClick={() => setShowForm(true)}
+            className="btn-add"
           >
             Add
           </button>

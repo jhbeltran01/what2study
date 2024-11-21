@@ -39,13 +39,14 @@ function Form() {
       <div className='form-1'>
         <button
           onClick={() => setShowForm(false)}
+          className="close-btn"
         >
-          Close
+          x
         </button>
 
         <form onSubmit={addNote}>
           <div>
-            <label htmlFor="name">Name</label> <br />
+            <label htmlFor="name">Title</label> <br />
             <input
               className='text-black'
               value={name}
@@ -55,7 +56,7 @@ function Form() {
             />
           </div>
 
-          <button type='submit'>Submit</button>
+          <button type='submit'>Add</button>
         </form>
       </div>
     </div>

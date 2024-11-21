@@ -21,8 +21,6 @@ function Main() {
             </button>
           )}
         </div>
-
-        <input type="text" />
       </div>
       
       {tabContent[activeTab]}
