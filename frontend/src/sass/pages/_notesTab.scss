@@ -18,7 +18,7 @@
     right: 10px;  
   }
   
-  .search-bar-notes {
+  .search-bar2 {
     padding: 0.5rem 1rem;
     border: 1px solid #d1d5db;
     border-radius: 999px;
@@ -133,7 +133,7 @@
   }
   
   .note-button {
-    background-color: #f4f4f4;
+    background: linear-gradient(to bottom, #FED65D 27%, #f4f4f4 25%);
     color: #333;
     padding: 20px;
     border: 1px solid #ccc;
@@ -147,19 +147,9 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 30px;
+    position: relative;      
   }
-  
-  .note-button:hover {
-    background-color: #ffcc00;
-  }
-  
-  .note-button {
-    display: flex;
-    flex-direction: column; 
-    position: relative;     
-    padding: 10px;         
-  }
-  
+
   .note-title {
     font-weight: bold;
     margin-bottom: 8px; 
@@ -177,14 +167,8 @@
     left: 10px;         
   }
   
-  .note-divider {
-    width: 100%; 
-    border: none;
-    border-top: 1px solid #ccc; 
-    margin: 0;
-  }
-  
   .note-content {
+    margin-top: 10px;
     flex-grow: 1; 
     text-align: center;  
     font-size: 0.9rem;

@@ -63,13 +63,13 @@ function NotesTab() {
             value={searchQuery}
             onChange={handleSearch} 
             placeholder="Search..." 
-            className="search-bar-notes"
+            className="search-bar2"
           />
           <button
             onClick={() => setShowForm(true)}
             className="btn-add"
           >
-            Add
+            Add 
           </button>
         </div>
         
@@ -86,7 +86,6 @@ function NotesTab() {
                   {formatTimestamp(note.created_at)}
                 </div>
               </div>
-              <hr className="note-divider" />
               <div className="note-content">
                 {note.content && note.content.trim() !== "" 
                   ? note.content 

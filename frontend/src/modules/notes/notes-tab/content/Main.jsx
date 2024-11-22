@@ -46,24 +46,23 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
+    <div className="container-content">
       <div>
         <select 
-          defaultValue={note.slug}
+          className="notes-dropdown" 
+          defaultValue={note.slug} 
           onChange={getNote}
         >
           {notes.map(note => 
-            <option 
-              value={note.slug}
-              key={note.slug}
-            >
-              {note.name} 1
-            </option>
+          <option value={note.slug} key={note.slug}>
+          {note.name} 1
+          </option>
           )}
         </select>
 
         <form>
           <textarea
+            className="input-content"
             rows={10}
             onBlur={editContent}
             value={contentInputText}

@@ -40,8 +40,9 @@ function Form() {
       <div className='form-1'>
         <button
           onClick={() => setShowForm(false)}
+          className="close-btn"
         >
-          Close
+          x
         </button>
 
         <form onSubmit={addTodo}>
@@ -56,7 +57,7 @@ function Form() {
             />
           </div>
 
-          <button type='submit'>Submit</button>
+          <button type='submit'>Add</button>
         </form>
       </div>
     </div>
