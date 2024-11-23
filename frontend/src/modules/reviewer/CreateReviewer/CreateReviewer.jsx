@@ -47,6 +47,7 @@ const CreateReviewer = () => {
   };
 
   const handleSubmit = async (event) => {
+   
     event.preventDefault();
 
     const formData = new FormData();
@@ -55,6 +56,7 @@ const CreateReviewer = () => {
     formData.append('description', reviewer.description);
 
     Array.from(reviewer.files).forEach((file, index) => {
+     
       formData.append('files', file);
     });
 
@@ -97,7 +99,7 @@ const CreateReviewer = () => {
           </form>
 
           <button className="create-button" onClick={handleCreateClick}>
-            Create
+            Bye
           </button>
         </div>
 
