@@ -3,7 +3,9 @@ from django.conf import settings
 import os
 import ast
 
-from common.models import StudypodReviewer
+from common.models import StudypodReviewer, StudypodDefinitionIsAnsweredCorrectly, Title, \
+    StudypodEnumerationIsCorrectlyAnswered
+from common.services import generate_unique_id
 
 key = settings.FERNET_KEY
 cipher_suite = Fernet(key)
@@ -45,3 +47,37 @@ def retrieve_reviewer(reviewer_slug, studypod_slug):
         return filter_manager(slug=reviewer_slug).first()
     else:
         return filter_manager(studypod__slug=studypod_slug)
+
+
+class GenerateIsCorrectlyAnsweredObj:
+    def __init__(self, studypod, reviewer):
+        self.studypod = studypod
+        self.reviewer = reviewer
+
+    def generate(self):
+        self.generate_definition_is_correctly_answered()
+        self.generate_enumeration_is_answered_correctly()
+
+    def generate_definition_is_correctly_answered(self):
+        definitions = self.reviewer.definitions.all()
+        objs = []
+        for definition in definitions:
+            objs.append(StudypodDefinitionIsAnsweredCorrectly(
+                studypod=self.studypod,
+                reviewer=self.reviewer,
+                definition=definition,
+                slug=generate_unique_id(),
+            ))
+        StudypodDefinitionIsAnsweredCorrectly.definitions.bulk_create(objs)
+
+    def generate_enumeration_is_answered_correctly(self):
+        enumerations = self.reviewer.titles.filter(type=Title.Type.ENUMERATION)
+        objs = []
+        for title in enumerations:
+            objs.append(StudypodEnumerationIsCorrectlyAnswered(
+                studypod=self.studypod,
+                reviewer=self.reviewer,
+                title=title,
+                slug=generate_unique_id(),
+            ))
+        StudypodEnumerationIsCorrectlyAnswered.titles.bulk_create(objs)

@@ -56,17 +56,7 @@ class Reviewer(SlugField):
         super().save(**kwargs)
 
 
-class ReviewerAvailableQuestionType(SlugField):
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='available_question_types'
-    )
-    reviewer = models.ForeignKey(
-        Reviewer,
-        on_delete=models.CASCADE,
-        related_name='available_question_types'
-    )
+class AvailableQuestionType(SlugField):
     available_question_types = models.JSONField(
         default=list,
         editable=True,
@@ -75,10 +65,7 @@ class ReviewerAvailableQuestionType(SlugField):
     reviewers = models.Manager()
 
     class Meta:
-        unique_together = ['owner', 'reviewer']
-
-    def __str__(self):
-        return self.reviewer.name
+        abstract = True
 
     def save(self, *args, **kwargs):
         if self.slug is None:
@@ -86,7 +73,31 @@ class ReviewerAvailableQuestionType(SlugField):
         super().save(*args, **kwargs)
 
 
+class ReviewerAvailableQuestionType(AvailableQuestionType):
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+        related_name='available_question_types'
+    )
+
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='available_question_types'
+    )
+
+    class Meta:
+        unique_together = ['owner', 'reviewer']
+
+    def __str__(self):
+        return self.reviewer.name
+
+
 class PublicReviewer(SlugField):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     reviewer = models.OneToOneField(
         Reviewer,
         on_delete=models.CASCADE,
@@ -98,6 +109,7 @@ class PublicReviewer(SlugField):
 
     class Meta:
         ordering = ['-created_at']
+        unique_together = ('owner', 'reviewer')
 
     def __str__(self):
         return self.slug
@@ -137,7 +149,6 @@ class StudyPod(SlugField):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
 
-
 class StudypodReviewer(SlugField):
     owner = models.ForeignKey(
         User,
@@ -158,12 +169,32 @@ class StudypodReviewer(SlugField):
 
     reviewers = models.Manager()
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.slug
 
     def save(self, **kwargs):
         self.slug = slugify('{}-{}'.format(self.name, self.owner.id))
         super().save(**kwargs)
+
+
+class StudypodReviewerAvailableQuestionType(AvailableQuestionType):
+    studypod = models.ForeignKey(
+        StudyPod,
+        on_delete=models.CASCADE,
+        related_name='available_types'
+    )
+
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+        related_name='available_types'
+    )
+
+    class Meta:
+        unique_together = ['studypod', 'reviewer']
 
 
 class Title(SlugField):
@@ -346,6 +377,55 @@ class EnumerationIsCorrectlyAnswered(IsCorrectlyAnswered):
         super().save(*args, **kwargs)
 
 
+class StudypodIsCorrectlyAnswered(SlugField):
+    studypod = models.ForeignKey(
+        StudyPod,
+        on_delete=models.CASCADE,
+    )
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+    )
+    is_correctly_answered = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = '{}'.format(generate_unique_id())
+        super().save(*args, **kwargs)
+
+
+class StudypodDefinitionIsAnsweredCorrectly(StudypodIsCorrectlyAnswered):
+    definition = models.ForeignKey(
+        Definition,
+        on_delete=models.CASCADE,
+        related_name='studypod_statuses'
+    )
+
+    definitions = models.Manager()
+
+    class Meta:
+        unique_together = ('studypod', 'reviewer', 'definition')
+
+
+class StudypodEnumerationIsCorrectlyAnswered(StudypodIsCorrectlyAnswered):
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        related_name='studypod_statuses'
+    )
+
+    titles = models.Manager()
+
+    class Meta:
+        unique_together = ('studypod', 'reviewer', 'title')
+
+
 class Note(SlugField):
     owner = models.ForeignKey(
         User,
@@ -434,9 +514,9 @@ class PublicReviewerCategory(SlugField):
         return str(self.public_reviewer.slug)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify('{}-{}'.format(self.public_reviewer.id, self.owner.id))
+        if self.slug is None:
+            self.slug = generate_unique_id()
         super().save(*args, **kwargs)
-
 
 
 class RecentViewedPublicReviewer(PublicReviewerCategory):

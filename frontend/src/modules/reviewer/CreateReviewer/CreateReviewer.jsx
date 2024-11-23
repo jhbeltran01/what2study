@@ -47,15 +47,17 @@ const CreateReviewer = () => {
   };
 
   const handleSubmit = async (event) => {
+   
     event.preventDefault();
-    
+
     const formData = new FormData();
-    
+
     formData.append('name', reviewer.name);
     formData.append('description', reviewer.description);
 
     Array.from(reviewer.files).forEach((file, index) => {
-      formData.append(`files[${index}]`, file);
+     
+      formData.append('files', file);
     });
 
     axios
@@ -69,7 +71,6 @@ const CreateReviewer = () => {
         }
       )
       .then(response => {
-        console.log(response.data)
         setReviewer(initialReviewer)
       })
       .catch(error => {
@@ -98,7 +99,7 @@ const CreateReviewer = () => {
           </form>
 
           <button className="create-button" onClick={handleCreateClick}>
-            Create
+            Bye
           </button>
         </div>
 
@@ -125,6 +126,7 @@ const CreateReviewer = () => {
                   id="uploadFile" 
                   className="input-field"
                   onChange={handleFileUpload} 
+                  multiple="multiple"
                 />
                 <label htmlFor="uploadFile" className="upload-link">
                 </label>

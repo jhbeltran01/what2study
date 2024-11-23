@@ -28,6 +28,7 @@ class GenerateQuestion(APIView):
         self.will_generate_questions = True
         self.reviewer = None
         self.owner = None
+        self.is_studypod_reviewer = False
 
     def get(self, request, *args, **kwargs):
         self._make_sure_that_needed_url_params_are_supplied()
@@ -73,8 +74,12 @@ class GenerateQuestion(APIView):
     def _check_if_will_generate_questions(self):
         if not self.will_generate_questions:
             return
-
-        question = Question(**self.params_serializer.data, owner=self.request.user)
+        obj = self.reviewer.available_question_types.filter(owner=self.owner).first()
+        question = Question(
+            **self.params_serializer.data,
+            owner=self.request.user,
+            available_question_types=obj.available_question_types
+        )
         self.payload = question.generate()
         self.http_status = status.HTTP_200_OK
 
@@ -119,9 +124,10 @@ class ResetQuestionsAPIView(APIView):
 
         question_types = QuestionType(
             reviewer=reviewer,
-            owner=self.request.user,
+            owner={'owner': self.request.user},
             for_definition=True,
             for_enumeration=True,
+            available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
         )
         question_types.update()
 

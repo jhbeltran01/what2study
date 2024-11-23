@@ -26,6 +26,7 @@ class GetReviewer:
 
     @database_sync_to_async
     def get(self):
+        print(self.user, self.moderator)
         if self.user.id != self.moderator.id:
             return get_error_data(
                 self.data,
@@ -55,6 +56,7 @@ class GenerateQuestion:
         data,
         user,
         moderator,
+        studypod,
         number_of_questions=1,
     ):
         self.reviewer = reviewer
@@ -62,6 +64,7 @@ class GenerateQuestion:
         self.user = user
         self.moderator = moderator
         self.number_of_questions = number_of_questions
+        self.studypod = studypod
 
     @database_sync_to_async
     def generate(self):
@@ -74,11 +77,18 @@ class GenerateQuestion:
         if self.number_of_questions < 1:
             return get_error_data(self.data, "Number of questions must be atleast 1.")
 
+        obj = self.studypod.available_types.filter(studypod=self.studypod).first()
+        types = obj.available_question_types
+
+        if 'E' in types:
+            types.remove('E')
+
         question = Question(
             reviewer_obj=self.reviewer,
-            number_of_questions=self.number_of_questions
+            number_of_questions=self.number_of_questions,
+            studypod=self.studypod,
+            available_question_types=types,
         )
-
         return {
             **self.data,
             "questions": question.generate()
@@ -99,11 +109,11 @@ class Answer:
             return get_error_data(self.data, "Please generate a question first.")
 
         self._check_answer()
-
-        self.user_answers[str(self.user.id)] = {
+        print(self.user_answers)
+        self.user_answers.append({
             "answers": self.answers,
             "user": UserInfoSerializer(self.user).data
-        }
+        })
 
     def _check_answer(self):
         for index in range(len(self.answers)):
