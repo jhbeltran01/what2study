@@ -7,6 +7,7 @@ import { apiRootURL } from '@root/globals'
 function Main() {
   const [subjects, setSubjects] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     axios
@@ -19,15 +20,28 @@ function Main() {
       })
   }, [])
 
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value)
+  }
+
   return (
     <div className='container-1'>
       <div>
         <header className='flex justify-between'>
-          <h2>Subjects</h2>
-          <div>
-            <button onClick={() => setShowForm(true)}>Add</button>
-            <input type="text" placeholder='Search' />
-          </div>
+          <h2 className='btn-4'>Subjects</h2>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Search..."
+            className="search-bar2"
+          />
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-add"
+          >
+            Add
+          </button>
         </header>
 
         <div className='mt-2rem grid grid-responsive-1'>
@@ -36,9 +50,9 @@ function Main() {
       </div>
 
       {
-      showForm 
-      && <Form 
-          subjectsState={[subjects, setSubjects]} 
+        showForm
+        && <Form
+          subjectsState={[subjects, setSubjects]}
           showFormState={[showForm, setShowForm]}
         />}
     </div>

@@ -27,29 +27,29 @@ function Form({subjectsState, showFormState}) {
 
   return (
     <div className='overlay-1 flex justify-center items-center text-white'>
-      <form
-        onSubmit={createSubject}
-        className='form-1'
-      >
-        <div>
-          <button onClick={() => setShowForm(false)} type="button">Close</button>
-        </div>
-        
-        <div>
-          <label htmlFor="name">Class</label>
-          <input 
-            value={name}
-            className='text-black' 
-            type="text" 
-            id="name" 
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+      <div className='form-1'>
+      <button
+          onClick={() => setShowForm(false)}
+            className="close-btn"
+        >
+          x
+        </button>
 
-        <div>
-          <button type="submit">Create</button>
-        </div>
-      </form>
+        <form onSubmit={createSubject}>
+          <div>
+            <label htmlFor="name">Class</label> <br />
+            <input
+              value={name}
+              className='text-black'
+              type="text"
+              id="name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <button type='submit' className='form-submit'>Add</button>
+        </form>
+      </div>
     </div>
   )
 }

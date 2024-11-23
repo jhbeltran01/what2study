@@ -15,6 +15,7 @@ function Main() {
   const notes = useSelector(state => state.notes.value)
   const [reviewers, setReviewers] = useState([])
   const [activeTab, setActiveTab] = useState(0)
+  const [searchQuery, setSearchQuery] = useState('')  
   const tabNames = ['Reviewers', 'Notes']
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch()
@@ -22,10 +23,10 @@ function Main() {
 
   useEffect(() => {
     switch (activeTab) {
-      case 0: // reviewers tab
+      case 0: 
         getReviewers()
         break
-      case 1: // notes tab
+      case 1: 
         getNotes()
         break
     }
@@ -54,15 +55,22 @@ function Main() {
       })
   }
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value)
+  }
 
   const reviewersTabContent = () => (
     <div className='mt-[2rem]' key={1}>
       <div className='text-right'>
-        <Link to={SUBJECT_CREATE_REVIEWER}>Add</Link>
+        <Link to={SUBJECT_CREATE_REVIEWER} className="btn-add">Add</Link>
       </div>
 
       <div className='grid grid-responsive-1'>
-        {reviewers.map(reviewer => <ReviewerCard contentRoute={SUBJECT_REVIEWER}  reviewer={reviewer} key={reviewer.slug} />)}
+        {reviewers
+          .filter(reviewer => reviewer.name.toLowerCase().includes(searchQuery.toLowerCase())) 
+          .map(reviewer => (
+            <ReviewerCard contentRoute={SUBJECT_REVIEWER} reviewer={reviewer} key={reviewer.slug} />
+          ))}
       </div>
     </div>
   )
@@ -70,18 +78,17 @@ function Main() {
   const notesTabContent = () => (
     <div className='mt-[2rem]' key={2}>
       <div className='text-right'>
-        <button onClick={() => setShowForm(true)}>Add</button>
+        <button onClick={() => setShowForm(true)} className="btn-add">Add</button>
       </div>
 
       <div className='grid grid-responsive-1'>
-        {notes.map(note =>
-          <button
-            onClick={() => redirectToNoteContent(note)}
-            key={note.slug}
-          >
-            {note.name}
-          </button>
-        )}
+        {notes
+          .filter(note => note.name.toLowerCase().includes(searchQuery.toLowerCase())) 
+          .map(note => (
+            <button onClick={() => redirectToNoteContent(note)} key={note.slug}>
+              {note.name}
+            </button>
+          ))}
       </div>
 
       {showForm && <CreateNoteForm setShowForm={setShowForm} />}
@@ -98,19 +105,22 @@ function Main() {
   return (
     <div className='container-1'>
       <header className='flex justify-between'>
-        <p>{subject.name}</p>
-        <input type="text" placeholder="Search" />
+      <p className='subject-name'>{subject.name}</p>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Search..."
+          className="search-bar2"
+        />
       </header>
 
       <div>
-        {tabNames.map((tab, index) => 
-          <button 
-            onClick={() => setActiveTab(index)}
-            key={index}
-          >
+        {tabNames.map((tab, index) => (
+          <button onClick={() => setActiveTab(index)} key={index} className="btn-4">
             {tab}
           </button>
-        )}
+        ))}
       </div>
 
       {tabs[activeTab]}

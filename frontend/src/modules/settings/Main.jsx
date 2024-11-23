@@ -15,10 +15,10 @@ function Main() {
 
     const formData = {}
 
-    if (username != '' && username != userInfo.username) { formData['username'] = username }
-    if (password != '') { formData['password'] = password }
+    if (username !== '' && username !== userInfo.username) { formData['username'] = username }
+    if (password !== '') { formData['password'] = password }
 
-    if (Object.keys(formData).length == 0) { 
+    if (Object.keys(formData).length === 0) { 
       clearForm()
       return
     }
@@ -29,7 +29,7 @@ function Main() {
         formData
       )
       .then(response => {
-        if (password != '') {
+        if (password !== '') {
           location.reload()
           return
         }
@@ -61,48 +61,65 @@ function Main() {
 
   return (
     <div className='container-1'>
-      <h2>Account Settings</h2>
+      <h2 className='btn-4'>Account Settings</h2>
+      <div className='settings-container'>
+        <div className='grid grid-2-column-1'>
+          <form onSubmit={updateAccount}>
+            <div>
+              <label htmlFor="username">Username</label>
+              <input 
+                value={username}
+                type="text" 
+                id="username" 
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password">Password</label>
+              <input 
+                value={password}
+                type="password" 
+                id="password" 
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-      <div className='grid grid-2-column-1'>
-        <form onSubmit={updateAccount}>
+            <div>
+              <button 
+                onClick={clearForm} 
+                type='button' 
+                name="cancelButton"
+              >
+                Cancel
+              </button>
+              <button 
+                type='submit' 
+                name="saveButton"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+
           <div>
-            <label htmlFor="username">Username</label>
-            <input 
-              value={username}
-              type="text" 
-              id="username" 
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="password">Password</label>
-            <input 
-              value={password}
-              type="password" 
-              id="password" 
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <h6>Password Requirements</h6>
 
-          <div>
-            <button onClick={clearForm} type='button'>Cancel</button>
-            <button type='submit'>Save</button>
-          </div>
-        </form>
+            <ul>
+              <li>At least 8 characters</li>
+              <li>At least one uppercase letter</li>
+              <li>At least one number</li>
+              <li>At least one special character</li>
+            </ul>
 
-        <div>
-          <h6>Password Requirements</h6>
-
-          <ul>
-            <li>At least 8 characters</li>
-            <li>At least one uppercase letter</li>
-            <li>At least one number</li>
-            <li>At least one special character</li>
-          </ul>
-
-          <div>
-            <button onClick={deleteAccount}>Delete</button>
+            <div>
+              <button 
+                onClick={deleteAccount} 
+                name="deleteButton"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>

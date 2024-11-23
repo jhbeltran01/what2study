@@ -1,6 +1,6 @@
 .todo-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);  /* Adjust as needed, here 6 columns */
+    grid-template-columns: repeat(6, 1fr);  
     gap: 20px;
     justify-items: start;
     width: 100%;
@@ -71,6 +71,8 @@
   
   .add-todo {
     width: 500px; 
+    background: #f4f4f4;
+    border: 1px solid #ccc;
   }
   
   .btn-add3 {
