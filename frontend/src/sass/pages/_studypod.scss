@@ -77,3 +77,80 @@ $gray-1: rgba(55, 55, 55, 0.14);
 .mb-1 {
   margin-bottom: 2rem;
 }
+
+.error-message {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  right: 0;
+}
+
+.action-buttons {
+  position: fixed;
+  bottom: 20px;
+  left  : 20px;
+}
+
+.submit-success {
+  background-color: #4CAF50;
+  border-radius: 5px;
+  padding: 1em;
+}
+
+.submit-error {
+  background-color: #c0392b;
+  border-radius: 5px;
+  padding: 1em;
+}
+
+.username-answer {
+  background: linear-gradient(rgba(254, 166, 31, 1), rgba(254, 214, 93, 1));
+  padding: 0.5em 1em;
+  border-radius: 5px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-\[10px\] {
+  gap: 10px;
+}
+
+.submit-button {
+  padding: 12px 25px;
+  background: linear-gradient(180deg, #FEA61F, #FED65D);;
+  border: none;
+  border-radius: 10px; /* Rounded corners for buttons */
+  font-size: 1.1rem; /* Font size for buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  width: 100%; /* Full width to match question number wrapper */
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.container-1 {
+  padding: 1em 2em;
+}
+
+.reviewer-entry {
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.reviewer-header {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the start */
+  margin-bottom: 0.5rem;
+}

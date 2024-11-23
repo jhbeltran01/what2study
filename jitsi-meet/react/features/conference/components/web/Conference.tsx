@@ -43,6 +43,7 @@ import type { AbstractProps } from '../AbstractConference';
 import ConferenceInfo from './ConferenceInfo';
 import { default as Notice } from './Notice';
 import Question from './Question'
+import StartReviewing from './StartReviewer/Main'
 
 
 /**
@@ -216,8 +217,15 @@ class Conference extends AbstractConference<IProps, any> {
             _showLobby,
             _showPrejoin,
             _showVisitorsQueue,
-            t
+            _roomName,
+            t,
         } = this.props;
+
+        const slugifyRoomName = _roomName.toString()                 // Ensure it's a string
+                                .toLowerCase()              // Convert to lowercase
+                                .trim()                     // Remove whitespace
+                                .replace(/[\s\W-]+/g, '-')  // Replace spaces, non-word characters, and dashes with a single dash
+                                .replace(/^-+|-+$/g, '');
 
         return (
             <div
@@ -239,7 +247,9 @@ class Conference extends AbstractConference<IProps, any> {
                         <div className='hide'>
                             <LargeVideo />
                         </div>
-                        <Question />    
+                        
+                        <StartReviewing studypodSlug={slugifyRoomName} /> 
+
                         {_showPrejoin || _showLobby || (<>
                                 <StageFilmstrip />
                                 <ScreenshareFilmstrip />

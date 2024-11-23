@@ -66,13 +66,12 @@
 
 .option {
     align-items: center;
-    padding: 12px 20px;
+    padding: 1em;
     background-color: #ffffff;
     border: none;
     border-radius: 50px;
     font-size: 1.2rem;
     cursor: pointer;
-    justify-content: flex-start;
 
     &:is(.correct) {
         background-color: var.$green-1;
@@ -87,7 +86,7 @@
     background-color: #fff5e5; /* Highlight selected option */
 }
 
-.option .circle {
+.option-circle {
     background: linear-gradient(180deg, #FEA61F, #FED65D);
     border-radius: 50%;
     width: 40px;
@@ -101,7 +100,7 @@
     flex-shrink: 0;
 }
 
-.option span {
+.option-text {
     font-size: 1.2rem;
     color: #333;
 }
@@ -235,7 +234,7 @@
 
 
 .submit-button {
-    background: linear-gradient(180deg, #FEA61F, #FED65D);;
+    
 }
 
 .save-button:hover {
