@@ -134,7 +134,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
         return value
 
     def get_owner(self, instance):
-        return UserInfoSerializer(instance.reviewer.owner).data
+        return UserInfoSerializer(instance.owner).data
 
     def get_description(self, instance):
         return instance.reviewer.description

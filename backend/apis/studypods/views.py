@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import exceptions
 
+from apis.reviewer_content.services import QuestionType
 from apis.studypods.serializers import (
     StudypodSerializer,
     StudypodAccessCodeSerializer,
@@ -21,10 +22,11 @@ from apis.studypods.services import (
     add_user_to_studypod,
     is_member_of_studypod,
     leave_studypod,
-    retrieve_reviewer,
+    retrieve_reviewer, GenerateIsCorrectlyAnsweredObj,
 )
 
-from common.models import StudyPod, StudypodReviewer
+from common.models import StudyPod, StudypodReviewer, ReviewerAvailableQuestionType, \
+    StudypodReviewerAvailableQuestionType, StudypodDefinitionIsAnsweredCorrectly, StudypodEnumerationIsCorrectlyAnswered
 
 
 class StudyPodAPIView(
@@ -177,7 +179,29 @@ class StudypodReviewersAPIView(
         return reviewer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        studypod_reviewer = serializer.save(owner=self.request.user)
+        studypod = studypod_reviewer.studypod
+        reviewer = studypod_reviewer.reviewer
+        types_objs = StudypodReviewerAvailableQuestionType.reviewers.create(
+            studypod=studypod,
+            reviewer=reviewer,
+        )
+        correctly_answered = GenerateIsCorrectlyAnsweredObj(
+            studypod=studypod_reviewer.studypod,
+            reviewer=studypod_reviewer.reviewer
+        )
+        correctly_answered.generate()
+
+        question_type = QuestionType(
+            reviewer=reviewer,
+            owner={'studypod': studypod},
+            for_definition=True,
+            for_enumeration=True,
+            available_question_types_obj=types_objs,
+            definition_is_answered_correctly=StudypodDefinitionIsAnsweredCorrectly.definitions,
+            enumeration_is_answered_correctly=StudypodEnumerationIsCorrectlyAnswered.titles,
+        )
+        question_type.update()
 
     def get_serializer_context(self):
         return {'owner': self.request.user}

@@ -11,7 +11,7 @@ from rest_framework import status
 from common.models import (
     Title,
     Definition,
-    EnumerationTitle
+    EnumerationTitle, DefinitionIsCorrectlyAnswered
 )
 from common.services import generate_unique_id
 
@@ -65,23 +65,31 @@ class DefinitionAPIView(
         return Definition.definitions.filter(title=self.query_params.get('title'))
 
     def perform_create(self, serializer):
-        serializer.save(
+        reviewer = self.query_params.get('reviewer')
+        definition = serializer.save(
             owner=self.request.user,
-            reviewer=self.query_params.get('reviewer'),
+            reviewer=reviewer,
             title=self.query_params.get('title'),
             slug=generate_unique_id()
         )
         self._update_available_question_types()
+        DefinitionIsCorrectlyAnswered.definitions.create(
+            owner=self.request.user,
+            reviewer=reviewer,
+            definiion=definition
+        )
 
     def perform_destroy(self, instance):
         instance.delete()
         self._update_available_question_types()
 
     def _update_available_question_types(self):
+        reviewer = self.query_params.get('reviewer', None)
         question_type = QuestionType(
-            reviewer=self.query_params.get('reviewer', None),
-            owner=self.request.user,
-            for_definition=True
+            reviewer=reviewer,
+            owner={'owner': self.request.user},
+            for_definition=True,
+            available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
         )
         question_type.update()
 
@@ -154,11 +162,13 @@ class EnumerationTitleAPIView(
         self._update_available_question_types()
 
     def _update_available_question_types(self):
+        reviewer = self.query_params.get('reviewer', None)
         question_type = QuestionType(
-            reviewer=self.query_params.get('reviewer', None),
+            reviewer=reviewer,
             owner=self.request.user,
             for_enumeration=True,
             for_definition=True,
+            available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
         )
         question_type.update()
 
@@ -251,10 +261,12 @@ class TitleAPIView(
         self.serialized_new_content = TitleSerializer(titles, many=True).data
 
     def _update_available_question_types(self, instance=None):
+        reviewer = self.query_params.get('reviewer', None)
         question_type = QuestionType(
-            reviewer=self.query_params.get('reviewer', None),
+            reviewer=reviewer,
             owner=self.request.user,
             for_enumeration=True,
             for_definition=True,
+            available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
         )
         question_type.update()

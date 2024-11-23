@@ -15,6 +15,7 @@ from common.models import (
     Definition,
     Title,
     EnumerationTitle, DefinitionIsCorrectlyAnswered, EnumerationIsCorrectlyAnswered,
+    StudypodDefinitionIsAnsweredCorrectly, StudypodEnumerationIsCorrectlyAnswered,
 )
 
 embeddings = HuggingFaceBgeEmbeddings(
@@ -26,19 +27,21 @@ embeddings = HuggingFaceBgeEmbeddings(
 class Question:
     def __init__(
         self,
+        available_question_types=list,
         reviewer_obj=None,
         number_of_questions=1,
         owner=None,
+        studypod=None,
         *args,
         **kwargs
     ):
+        self.studypod = studypod
         self.owner = owner
         self.reviewer = reviewer_obj
         self.number_of_questions = number_of_questions
-        self.available_question_types_obj = self.reviewer.available_question_types.filter(owner=owner).first()
-        self.available_question_types = self.available_question_types_obj.available_question_types
         self.question_type = None
         self.question_type_class = ''
+        self.available_question_types = available_question_types
 
     def generate(self):
         self._set_question_type()
@@ -47,7 +50,8 @@ class Question:
         question = globals()[self.question_type_class](
             reviewer=self.reviewer,
             number_of_questions=self.number_of_questions,
-            owner=self.owner
+            owner=self.owner,
+            studypod=self.studypod,
         )
         return question.generate()
 
@@ -66,10 +70,17 @@ class Question:
 
 
 class IdentificationQuestion:
-    def __init__(self, reviewer=None, number_of_questions=1, owner=None):
+    def __init__(
+        self,
+        reviewer=None,
+        number_of_questions=1,
+        owner=None,
+        studypod=None
+    ):
         self.reviewer = reviewer
         self.number_of_questions = number_of_questions
         self.owner = owner
+        self.studypod = studypod
 
     def generate(self):
         return IdentificationQuestionSerializer(
@@ -79,13 +90,21 @@ class IdentificationQuestion:
         ).data
 
     def _get_definitions(self):
-        definition_is_correctly_answered_obj = \
-            DefinitionIsCorrectlyAnswered.definitions.filter(
-                owner=self.owner,
+        objs = self._get_objs().order_by('?')[:self.number_of_questions]
+        return [obj.definition for obj in objs]
+
+    def _get_objs(self):
+        if self.studypod is not None:
+            return StudypodDefinitionIsAnsweredCorrectly.definitions.filter(
+                studypod=self.studypod,
                 reviewer=self.reviewer,
                 is_correctly_answered=False
-            ).order_by('?')[:self.number_of_questions]
-        return [obj.definition for obj in definition_is_correctly_answered_obj]
+            )
+        return DefinitionIsCorrectlyAnswered.definitions.filter(
+            owner=self.owner,
+            reviewer=self.reviewer,
+            is_correctly_answered=False
+        )
 
 
 class MultipleChoiceQuestion(IdentificationQuestion):
@@ -98,10 +117,17 @@ class MultipleChoiceQuestion(IdentificationQuestion):
 
 
 class EnumerationQuestion:
-    def __init__(self, reviewer=None, number_of_questions=1, owner=None):
+    def __init__(
+        self,
+        reviewer=None,
+        number_of_questions=1,
+        owner=None,
+        studypod=None,
+    ):
         self.reviewer = reviewer
         self.number_of_questions = number_of_questions
         self.owner = owner
+        self.studypod = studypod
 
     def generate(self):
         return EnumerationQuestionSerializer(
@@ -110,15 +136,22 @@ class EnumerationQuestion:
             context={'category': Reviewer.QuestionType.ENUMERATION.label},
         ).data
 
-
     def _get_titles(self):
-        enumeration_is_answered_correctly_obj = \
-            EnumerationIsCorrectlyAnswered.titles.filter(
-                owner=self.owner,
+        objs = self._get_objs().order_by('?')[:self.number_of_questions]
+        return [obj.title for obj in objs]
+
+    def _get_objs(self):
+        if self.studypod is not None:
+            return StudypodEnumerationIsCorrectlyAnswered.titles.filter(
+                studypod=self.studypod,
                 reviewer=self.reviewer,
                 is_correctly_answered=False
-            ).order_by('?')[:self.number_of_questions]
-        return [obj.title for obj in enumeration_is_answered_correctly_obj]
+            )
+        return EnumerationIsCorrectlyAnswered.titles.filter(
+            owner=self.owner,
+            reviewer=self.reviewer,
+            is_correctly_answered=False
+        )
 
 
 class Answers:
@@ -202,54 +235,84 @@ class Answers:
         has_an_answer = len(self.user_answers) > 0
         self.answers_are_all_correct = has_an_answer and answered_all_items
 
-
     @staticmethod
     def _is_correct(correct_answer, user_answer):
         accuracy = np.dot(correct_answer, user_answer) * 100
         return accuracy >= 96
 
+
 class CorrectlyAnswered:
-    def __init__(self, data):
+    def __init__(self, data, is_studypod=False):
         self.checked_answers = data['checked_answers']
         self.question_type = data['question_type']
         self.slugs_of_correctly_answered = []
-
-    def update_status(self):
-        self._set_slugs_of_correctly_answered()
-
-        match self.question_type:
-            case Reviewer.QuestionType.IDENTIFICATION | Reviewer.QuestionType.MULTIPLE_CHOICE:
-                self._update_identification_statuses()
-            case Reviewer.QuestionType.ENUMERATION:
-                self._update_enumeration_statuses()
+        self.is_studypod = is_studypod
 
     @property
     def has_answered_an_item_correctly(self):
         return len(self.slugs_of_correctly_answered)
 
+    def update_status(self):
+        self._set_slugs_of_correctly_answered()
+
+        if self.is_studypod:
+            self._update_status_on_studypod()
+            return
+
+        self._update_status_on_reviewer()
+
+    def _update_status_on_reviewer(self):
+        match self.question_type:
+            case Reviewer.QuestionType.IDENTIFICATION | Reviewer.QuestionType.MULTIPLE_CHOICE:
+                self._update_definitions_status()
+            case Reviewer.QuestionType.ENUMERATION:
+                self._update_enumeration_status()
+
+    def _update_status_on_studypod(self):
+        match self.question_type:
+            case Reviewer.QuestionType.IDENTIFICATION | Reviewer.QuestionType.MULTIPLE_CHOICE:
+                self._update_studypod_definitions_status()
+            case Reviewer.QuestionType.ENUMERATION:
+                self._update_studypod_enumeration_status()
+
     def _set_slugs_of_correctly_answered(self):
         for answer in self.checked_answers:
-            if not answer['is_correct']:
+            if not answer.get('is_correct', False):
                 continue
             self.slugs_of_correctly_answered.append(answer['slug'])
 
-    def _update_identification_statuses(self):
+    def _update_definitions_status(self):
         DefinitionIsCorrectlyAnswered.definitions.filter(
             definition__slug__in=self.slugs_of_correctly_answered
         ).update(is_correctly_answered=True)
 
-    def _update_enumeration_statuses(self):
+    def _update_enumeration_status(self):
         EnumerationIsCorrectlyAnswered.titles.filter(
             title__slug__in=self.slugs_of_correctly_answered
         ).update(is_correctly_answered=True)
 
+    def _update_studypod_definitions_status(self):
+        StudypodDefinitionIsAnsweredCorrectly.definitions.filter(
+            definition__slug__in=self.slugs_of_correctly_answered
+        ).update(is_correctly_answered=True)
+
+    def _update_studypod_enumeration_status(self):
+        StudypodEnumerationIsCorrectlyAnswered.titles.filter(
+            title__slug__in=self.slugs_of_correctly_answered
+        ).update(is_correctly_answered=True)
 
 class Reset:
-    def __init__(self, reviewer, owner):
+    def __init__(self, reviewer, owner, studypod=None):
         self.reviewer = reviewer
         self.owner = owner
+        self.studypod = studypod
 
     def execute(self):
+        if self.studypod is not None:
+            self.reset_studypod_definitions()
+            self.reset_enumerations()
+            return
+
         self.reset_definitions()
         self.reset_enumerations()
 
@@ -262,6 +325,18 @@ class Reset:
     def reset_enumerations(self):
         EnumerationIsCorrectlyAnswered.titles.filter(
             owner=self.owner,
+            reviewer=self.reviewer
+        ).update(is_correctly_answered=False)
+
+    def reset_studypod_definitions(self):
+        StudypodDefinitionIsAnsweredCorrectly.definitions.filter(
+            stuydpod=self.studypod,
+            reviewer=self.reviewer
+        ).update(is_correctly_answered=False)
+
+    def reset_studypod_enumerations(self):
+        StudypodEnumerationIsCorrectlyAnswered.titles.filter(
+            stuydpod=self.studypod,
             reviewer=self.reviewer
         ).update(is_correctly_answered=False)
 
@@ -278,9 +353,10 @@ def update_question_types(
 
     question_type = QuestionType(
         reviewer=reviewer,
-        owner=owner,
+        owner={'owner': owner},
         for_definition=for_definition,
         for_enumeration=for_enumeration,
+        available_question_types_obj=reviewer.available_question_types.filter(owner=owner).first()
     )
     question_type.update()
 

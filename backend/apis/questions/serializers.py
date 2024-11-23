@@ -209,7 +209,7 @@ class AnswersSerializer(serializers.Serializer):
         score = 0
 
         for answer in self.answers:
-            is_correct = answer['is_correct']
+            is_correct = answer.get('is_correct', False)
             if is_correct:
                 score += 1
 
