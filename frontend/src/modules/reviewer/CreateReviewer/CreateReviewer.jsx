@@ -72,8 +72,10 @@ const CreateReviewer = () => {
       )
       .then(response => {
         setReviewer(initialReviewer)
+        alert("Done!")
       })
       .catch(error => {
+        alert("Error!")
         console.log(error.response.data)
       })
   };
