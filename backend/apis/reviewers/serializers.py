@@ -231,7 +231,7 @@ class TitleSerializer(serializers.ModelSerializer):
             return None
 
         enum_title = EnumerationTitle.titles.filter(title=instance).first()
-        return enum_title.is_in_order
+        return enum_title is not None and enum_title.is_in_order
 
     def get_is_in_enumeration(self, instance):
         return instance.enum_title is not None

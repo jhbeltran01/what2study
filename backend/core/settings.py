@@ -224,7 +224,15 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:9000',
     'https://localhost:8081',
+    'https://workable-oyster-regularly.ngrok-free.app',
+    'https://diverse-fox-loving.ngrok-free.app'
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://workable-oyster-regularly.ngrok-free.app",
+    'https://diverse-fox-loving.ngrok-free.app',
+]
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-api-key', 
 ]
