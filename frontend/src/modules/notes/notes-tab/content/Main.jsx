@@ -58,7 +58,7 @@ function Main() {
               value={note.slug}
               key={note.slug}
             >
-              {note.name} 1
+              {note.name}
             </option>
           )}
         </select>
