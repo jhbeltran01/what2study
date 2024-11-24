@@ -32,25 +32,57 @@ function Main() {
     navigate(NOTE_CONTENT)
   }
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp)
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }
+    return date.toLocaleString('en-US', options).replace(',', '')
+  }
+
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='flex gap-[10px]'>
+        <div className='text-right'>
           <button
+            className='btn-add3'
             onClick={() => setShowForm(true)}
           >
             Add
           </button>
-          {notes.map(note =>
-            <button
-              onClick={() => redirectToNoteContent(note)}
-              key={note.slug}
-            >
-              {note.name}
-            </button>
-          )}
         </div>
-        {showForm && <Form />}
+
+        <div className=''>
+          <div className=''>
+          </div>
+            <div className='note-container'>
+              {notes.map(note =>
+                  <button 
+                    className="note-button" 
+                    onClick={() => redirectToNoteContent(note)} 
+                    key={note.slug}
+                  >
+                    <div className="note-title-container">
+                      <div className="note-title">{note.name}</div>
+                      <div className="note-timestamp">
+                        {formatTimestamp(note.created_at)}
+                      </div>
+                    </div>
+                    <div className="note-content">
+                      {note.content && note.content.trim() !== "" 
+                        ? note.content 
+                        : "Content goes here..."}
+                    </div>
+                  </button>
+              )}
+            </div>
+          </div>
+          {showForm && <Form />}
       </div>
     </ShowFormContext.Provider>
   )

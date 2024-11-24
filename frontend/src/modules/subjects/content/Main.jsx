@@ -99,7 +99,8 @@ function Main() {
     <div className='container-1'>
       <header className='flex justify-between'>
         <p>{subject.name}</p>
-        <input type="text" placeholder="Search" />
+        
+        <input className='w-[max-content]' type="text" placeholder="Search" />
       </header>
 
       <div>

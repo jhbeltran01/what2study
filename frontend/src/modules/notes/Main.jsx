@@ -2,19 +2,16 @@ import React, { useState, useEffect, createContext } from 'react'
 import axios from 'axios'
 import { apiRootURL } from '@root/globals'
 import { useDispatch, useSelector } from 'react-redux'
-import { setNote } from '@redux/note'
 import { setNotes } from '@redux/notes'
-import { useNavigate } from 'react-router-dom'
-import { NOTE_CONTENT } from '@root/routes/constants'
+import NotesTabContent from './notes-tab/Main'
+import TodosTabContent from './todos-tab/Main'
 
 export const ShowFormContext = createContext()
 
 function NotesTab() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const notes = useSelector(state => state.notes.value)
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState(0)
 
   useEffect(() => {
     axios
@@ -27,72 +24,27 @@ function NotesTab() {
       })
   }, [dispatch])
 
-  const redirectToNoteContent = (note) => {
-    dispatch(setNote(note))
-    navigate(NOTE_CONTENT)
-  }
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-  }
-
-  const filteredNotes = notes.filter(note =>
-    note.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp)
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    }
-    return date.toLocaleString('en-US', options).replace(',', '')
-  }
+  const tab = [<NotesTabContent key={1}/>, <TodosTabContent key={2} />][activeTab]
 
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div className='container-1'>
-        <div className='flex justify-between items-center'>
-          <input 
-            type="text" 
-            value={searchQuery}
-            onChange={handleSearch} 
-            placeholder="Search..." 
-            className="search-bar2"
-          />
+        <div className="header-buttons">
           <button
-            onClick={() => setShowForm(true)}
-            className="btn-add"
+            className={`${activeTab == 0 && 'active'}`}
+            onClick={() => setActiveTab(0)}
           >
-            Add 
+            Notes
+          </button>
+          <button
+            className={`${activeTab == 1 && 'active'}`}
+            onClick={() => setActiveTab(1)}
+          >
+            To-Do
           </button>
         </div>
         
-        <div className='note-container'>
-          {filteredNotes.map(note =>
-            <button 
-              className="note-button" 
-              onClick={() => redirectToNoteContent(note)} 
-              key={note.slug}
-            >
-              <div className="note-title-container">
-                <div className="note-title">{note.name}</div>
-                <div className="note-timestamp">
-                  {formatTimestamp(note.created_at)}
-                </div>
-              </div>
-              <div className="note-content">
-                {note.content && note.content.trim() !== "" 
-                  ? note.content 
-                  : "Content goes here..."}
-              </div>
-            </button>
-          )}
-        </div>
+        {tab}
         
         {showForm && <Form />}
       </div>

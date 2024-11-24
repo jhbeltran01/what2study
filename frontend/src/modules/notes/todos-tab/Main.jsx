@@ -41,36 +41,28 @@ function Main() {
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='flex justify-between items-center'>
-        <input 
-            type="text" 
-            value={searchQuery}
-            onChange={handleSearch} 
-            placeholder="Search..." 
-            className="search-bar2"
-          />
+        <div className='text-right'>
           <button
             onClick={() => setShowForm(true)}
-            className="btn-add"
+            className="btn-add3"
           >
             Add
           </button>
         </div>
         
         <div className='todo-container'>
-  {filteredTodos.map(todo =>
-    <button 
-      className="todo-button" 
-      onClick={() => redirectToTodoContent(todo)} 
-      key={todo.slug}
-    >
-      <div className="todo-title-container">
-        <div className="todo-title">{todo.name}</div>
-      </div>
-    </button>
-  )}
-</div>
-
+          {filteredTodos.map(todo =>
+            <button 
+              className="todo-button" 
+              onClick={() => redirectToTodoContent(todo)} 
+              key={todo.slug}
+            >
+              <div className="todo-title-container">
+                <div className="todo-title">{todo.name}</div>
+              </div>
+            </button>
+          )}
+        </div>
 
         {showForm && <Form />}
       </div>
