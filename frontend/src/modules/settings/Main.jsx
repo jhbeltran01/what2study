@@ -15,10 +15,10 @@ function Main() {
 
     const formData = {}
 
-    if (username != '' && username != userInfo.username) { formData['username'] = username }
-    if (password != '') { formData['password'] = password }
+    if (username !== '' && username !== userInfo.username) { formData['username'] = username }
+    if (password !== '') { formData['password'] = password }
 
-    if (Object.keys(formData).length == 0) { 
+    if (Object.keys(formData).length === 0) { 
       clearForm()
       return
     }
@@ -29,7 +29,7 @@ function Main() {
         formData
       )
       .then(response => {
-        if (password != '') {
+        if (password !== '') {
           location.reload()
           return
         }
@@ -60,14 +60,15 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
-      <h2>Account Settings</h2>
+    <div className='settings-container'>
+      <h2 className='settings-title'>Account Settings</h2>
 
-      <div className='grid grid-2-column-1'>
-        <form onSubmit={updateAccount}>
-          <div>
-            <label htmlFor="username">Username</label>
+      <div className='settings-grid settings-grid-2-column-1'>
+        <form className='settings-form' onSubmit={updateAccount}>
+          <div className='settings-form-group'>
+            <label className='settings-label' htmlFor="username">Username</label>
             <input 
+              className='settings-input'
               value={username}
               type="text" 
               id="username" 
@@ -75,9 +76,10 @@ function Main() {
             />
           </div>
           
-          <div>
-            <label htmlFor="password">Password</label>
+          <div className='settings-form-group'>
+            <label className='settings-label' htmlFor="password">Password</label>
             <input 
+              className='settings-input'
               value={password}
               type="password" 
               id="password" 
@@ -85,24 +87,24 @@ function Main() {
             />
           </div>
 
-          <div>
-            <button onClick={clearForm} type='button'>Cancel</button>
-            <button type='submit'>Save</button>
+          <div className='settings-button-group'>
+            <button className='settings-button settings-cancel-button' onClick={clearForm} type='button'>Cancel</button>
+            <button className='settings-button settings-save-button' type='submit'>Save</button>
           </div>
         </form>
 
-        <div>
-          <h6>Password Requirements</h6>
+        <div className='settings-info'>
+          <h6 className='settings-info-title'>Password Requirements</h6>
 
-          <ul>
-            <li>At least 8 characters</li>
-            <li>At least one uppercase letter</li>
-            <li>At least one number</li>
-            <li>At least one special character</li>
+          <ul className='settings-info-list'>
+            <li className='settings-info-item'>At least 8 characters</li>
+            <li className='settings-info-item'>At least one uppercase letter</li>
+            <li className='settings-info-item'>At least one number</li>
+            <li className='settings-info-item'>At least one special character</li>
           </ul>
 
-          <div>
-            <button onClick={deleteAccount}>Delete</button>
+          <div className='settings-delete-button-container'>
+            <button className='settings-button settings-delete-button' onClick={deleteAccount}>Delete</button>
           </div>
         </div>
       </div>
