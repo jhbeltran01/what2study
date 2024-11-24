@@ -1,12 +1,5 @@
 @use '../abstract/variables' as var;
 
-.form-1 {
-  background-color: var.$black-2;
-  width: 100%;
-  max-width: 600px;
-  padding: 1.5em;
-}
-
 .form-2 {
   background-color: var.$white-1;
   padding: 1em 2em;

@@ -28,7 +28,7 @@ function Form({subjectsState, showFormState}) {
   return (
     <div className='overlay-1 flex justify-center items-center text-white'>
       <div className='form-1'>
-      <button
+        <button
           onClick={() => setShowForm(false)}
             className="close-btn"
         >
