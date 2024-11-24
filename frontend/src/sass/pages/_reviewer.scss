@@ -79,6 +79,12 @@ html, body {
   background-color: #f59e0b;
 }
 
+.filler {
+  background-color: transparent; /* Ensure no yellow background is set here */
+  height: 0;
+  padding: 0;
+}
+
 
 @media (max-width: 768px) {
   .header {
