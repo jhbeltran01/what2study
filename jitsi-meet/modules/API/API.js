@@ -14,11 +14,13 @@ import {
     requestEnableVideoModeration
 } from '../../react/features/av-moderation/actions';
 import { isEnabledFromState } from '../../react/features/av-moderation/functions';
+import { setAudioOnly } from '../../react/features/base/audio-only/actions';
 import {
     endConference,
     sendTones,
     setAssumedBandwidthBps,
     setFollowMe,
+    setFollowMeRecorder,
     setLocalSubject,
     setPassword,
     setSubject
@@ -31,6 +33,7 @@ import { isSupportedBrowser } from '../../react/features/base/environment/enviro
 import { parseJWTFromURLParams } from '../../react/features/base/jwt/functions';
 import JitsiMeetJS, { JitsiRecordingConstants } from '../../react/features/base/lib-jitsi-meet';
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../react/features/base/media/constants';
+import { isVideoMutedByUser } from '../../react/features/base/media/functions';
 import {
     grantModerator,
     kickParticipant,
@@ -53,6 +56,10 @@ import { updateSettings } from '../../react/features/base/settings/actions';
 import { getDisplayName } from '../../react/features/base/settings/functions.web';
 import { setCameraFacingMode } from '../../react/features/base/tracks/actions.web';
 import { CAMERA_FACING_MODE_MESSAGE } from '../../react/features/base/tracks/constants';
+import {
+    getLocalVideoTrack,
+    isLocalTrackMuted
+} from '../../react/features/base/tracks/functions';
 import {
     autoAssignToBreakoutRooms,
     closeBreakoutRoom,
@@ -115,6 +122,8 @@ import { isAudioMuteButtonDisabled } from '../../react/features/toolbox/function
 import { setTileView, toggleTileView } from '../../react/features/video-layout/actions.any';
 import { muteAllParticipants } from '../../react/features/video-menu/actions';
 import { setVideoQuality } from '../../react/features/video-quality/actions';
+import { toggleBackgroundEffect, toggleBlurredBackgroundEffect } from '../../react/features/virtual-background/actions';
+import { VIRTUAL_BACKGROUND_TYPE } from '../../react/features/virtual-background/constants';
 import { toggleWhiteboard } from '../../react/features/whiteboard/actions.web';
 import { getJitsiMeetTransport } from '../transport';
 
@@ -322,15 +331,26 @@ function initCommands() {
 
             APP.store.dispatch(setAssumedBandwidthBps(value));
         },
-        'set-follow-me': value => {
+        'set-blurred-background': blurType => {
+            const tracks = APP.store.getState()['features/base/tracks'];
+            const videoTrack = getLocalVideoTrack(tracks)?.jitsiTrack;
+            const muted = tracks ? isLocalTrackMuted(tracks, MEDIA_TYPE.VIDEO) : isVideoMutedByUser(APP.store);
+
+            APP.store.dispatch(toggleBlurredBackgroundEffect(videoTrack, blurType, muted));
+        },
+        'set-follow-me': (value, recorderOnly) => {
 
             if (value) {
-                sendAnalytics(createApiEvent('follow.me.set'));
+                sendAnalytics(createApiEvent('follow.me.set', {
+                    recorderOnly
+                }));
             } else {
-                sendAnalytics(createApiEvent('follow.me.unset'));
+                sendAnalytics(createApiEvent('follow.me.unset', {
+                    recorderOnly
+                }));
             }
 
-            APP.store.dispatch(setFollowMe(value));
+            APP.store.dispatch(recorderOnly ? setFollowMeRecorder(value) : setFollowMe(value));
         },
         'set-large-video-participant': (participantId, videoType) => {
             const { getState, dispatch } = APP.store;
@@ -546,6 +566,10 @@ function initCommands() {
         'set-video-quality': frameHeight => {
             sendAnalytics(createApiEvent('set.video.quality'));
             APP.store.dispatch(setVideoQuality(frameHeight));
+        },
+        'set-audio-only': enable => {
+            sendAnalytics(createApiEvent('set.audio.only'));
+            APP.store.dispatch(setAudioOnly(enable));
         },
         'start-share-video': url => {
             sendAnalytics(createApiEvent('share.video.start'));
@@ -848,6 +872,16 @@ function initCommands() {
         },
         'toggle-whiteboard': () => {
             APP.store.dispatch(toggleWhiteboard());
+        },
+        'set-virtual-background': (enabled, backgroundImage) => {
+            const tracks = APP.store.getState()['features/base/tracks'];
+            const jitsiTrack = getLocalVideoTrack(tracks)?.jitsiTrack;
+
+            APP.store.dispatch(toggleBackgroundEffect({
+                backgroundEffectEnabled: enabled,
+                backgroundType: VIRTUAL_BACKGROUND_TYPE.IMAGE,
+                virtualSource: backgroundImage
+            }, jitsiTrack));
         }
     };
     transport.on('event', ({ data, name }) => {
@@ -2197,6 +2231,19 @@ class API {
         this._sendEvent({
             name: 'compute-pressure-changed',
             records
+        });
+    }
+
+    /**
+     * Notify the external application (if API is enabled) when the audio only enabled status changed.
+     *
+     * @param {boolean} enabled - Whether the audio only is enabled or not.
+     * @returns {void}
+     */
+    notifyAudioOnlyChanged(enabled) {
+        this._sendEvent({
+            name: 'audio-only-changed',
+            enabled
         });
     }
 

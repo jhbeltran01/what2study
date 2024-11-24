@@ -204,8 +204,16 @@ export class AbstractWelcomePage<P extends IProps> extends Component<P, IState> 
      * @protected
      * @returns {void}
      */
-    _onJoin(roomName: string) {
-        if (roomName) {
+    _onJoin() {
+        const room = this.state.room || this.state.generatedRoomName;
+
+        sendAnalytics(
+            createWelcomePageEvent('clicked', 'joinButton', {
+                isGenerated: !this.state.room,
+                room
+            }));
+
+        if (room) {
             this.setState({ joining: true });
 
             // By the time the Promise of appNavigate settles, this component
@@ -213,7 +221,7 @@ export class AbstractWelcomePage<P extends IProps> extends Component<P, IState> 
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
 
-            this.props.dispatch(appNavigate(roomName))
+            this.props.dispatch(appNavigate(room))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate, translateToHTML } from '../../base/i18n/functions';
@@ -15,7 +14,6 @@ import { SETTINGS_TABS } from '../../settings/constants';
 
 import { AbstractWelcomePage, IProps, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
-import axios from 'axios'
 
 /**
  * The pattern used to validate room name.
@@ -146,31 +144,29 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
     componentDidMount() {
         super.componentDidMount();
 
-        const { t } = this.props;
-        const urlParams = new URLSearchParams(window.location.search);
-        const encryptedData = urlParams.get('encryptedData');
-        const roomName = urlParams.get('roomName');
+        document.body.classList.add('welcome-page');
+        document.title = interfaceConfig.APP_NAME;
 
-        const url = `${t('rootAPIUrl')}/auth/login/user-id/`
+        if (this.state.generateRoomNames) {
+            this._updateRoomName();
+        }
 
-        axios
-            .post(
-                url, 
-                {data: encryptedData},
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            )
-            .then(response => {
-                super._onRoomChange(roomName)
-                this._onJoin(roomName)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if (this._shouldShowAdditionalContent()) {
+            this._additionalContentRef?.appendChild(
+                this._additionalContentTemplate?.content.cloneNode(true) as Node);
+        }
+
+        if (this._shouldShowAdditionalToolbarContent()) {
+            this._additionalToolbarContentRef?.appendChild(
+                this._additionalToolbarContentTemplate?.content.cloneNode(true) as Node
+            );
+        }
+
+        if (this._shouldShowAdditionalCard()) {
+            this._additionalCardRef?.appendChild(
+                this._additionalCardTemplate?.content.cloneNode(true) as Node
+            );
+        }
     }
 
     /**
@@ -181,6 +177,8 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
      */
     componentWillUnmount() {
         super.componentWillUnmount();
+
+        document.body.classList.remove('welcome-page');
     }
 
     /**
@@ -190,7 +188,120 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
      * @returns {ReactElement|null}
      */
     render() {
-        return <h1>Loading</h1>;
+        const { _moderatedRoomServiceUrl, t } = this.props;
+        const { DEFAULT_WELCOME_PAGE_LOGO_URL, DISPLAY_WELCOME_FOOTER } = interfaceConfig;
+        const showAdditionalCard = this._shouldShowAdditionalCard();
+        const showAdditionalContent = this._shouldShowAdditionalContent();
+        const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
+        const contentClassName = showAdditionalContent ? 'with-content' : 'without-content';
+        const footerClassName = DISPLAY_WELCOME_FOOTER ? 'with-footer' : 'without-footer';
+
+        return (
+            <div
+                className = { `welcome ${contentClassName} ${footerClassName}` }
+                id = 'welcome_page'>
+                <div className = 'header'>
+                    <div className = 'header-image' />
+                    <div className = 'header-container'>
+                        <div className = 'header-watermark-container'>
+                            <div className = 'welcome-watermark'>
+                                <Watermarks
+                                    defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL }
+                                    noMargins = { true } />
+                            </div>
+                        </div>
+                        <div className = 'welcome-page-settings'>
+                            <SettingsButton
+                                defaultTab = { SETTINGS_TABS.CALENDAR }
+                                isDisplayedOnWelcomePage = { true } />
+                            {showAdditionalToolbarContent
+                                ? <div
+                                    className = 'settings-toolbar-content'
+                                    ref = { this._setAdditionalToolbarContentRef } />
+                                : null
+                            }
+                        </div>
+                        <h1 className = 'header-text-title'>
+                            {t('welcomepage.headerTitle')}
+                        </h1>
+                        <span className = 'header-text-subtitle'>
+                            {t('welcomepage.headerSubtitle')}
+                        </span>
+                        <div id = 'enter_room'>
+                            <div className = 'join-meeting-container'>
+                                <div className = 'enter-room-input-container'>
+                                    <form onSubmit = { this._onFormSubmit }>
+                                        <input
+                                            aria-disabled = 'false'
+                                            aria-label = 'Meeting name input'
+                                            autoFocus = { true }
+                                            className = 'enter-room-input'
+                                            id = 'enter_room_field'
+                                            onChange = { this._onRoomChange }
+                                            pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                            placeholder = { this.state.roomPlaceholder }
+                                            ref = { this._setRoomInputRef }
+                                            type = 'text'
+                                            value = { this.state.room } />
+                                    </form>
+                                </div>
+
+                                <button
+                                    aria-disabled = 'false'
+                                    aria-label = 'Start meeting'
+                                    className = 'welcome-page-button'
+                                    id = 'enter_room_button'
+                                    onClick = { this._onFormSubmit }
+                                    tabIndex = { 0 }
+                                    type = 'button'>
+                                    {t('welcomepage.startMeeting')}
+                                </button>
+                            </div>
+                        </div>
+                        {this._titleHasNotAllowCharacter && (
+                            <div
+                                className = 'not-allow-title-character-div'
+                                role = 'alert'>
+                                <Icon src = { IconWarning } />
+                                <span className = 'not-allow-title-character-text'>
+                                    {t('welcomepage.roomNameAllowedChars')}
+                                </span>
+                            </div>
+                        )}
+                        {this._renderInsecureRoomNameWarning()}
+
+                        {_moderatedRoomServiceUrl && (
+                            <div id = 'moderated-meetings'>
+                                {
+                                    translateToHTML(
+                                        t, 'welcomepage.moderatedMessage', { url: _moderatedRoomServiceUrl })
+                                }
+                            </div>)}
+                    </div>
+                </div>
+
+                <div className = 'welcome-cards-container'>
+                    <div className = 'welcome-card-column'>
+                        <div className = 'welcome-tabs welcome-card welcome-card--blue'>
+                            {this._renderTabs()}
+                        </div>
+                        {showAdditionalCard
+                            ? <div
+                                className = 'welcome-card welcome-card--dark'
+                                ref = { this._setAdditionalCardRef } />
+                            : null}
+                    </div>
+
+                    {showAdditionalContent
+                        ? <div
+                            className = 'welcome-page-content'
+                            ref = { this._setAdditionalContentRef } />
+                        : null}
+                </div>
+                {DISPLAY_WELCOME_FOOTER && this._renderFooter()}
+            </div>
+
+        );
     }
 
     /**

@@ -277,6 +277,7 @@ const VideoSettingsContent = ({
                 </div>
                 <Video
                     className = { cx(classes.previewVideo, 'flipVideoX') }
+                    id = { `video_settings_preview-${index}` }
                     playsinline = { true }
                     videoTrack = {{ jitsiTrack }} />
             </div>
@@ -301,6 +302,7 @@ const VideoSettingsContent = ({
 
     return (
         <ContextMenu
+            activateFocusTrap = { true }
             aria-labelledby = 'video-settings-button'
             className = { classes.container }
             hidden = { false }

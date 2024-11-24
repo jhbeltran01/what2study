@@ -24,6 +24,7 @@ local get_room_from_jid = util.get_room_from_jid;
 local get_focus_occupant = util.get_focus_occupant;
 local internal_room_jid_match_rewrite = util.internal_room_jid_match_rewrite;
 local presence_check_status = util.presence_check_status;
+local respond_iq_result = util.respond_iq_result;
 
 local PARTICIPANT_PROP_RAISE_HAND = 'jitsi_participant_raisedHand';
 local PARTICIPANT_PROP_REQUEST_TRANSCRIPTION = 'jitsi_participant_requestingTranscription';
@@ -231,7 +232,9 @@ module:hook('muc-occupant-left', function (event)
     if prosody.hosts[occupant_domain] and not is_admin(occupant.bare_jid) then
         local focus_occupant = get_focus_occupant(room);
         if not focus_occupant then
-            module:log('info', 'No focus found for %s', room.jid);
+            if not room.destroying then
+                module:log('warn', 'No focus found for %s', room.jid);
+            end
             return;
         end
         -- Let's forward unavailable presence to the special jicofo
@@ -350,15 +353,15 @@ module:hook('muc-broadcast-presence', function (event)
         module:send(promotion_request);
     end
 
+    local requestTranscriptionValue = full_p:get_child_text(PARTICIPANT_PROP_REQUEST_TRANSCRIPTION);
+    local hasTranscriptionEnabled = room._transcription_languages and room._transcription_languages[occupant.jid];
+
     -- detect transcription
-    if full_p:get_child_text(PARTICIPANT_PROP_REQUEST_TRANSCRIPTION) then
+    if requestTranscriptionValue == 'true' then
         local lang = full_p:get_child_text(PARTICIPANT_PROP_TRANSLATION_LANG);
 
-        occupant._transcription_enabled = true;
-
         add_transcription(room, occupant, lang);
-    elseif occupant._transcription_enabled then
-        occupant._transcription_enabled = false;
+    elseif hasTranscriptionEnabled then
         remove_transcription(room, occupant, nil);
     end
 
@@ -406,12 +409,7 @@ local function stanza_handler(event)
     end
 
     -- respond with successful receiving the iq
-    origin.send(st.iq({
-        type = 'result';
-        from = stanza.attr.to;
-        to = stanza.attr.from;
-        id = stanza.attr.id
-    }));
+    respond_iq_result(origin, stanza);
 
     local req_jid = request_promotion.attr.jid;
     -- now let's find the occupant and forward the response
@@ -602,12 +600,7 @@ local function iq_from_main_handler(event)
     end
 
     -- respond with successful receiving the iq
-    origin.send(st.iq({
-        type = 'result';
-        from = stanza.attr.to;
-        to = stanza.attr.from;
-        id = stanza.attr.id
-    }));
+    respond_iq_result(origin, stanza);
 
     if process_disconnect then
         cancel_destroy_timer(room);
