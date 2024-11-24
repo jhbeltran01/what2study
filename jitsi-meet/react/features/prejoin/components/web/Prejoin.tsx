@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect, useDispatch } from 'react-redux';
 import { makeStyles } from 'tss-react/mui';
@@ -35,11 +35,10 @@ import {
     isJoinByPhoneDialogVisible,
     isPrejoinDisplayNameVisible
 } from '../../functions';
+import logger from '../../logger';
 import { hasDisplayName } from '../../utils';
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
-import { getConferenceName } from '../../../conference/functions';
-import axios from 'axios'
 
 interface IProps {
 
@@ -137,8 +136,6 @@ interface IProps {
      * The JitsiLocalTrack to display.
      */
     videoTrack?: Object;
-
-    room?: string
 }
 
 const useStyles = makeStyles()(theme => {
@@ -232,8 +229,7 @@ const Prejoin = ({
     showUnsafeRoomWarning,
     unsafeRoomConsent,
     updateSettings: dispatchUpdateSettings,
-    videoTrack,
-    room,
+    videoTrack
 }: IProps) => {
     const showDisplayNameField = useMemo(
         () => isDisplayNameVisible && !readOnlyName,
@@ -245,38 +241,6 @@ const Prejoin = ({
     const { classes } = useStyles();
     const { t } = useTranslation();
     const dispatch = useDispatch();
-
-
-    useEffect(() => {
-        axios
-            .get(
-                `${t('rootAPIUrl')}/auth/authenticated-user-details/`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            )
-            .then(response => {
-                setName(response.data.username)
-                // joinConference()
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-        function capitalizeFirstLetters(sentence) {
-            if (!sentence) return sentence;
-            
-            return sentence
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-        }
-
-        document.title = `${capitalizeFirstLetters(room)} | StudyHive`
-    }, [])
 
     /**
      * Handler for the join button.
@@ -293,7 +257,9 @@ const Prejoin = ({
 
             return;
         }
-        console.log('hello')
+
+        logger.info('Prejoin join button clicked.');
+
         joinConference();
     };
 
@@ -375,6 +341,7 @@ const Prejoin = ({
             && (e.key === ' '
                 || e.key === 'Enter')) {
             e.preventDefault();
+            logger.info('Prejoin joinConferenceWithoutAudio dispatched on a key pressed.');
             joinConferenceWithoutAudio();
         }
     };
@@ -390,7 +357,10 @@ const Prejoin = ({
             testId: 'prejoin.joinWithoutAudio',
             icon: IconVolumeOff,
             label: t('prejoin.joinWithoutAudio'),
-            onClick: joinConferenceWithoutAudio,
+            onClick: () => {
+                logger.info('Prejoin join conference without audio pressed.');
+                joinConferenceWithoutAudio();
+            },
             onKeyPress: onJoinConferenceWithoutAudioKeyPress
         };
 
@@ -417,6 +387,7 @@ const Prejoin = ({
      */
     const onInputKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
+            logger.info('Dispatching join conference on Enter key press from the prejoin screen.');
             joinConference();
         }
     };
@@ -430,6 +401,7 @@ const Prejoin = ({
         extraButtonsToRender = extraButtonsToRender.filter((btn: any) => btn.key !== 'by-phone');
     }
     const hasExtraJoinButtons = Boolean(extraButtonsToRender.length);
+
     return (
         <PreMeetingScreen
             showDeviceStatus = { deviceStatusVisible }
@@ -444,6 +416,7 @@ const Prejoin = ({
                 {showDisplayNameField ? (<Input
                     accessibilityLabel = { t('dialog.enterDisplayName') }
                     autoComplete = { 'name' }
+                    autoFocus = { true }
                     className = { classes.input }
                     error = { showErrorOnField }
                     id = 'premeeting-name-input'
@@ -498,7 +471,7 @@ const Prejoin = ({
                             tabIndex = { 0 }
                             testId = 'prejoin.joinMeeting'
                             type = 'primary'>
-                            {t('prejoin.joinMeeting')} asdsa
+                            {t('prejoin.joinMeeting')}
                         </ActionButton>
                     </Popover>
                 </div>
@@ -543,8 +516,7 @@ function mapStateToProps(state: IReduxState) {
         showRecordingWarning: Boolean(showRecordingWarning),
         showUnsafeRoomWarning: isInsecureRoomName(room) && isUnsafeRoomWarningEnabled(state),
         unsafeRoomConsent,
-        videoTrack: getLocalJitsiVideoTrack(state),
-        room,
+        videoTrack: getLocalJitsiVideoTrack(state)
     };
 }
 

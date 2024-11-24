@@ -26,89 +26,12 @@ endif
 
 all: compile deploy
 
-compile: clean
-	NODE_OPTIONS=--max-old-space-size=8192 \
-	$(WEBPACK)
-
-clean:
-	rm -fr $(BUILD_DIR)
+compile: 
+	NODE_OPTIONS=--max-old-space-size=8192 ./node_modules/.bin/webpack
 
 .NOTPARALLEL:
-deploy: deploy-init deploy-appbundle deploy-rnnoise-binary deploy-excalidraw deploy-tflite deploy-meet-models deploy-lib-jitsi-meet deploy-olm deploy-tf-wasm deploy-css deploy-local deploy-face-landmarks
+deploy: deploy-css deploy-local
 
-deploy-init:
-	rm -fr $(DEPLOY_DIR)
-	mkdir -p $(DEPLOY_DIR)
-
-deploy-appbundle:
-	cp \
-		$(BUILD_DIR)/app.bundle.min.js \
-		$(BUILD_DIR)/app.bundle.min.js.map \
-		$(BUILD_DIR)/external_api.min.js \
-		$(BUILD_DIR)/external_api.min.js.map \
-		$(BUILD_DIR)/alwaysontop.min.js \
-		$(BUILD_DIR)/alwaysontop.min.js.map \
-		$(BUILD_DIR)/analytics-ga.min.js \
-		$(BUILD_DIR)/analytics-ga.min.js.map \
-		$(BUILD_DIR)/face-landmarks-worker.min.js \
-		$(BUILD_DIR)/face-landmarks-worker.min.js.map \
-		$(BUILD_DIR)/noise-suppressor-worklet.min.js \
-		$(BUILD_DIR)/noise-suppressor-worklet.min.js.map \
-		$(BUILD_DIR)/screenshot-capture-worker.min.js \
-		$(BUILD_DIR)/screenshot-capture-worker.min.js.map \
-		$(DEPLOY_DIR)
-	cp \
-		$(BUILD_DIR)/close3.min.js \
-		$(BUILD_DIR)/close3.min.js.map \
-		$(DEPLOY_DIR) || true
-
-deploy-lib-jitsi-meet:
-	cp \
-		$(LIBJITSIMEET_DIR)/dist/umd/lib-jitsi-meet.* \
-		$(DEPLOY_DIR)
-
-deploy-olm:
-	cp \
-		$(OLM_DIR)/olm.wasm \
-		$(DEPLOY_DIR)
-
-deploy-tf-wasm:
-	cp \
-		$(TF_WASM_DIR)/*.wasm \
-		$(DEPLOY_DIR)
-
-deploy-rnnoise-binary:
-	cp \
-		$(RNNOISE_WASM_DIR)/rnnoise.wasm \
-		$(DEPLOY_DIR)
-
-deploy-tflite:
-	cp \
-		$(TFLITE_WASM)/*.wasm \
-		$(DEPLOY_DIR)
-
-deploy-excalidraw:
-	cp -R \
-		$(EXCALIDRAW_DIR) \
-		$(DEPLOY_DIR)/
-
-deploy-excalidraw-dev:
-	cp -R \
-		$(EXCALIDRAW_DIR_DEV) \
-		$(DEPLOY_DIR)/
-
-deploy-meet-models:
-	cp \
-		$(MEET_MODELS_DIR)/*.tflite \
-		$(DEPLOY_DIR)
-
-deploy-face-landmarks:
-	cp \
-		$(FACE_MODELS_DIR)/blazeface-front.bin \
-		$(FACE_MODELS_DIR)/blazeface-front.json \
-		$(FACE_MODELS_DIR)/emotion.bin \
-		$(FACE_MODELS_DIR)/emotion.json \
-		$(DEPLOY_DIR)
 
 deploy-css:
 	$(NODE_SASS) $(STYLES_MAIN) $(STYLES_BUNDLE) && \
@@ -119,7 +42,7 @@ deploy-local:
 	([ ! -x deploy-local.sh ] || ./deploy-local.sh)
 
 .NOTPARALLEL:
-dev: deploy-init deploy-css deploy-rnnoise-binary deploy-tflite deploy-meet-models deploy-lib-jitsi-meet deploy-olm deploy-tf-wasm deploy-excalidraw-dev deploy-face-landmarks
+dev: deploy-css
 	$(WEBPACK_DEV_SERVER)
 
 source-package: compile deploy

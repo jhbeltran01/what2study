@@ -12,7 +12,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
  * development with webpack-dev-server.
  */
 const devServerProxyTarget
-    = process.env.WEBPACK_DEV_SERVER_PROXY_TARGET || 'https://localhost/';
+    = process.env.WEBPACK_DEV_SERVER_PROXY_TARGET || 'https://alpha.jitsi.net';
 
 /**
  * Build a Performance configuration object for the given size.
@@ -240,8 +240,9 @@ function getDevServerConfig() {
         },
         host: '127.0.0.1',
         hot: true,
-        proxy: {
-            '/': {
+        proxy: [
+            {
+                context: [ '/' ],
                 bypass: devServerProxyBypass,
                 secure: false,
                 target: devServerProxyTarget,
@@ -249,12 +250,11 @@ function getDevServerConfig() {
                     'Host': new URL(devServerProxyTarget).host
                 }
             }
-        },
+        ],
         server: process.env.CODESPACES ? 'http' : 'https',
         static: {
             directory: process.cwd()
-        },
-        allowedHosts: ['.ngrok-free.app'], 
+        }
     };
 }
 

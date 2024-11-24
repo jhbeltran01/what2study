@@ -170,6 +170,9 @@ class PublicizeReviewerAPIView(
             'is_partial': self.is_partial,
         }
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class RecentViewedReviewerAPIView(APIView):
     def post(self, request, *args, **kwargs):

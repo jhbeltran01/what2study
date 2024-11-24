@@ -1,4 +1,6 @@
+local http_server = require "net.http.server";
 local jid = require "util.jid";
+local st = require 'util.stanza';
 local timer = require "util.timer";
 local http = require "net.http";
 local cache = require "util.cache";
@@ -566,6 +568,30 @@ function split_string(str, delimiter)
     return result;
 end
 
+-- send iq result that the iq was received and will be processed
+function respond_iq_result(origin, stanza)
+    -- respond with successful receiving the iq
+    origin.send(st.iq({
+        type = 'result';
+        from = stanza.attr.to;
+        to = stanza.attr.from;
+        id = stanza.attr.id
+    }));
+end
+
+-- Note: http_server.get_request_from_conn() was added in Prosody 0.12.3,
+-- this code provides backwards compatibility with older versions
+local get_request_from_conn = http_server.get_request_from_conn or function (conn)
+    local response = conn and conn._http_open_response;
+    return response and response.request or nil;
+end;
+
+-- Discover real remote IP of a session
+function get_ip(session)
+    local request = get_request_from_conn(session.conn);
+    return request and request.ip or session.ip;
+end
+
 return {
     OUTBOUND_SIP_JIBRI_PREFIXES = OUTBOUND_SIP_JIBRI_PREFIXES;
     INBOUND_SIP_JIBRI_PREFIXES = INBOUND_SIP_JIBRI_PREFIXES;
@@ -578,12 +604,14 @@ return {
     is_transcriber_jigasi = is_transcriber_jigasi;
     is_vpaas = is_vpaas;
     get_focus_occupant = get_focus_occupant;
+    get_ip = get_ip;
     get_room_from_jid = get_room_from_jid;
     get_room_by_name_and_subdomain = get_room_by_name_and_subdomain;
     get_sip_jibri_email_prefix = get_sip_jibri_email_prefix;
     async_handler_wrapper = async_handler_wrapper;
     presence_check_status = presence_check_status;
     process_host_module = process_host_module;
+    respond_iq_result = respond_iq_result;
     room_jid_match_rewrite = room_jid_match_rewrite;
     room_jid_split_subdomain = room_jid_split_subdomain;
     internal_room_jid_match_rewrite = internal_room_jid_match_rewrite;

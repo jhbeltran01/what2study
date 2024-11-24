@@ -301,6 +301,7 @@ class CorrectlyAnswered:
             title__slug__in=self.slugs_of_correctly_answered
         ).update(is_correctly_answered=True)
 
+
 class Reset:
     def __init__(self, reviewer, owner, studypod=None):
         self.reviewer = reviewer
