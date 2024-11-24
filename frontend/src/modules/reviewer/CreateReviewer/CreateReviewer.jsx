@@ -47,7 +47,6 @@ const CreateReviewer = () => {
   };
 
   const handleSubmit = async (event) => {
-   
     event.preventDefault();
 
     const formData = new FormData();
@@ -56,7 +55,6 @@ const CreateReviewer = () => {
     formData.append('description', reviewer.description);
 
     Array.from(reviewer.files).forEach((file, index) => {
-     
       formData.append('files', file);
     });
 
@@ -72,37 +70,37 @@ const CreateReviewer = () => {
       )
       .then(response => {
         setReviewer(initialReviewer)
-        alert("Done!")
       })
       .catch(error => {
-        alert("Error!")
         console.log(error.response.data)
       })
   };
 
   return (
       <section className="create-section p-4 flex flex-col">
-        <div className="header mb-4">
+        <div className="header flex items-center justify-between mb-4">
           <button className="header-title" onClick={handleTitleClick}>
             {'← Back to Reviewers'}
           </button>
 
-          <form className="search-container" onSubmit={handleSearchSubmit}>
+          <div className="actions flex items-center gap-4">
+          <form className="search-containerr" onSubmit={handleSearchSubmit}>
             <input
               type="text"
               placeholder="Search..."
-              className="search-bar"
+              className="search-barr"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button type="submit" className="search-button">
-              <img src={searchIcon} alt="Search" className="search-icon" />
+            <button type="submit" className="search-buttonn">
+              <img src={searchIcon} alt="Search" className="search-iconn" />
             </button>
           </form>
 
-          <button className="create-button" onClick={handleCreateClick}>
-            Bye
+          <button className="create-buttonn" onClick={handleCreateClick}>
+            Create
           </button>
+          </div>
         </div>
 
         <div className="reviewer-content">

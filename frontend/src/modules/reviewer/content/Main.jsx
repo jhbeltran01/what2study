@@ -38,14 +38,12 @@ function Main() {
     <WillAddAContentContext.Provider value={[willAddContent, setWillAddContent]}>
       <EnumTitleContext.Provider value={[text, setText]}>
         <TitleContext.Provider value={[titles, setTitles]}>
-          <div className='relative pt-[3em]'>
-            <div className='p-[1em] flex items-center justify-between header-1'>
-              <h1>{reviewer.name}</h1>
-
-              <div className='flex items-center gap-[10px]'>
+          <div className='main-content'>
+            <div className='main-content-options'>
+              <h1 className='header-title'>{reviewer.name}</h1>
+              <div className='review-addcontent-button'>
                 <Link to={START_REVIEWING}>Review</Link>
-                <button onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
-
+                <button className='content-button' onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
                 <Options reviewer={reviewer} />
               </div>
             </div>
@@ -56,16 +54,18 @@ function Main() {
                 const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
                 const hasNoDefinition = title.content.length == 0;
                 if (isEnumerationTitle && hasNoDefinition && title.is_in_enumeration) {
-                  return ''
+                  //return ''
+                  return false;
                 }
 
                 return <Title title={title} index={index} key={title.slug} />
               })}
             </ul>
-          </div>
-          <div>
+            <div>
             {willAddContent && <AddContentOverlay reviewer={reviewer} />}
           </div>
+          </div>
+
         </TitleContext.Provider>
       </EnumTitleContext.Provider>
     </WillAddAContentContext.Provider>

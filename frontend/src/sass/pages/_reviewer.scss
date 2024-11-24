@@ -6,143 +6,128 @@ html, body {
   height: 100%;
 }
 
+/* Align search and create features */
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: flex-start; /* Ensures vertical alignment */
   margin-bottom: 1rem;
-  padding: 0 1rem; /* Add some padding to the header to ensure space on both sides */
+  padding: 1rem;
+  //position: relative;
 }
 
 .header-title {
   font-size: 1.125rem;
   font-weight: bold;
   color: #4a4a4a;
-  margin-right: auto;
 }
 
-.search-container {
+.actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 40%;
-  position: relative;
-  padding-left: 1rem;
+  gap: 1rem;
+  margin-left: 42rem;
+  margin-bottom: 3rem;
+  margin-top: 1.5rem;
+  position: absolute;
+
+  margin-bottom: 0.5rem;
 }
 
-.search-bar {
+.search-containerr {
+  position: relative;
+  display: flex;
+  align-items: center; /* Aligns search bar with icon */
+}
+
+.search-barr {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 999px;
-  box-sizing: border-box;
   outline: none;
-  padding-right: 3rem;
+  width: 400px;
 }
 
-.search-icon {
+.search-buttonn {
   position: absolute;
-  right: 1rem;
+  right: 5px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  pointer-events: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.create-button {
-  background-color: #3b82f6;
+.search-iconn {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+.create-buttonn {
+  background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: white;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 999px;
-  margin-right: 2rem;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .create-button:hover {
-  background-color: #2563eb;
-}
-
-.reviewer-content {
-  padding: 1em;
-  background-color: #ffffff;
-  border-radius: 8px;
-  overflow-y: auto; /* Enable vertical scrolling if content overflows */
-}
-
-.reviewer-entry {
-  padding: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  position: relative;
-  background-color: #ffffff;
-}
-
-.reviewer-header {
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: flex-start; /* Align items to the start */
-  margin-bottom: 0.5rem;
+  background-color: #f59e0b;
 }
 
 
-.reviewer-info {
-  display: flex;
-  flex-direction: column; /* Stack type and date vertically */
-  gap: 0.25rem; /* Space between type and date */
-  margin-top: 0; /* Remove top margin */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .header-title {
+    font-size: 1rem; /* Smaller title for mobile */
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 0;
+    position: static;
+    margin-top: 1rem;
+  }
+
+  .search-barr {
+    width: 100%; /* Full width for search bar */
+  }
+
+  .search-containerr {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .create-buttonn {
+    width: 100%; /* Full width for create button on mobile */
+  }
 }
 
-.reviewer-title {
-  font-weight: bold;
-  margin-bottom: 0; /* Ensure no extra margin below title */
-}
+@media (max-width: 480px) {
+  .search-barr {
+    padding: 0.5rem;
+  }
 
-.reviewer-type {
-  background-color: #ff8c00; /* Orange background */
-  color: #ffffff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
-}
+  .header-title {
+    font-size: 1rem;
+  }
 
-.reviewer-date {
-  font-size: 0.875rem;
-  color: #4a4a4a;
-}
+  .actions {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
 
-.more-options {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  color: #4a4a4a;
-  position: absolute;
-  top: 1rem; /* Adjust as needed */
-  right: 1rem; /* Adjust as needed */
-}
-
-.reviewer-created-by {
-  font-size: 0.875rem;
-  color: #4a4a4a;
-}
-
-.view-link {
-  display: block;
-  margin-top: 0.5rem;
-  color: #3b82f6;
-  text-decoration: none;
-}
-
-.view-link:hover {
-  text-decoration: underline;
-}
-
-.divider {
-  margin: 1rem 0;
-  border: 0;
-  border-top: 1px solid #d1d5db;
+  .create-buttonn {
+    padding: 0.5rem 1rem;
+  }
 }
