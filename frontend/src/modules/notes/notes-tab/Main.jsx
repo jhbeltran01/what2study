@@ -56,13 +56,13 @@ function Main() {
       for (let j = 0; j < rowCount && noteIndex < notes.length; j++, noteIndex++) {
         const note = notes[noteIndex];
         currentRow.push(
-          <b
+          <button
             key={noteIndex} 
             className="note-card"
             onClick={() => redirectToNoteContent(note)} 
           >
             <h3>{note.name}</h3>  {/* Display title */}
-          </b>
+          </button>
         );
       }
   
