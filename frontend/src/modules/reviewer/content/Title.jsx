@@ -186,21 +186,21 @@ function Title({title, index=null, titleSlug=null}) {
     return (
       <ContentContext.Provider value={[content]}>
         <li className={`${!isEnumerationTitle && 'm-[1rem]'}`}>
-          <div className='flex gap-[10px]'>
+          <div className='flex title-gap'>
             <input
-              className='w-[100%]'
+              className='title-input'
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onBlur={() => updateTitle(title.slug, isEnumerationTitle, titleSlug)}
             />
-            <div className='flex gap-[10px]'>
-              <button onClick={() => setWillAddAContent(true) }>Add</button>
-              <button onClick={() => deleteTitleFunction(index)}>Delete</button>
+            <div className='title-buttons'>
+              <button className='add-button' onClick={() => setWillAddAContent(true) }>+</button>
+              <button className='delete-button' onClick={() => deleteTitleFunction(index)}>-</button>
               {isEnumeration && <button>Order</button>}
             </div>
           </div>
-          <ul className='px-[1em]'>
+          <ul className='title-info'>
             {title.content.map((data, index) => {
               switch(title.t_type) {
                 case constants.DEFINITION:
@@ -223,7 +223,7 @@ function Title({title, index=null, titleSlug=null}) {
                           />
               }
             })}
-            <li>
+            <li style={{ display: willAddAContent ? 'block' : 'none' }}>
               {
                 willAddAContent && !isEnumeration
                 && <textarea

@@ -107,7 +107,7 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
                     `}
                     onClick={() => handleOptionSelect(optionText, question.answer)}
                   >
-                    <div className="circle">{option}</div>
+                    <div className="option-circle">{option}</div>
                     <span>{optionText}</span>
                   </button>
                 )

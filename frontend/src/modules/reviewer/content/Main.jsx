@@ -8,6 +8,8 @@ import AddContentOverlay from './AddContentOverlay'
 import Options from './Options'
 import { START_REVIEWING } from '@root/routes/constants'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 
 export const TitleContext = createContext()
 export const EnumTitleContext = createContext()
@@ -18,6 +20,12 @@ function Main() {
   const [titles, setTitles] = useState([])
   const [text, setText] = useState({isUpdated: false, slug: '', text: ''})
   const [willAddContent, setWillAddContent] = useState(false)
+  const navigate = useNavigate(); // Initialize useNavigate
+
+
+  const handleTitleClick = () => {
+    navigate('/reviewers'); // Redirect to Reviewer page
+  };
 
   useEffect(() => {
     /** Get the content of the reviewer */
@@ -38,34 +46,41 @@ function Main() {
     <WillAddAContentContext.Provider value={[willAddContent, setWillAddContent]}>
       <EnumTitleContext.Provider value={[text, setText]}>
         <TitleContext.Provider value={[titles, setTitles]}>
-          <div className='relative pt-[3em]'>
-            <div className='p-[1em] flex items-center justify-between header-1'>
-              <h1>{reviewer.name}</h1>
+          <div className='main-content'>
 
-              <div className='flex items-center gap-[10px]'>
+            <div className='main-content-options'>
+            <button className="header-title" onClick={handleTitleClick}>
+            {'← Back to Reviewers'}
+          </button>
+              <h1 className='header-title'>{reviewer.name}</h1>
+              <div className='review-addcontent-button'>
                 <Link to={START_REVIEWING}>Review</Link>
-                <button onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
-
+                <button className='content-button' onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
                 <Options reviewer={reviewer} />
               </div>
             </div>
-            <ul>
+
+            <ul className='content-list'>
               {titles.map((title, index) => {
                 if (title.content == undefined) { return '' }
                 
                 const isEnumerationTitle = title.t_type === constants.ENUMERATION_TITLE
                 const hasNoDefinition = title.content.length == 0;
                 if (isEnumerationTitle && hasNoDefinition && title.is_in_enumeration) {
+                  //return ''
                   return ''
                 }
 
                 return <Title title={title} index={index} key={title.slug} />
               })}
             </ul>
-          </div>
-          <div>
+
+
+            <div>
             {willAddContent && <AddContentOverlay reviewer={reviewer} />}
           </div>
+          </div>
+
         </TitleContext.Provider>
       </EnumTitleContext.Provider>
     </WillAddAContentContext.Provider>

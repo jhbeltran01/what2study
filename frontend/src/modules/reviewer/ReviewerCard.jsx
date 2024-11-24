@@ -19,12 +19,12 @@ function ReviewerCard({reviewer, contentRoute=routes.VIEW_REVIEWER_CONTENT}) {
     <div className="reviewer-entry">
       <div className="reviewer-header">
         <h2 className="reviewer-title">{reviewer.name}</h2>
-        <div className="reviewer-info">
-          <span className="reviewer-date">2024-09-15</span>
-        </div>
         <button className="more-options">⋮</button>
       </div>
+      <div className="reviewer-date-owner">
       <p className="reviewer-created-by">Created by: {reviewer.owner.username}</p>
+      <span className="reviewer-date">2024-09-15</span>
+      </div>
       <button 
         onClick={redirectToSelectedReviewerContent} 
         className="view-link"
@@ -32,7 +32,8 @@ function ReviewerCard({reviewer, contentRoute=routes.VIEW_REVIEWER_CONTENT}) {
         View
       </button>
     </div>
-  )
+  );
+  
 }
 
 ReviewerCard.propTypes = {
@@ -48,4 +49,4 @@ ReviewerCard.propTypes = {
 };
 
 
-export default ReviewerCard
+export default ReviewerCard;

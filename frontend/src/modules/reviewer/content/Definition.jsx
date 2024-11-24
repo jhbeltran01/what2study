@@ -91,10 +91,10 @@ function Definition({definition, titleSlug}) {
   }
   
   return (
-    <li>
-      <div className='flex gap-[10px]'>
+    <li className='list-definition'>
+      <div className='definition-content'>
         <textarea
-          className='w-[100%] textarea-1 h-[auto]'
+          className='definition-textarea'
           onChange={handleDefinitionTextChange}
           onFocus={handleDefinitionTextChange}
           value={inputText}

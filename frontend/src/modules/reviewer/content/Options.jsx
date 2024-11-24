@@ -1,73 +1,104 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import { apiRootURL } from '@root/globals'
-import { useSelector } from 'react-redux'
+import axios from 'axios';
+import React, { useState } from 'react';
+import { apiRootURL } from '@root/globals';
+import { useSelector } from 'react-redux';
 
 function Options() {
-  const reviewer = useSelector(state => state.reviewer.value)
-  const [isPublic, setIsPublic] = useState(reviewer.is_public)
+  const reviewer = useSelector((state) => state.reviewer.value);
+  const [isPublic, setIsPublic] = useState(reviewer.is_public);
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false); // State to toggle visibility
+
+  const toggleOptionsVisibility = () => {
+    setIsOptionsVisible((prev) => !prev); // Toggle the visibility
+  };
 
   const updatePublicStatusOfReviewer = (event) => {
-    const willSetToPublic = event.target.checked
+    const willSetToPublic = event.target.checked;
 
     if (willSetToPublic) {
-      publicizeReviewer()
-      return
+      publicizeReviewer();
+      return;
     }
 
-    changeToPrivate()
-  }
+    changeToPrivate();
+  };
+
+  // const publicizeReviewer = () => {
+  //   axios
+  //     .post(`${apiRootURL}/reviewers/public/`, { reviewer: reviewer.slug })
+  //     .then((response) => {
+  //       console.log(response.status);
+  //       setIsPublic(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.request.response);
+  //     });
+  // };
 
   const publicizeReviewer = () => {
     axios
-    .post(
-      `${apiRootURL}/reviewers/public/`,
-      {reviewer: reviewer.slug}
-    )
-    .then(response => {
-      console.log(response.status)
-      setIsPublic(true)
-    })
-    .catch(err => {
-      console.log(err.request.response)
-    })
-  }
+      .post(`${apiRootURL}/reviewers/public/`, { reviewer: reviewer.slug })
+      .then((response) => {
+        console.log(response.status);
+        setIsPublic(true);
+        // Dispatch action to update Redux store
+        dispatch(setReviewerIsPublic(true)); // Update public status in Redux
+      })
+      .catch((err) => {
+        console.log(err.request.response);
+      });
+  };
+  
+
+  // const changeToPrivate = () => {
+  //   axios
+  //     .delete(`${apiRootURL}/reviewers/public/${reviewer.slug}/`)
+  //     .then((response) => {
+  //       console.log(response.status);
+  //       setIsPublic(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.request.response);
+  //     });
+  // };
 
   const changeToPrivate = () => {
     axios
-    .delete(
-      `${apiRootURL}/reviewers/public/${reviewer.slug}/`,
-    )
-    .then(response => {
-      console.log(response.status)
-      setIsPublic(false)
-    })
-    .catch(err => {
-      console.log(err.request.response)
-    })
-  }
+      .delete(`${apiRootURL}/reviewers/public/${reviewer.slug}/`)
+      .then((response) => {
+        console.log(response.status);
+        setIsPublic(false);
+        // Dispatch action to update Redux store
+        dispatch(setReviewerIsPublic(false)); // Update public status in Redux
+      })
+      .catch((err) => {
+        console.log(err.request.response);
+      });
+  };
 
   return (
-    <div className='dropdown-1 relative'>
-      <button className='btn-options'>⋮</button>
+    <div className="options-container">
+      <button className="option-button" onClick={toggleOptionsVisibility}>
+        ⋮
+      </button>
 
-      <div className='dropdown-1__content hidden'>
+      {isOptionsVisible && ( // Conditionally render public-checkbox
+        <div className={`public-content ${isOptionsVisible ? 'visible' : ''}`}>
         <ul>
-          <li>
-            <div className='flex gap-[10px]'>
+            <div className="public-checkbox">
               <input
                 checked={isPublic}
-                id='is-public' 
-                type="checkbox" 
+                id="is-public"
+                type="checkbox"
                 onChange={updatePublicStatusOfReviewer}
               />
               <label htmlFor="is-public">Public</label>
             </div>
-          </li>
-        </ul>
-      </div>
+          </ul>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default Options
+export default Options;
