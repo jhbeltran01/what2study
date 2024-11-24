@@ -35,7 +35,7 @@ html, body {
               background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
               color: white;
               border: none;
-              border-radius: 4px;
+              border-radius: 20px;
               cursor: pointer;
               transition: background-color 0.3s;
           }
@@ -57,7 +57,7 @@ html, body {
               background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
               color: white;
               text-decoration: none;
-              border-radius: 4px;
+              border-radius: 20px;
               cursor: pointer;
               transition: background-color 0.3s;
               transition: all 0.3s ease;
@@ -191,7 +191,7 @@ html, body {
       .title-input {
           width: 100%;
           padding: 0.5rem;
-          font-size: 1rem;
+          font-weight: bold;
           color: #333;
           border: none;
           background-color: transparent;

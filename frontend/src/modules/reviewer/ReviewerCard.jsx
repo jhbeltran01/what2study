@@ -15,25 +15,6 @@ function ReviewerCard({reviewer, contentRoute=routes.VIEW_REVIEWER_CONTENT}) {
     navigate(contentRoute)
   }
 
-  // return (
-  //   <div className="reviewer-entry">
-  //     <div className="reviewer-header">
-  //       <h2 className="reviewer-title">{reviewer.name}</h2>
-  //       <button className="more-options">⋮</button>
-  //     </div>
-  //     <div className="reviewer-info">
-  //         <span className="reviewer-date">2024-09-15</span>
-  //       </div>
-  //     <p className="reviewer-created-by">Created by: {reviewer.owner.username}</p>
-  //     <button 
-  //       onClick={redirectToSelectedReviewerContent} 
-  //       className="view-link"
-  //     >
-  //       View
-  //     </button>
-  //   </div>
-  // )
-
   return (
     <div className="reviewer-entry">
       <div className="reviewer-header">

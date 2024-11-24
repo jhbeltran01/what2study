@@ -76,7 +76,7 @@ class DefinitionAPIView(
         DefinitionIsCorrectlyAnswered.definitions.create(
             owner=self.request.user,
             reviewer=reviewer,
-            definiion=definition
+            definition=definition,
         )
 
     def perform_destroy(self, instance):
