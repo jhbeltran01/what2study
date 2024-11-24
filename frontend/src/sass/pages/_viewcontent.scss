@@ -1,4 +1,350 @@
 html, body {
+<<<<<<< HEAD
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    background-color: #ffffff;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 8px;
+  
+    .main-content-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        height: 70px;
+  
+        .review-addcontent-button {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background-color: transparent;
+            justify-content: flex-end;
+  
+            .content-button {
+                padding: 0.5rem 1rem;
+                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+                color: white;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .content-button:hover {
+                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+                color: #ffffff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+    
+            .content-button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+  
+            a {
+                padding: 0.5rem 1rem;
+                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                transition: all 0.3s ease;
+            }
+
+            a:hover {
+                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+                color: #ffffff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+    
+            a:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    .options-container {
+        position: relative;
+    }
+    
+    .option-button {
+        padding: 0.5rem;
+        color: rgb(50, 49, 49);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 3rem;
+    }
+
+    .public-content {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        height: 40px;
+        padding: 0.5rem;
+        z-index: 10;
+        display: none;
+    }
+      
+    .public-content.visible {
+        display: block;
+    }
+
+    .public-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+    }
+  
+    li {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-buttons {
+            display: flex;
+            gap: 0.5rem;
+            background-color: transparent;
+            align-items: center;
+        }
+    
+        .title-buttons button {
+            padding: 0.5rem 1rem;
+            background: white;
+            color: #333;
+            border: 2px solid #e1cb5e;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .title-buttons .add-button:hover {
+            background: rgb(47, 158, 47);
+            color: white;
+            border: 2px solid rgb(47, 158, 47);
+        }
+
+        .title-buttons .add-button.clicked {
+            background: rgb(47, 158, 47);
+            color: white;
+            border: 2px solid rgb(47, 158, 47);
+        }
+      
+        .title-buttons .delete-button:hover {
+            background: rgb(220, 53, 69);
+            color: white;
+            border: 2px solid rgb(220, 53, 69);
+        }
+      
+        .title-buttons .delete-button.clicked {
+            background: rgb(220, 53, 69);
+            color: white;
+            border: 2px solid rgb(220, 53, 69);
+        }
+
+        .list-definition {
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .definition-textarea {
+            width: 100%;
+            padding: 0.5rem;
+            resize: vertical;
+            font-size: 1rem;
+            color: #333;
+        }
+  
+        .title-input {
+            width: 100%;
+            padding: 0.5rem;
+            font-weight: bold;
+            color: #333;
+            border: none;
+            background-color: transparent;
+        }
+    }
+}
+  
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+  
+        .main-content-options {
+            align-items: center;
+        }
+  
+        .review-addcontent-button {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+  
+        .title-w {
+            font-size: 1rem;
+        }
+  
+        button, a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .add-content-overlay .overlay-content {
+        width: 90%;
+        padding: 1.5rem;
+    }
+}
+  
+.content-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.3);
+}
+  
+.content-overlay form {
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+  
+.add-content-button,
+.close-button {
+    padding: 0.5rem 1rem;
+    background-color: #FEA61F;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+  
+.add-content-button:hover,
+.close-button:hover {
+    background-color: #FED65D;
+}
+  
+.add-content-button:active,
+.close-button:active {
+    transform: translateY(1px);
+}
+  
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    width: 100%;
+}
+  
+.add-content-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    margin-left: 20rem;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+  
+  .add-content-button:hover {
+    background-color: #45a049;
+  }
+  
+  .close-button {
+    background: #FF4C4C;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+  
+  .close-button:hover {
+    background-color: #e03e3e;
+  }
+  
+  textarea.new-content {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+  }
+
+  .content-list {
+    background: none;
+  }
+
+=======
   background-color: #ffffff;
   margin: 0;
   padding: 0;
@@ -342,3 +688,4 @@ textarea.new-content {
 .content-list {
   background: none;
 }
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
