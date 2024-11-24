@@ -52,7 +52,6 @@ const Reviewer = () => {
           <button className="create-buttonn" onClick={handleCreateClick}>
             Create
           </button>
-        </div>
       </div>
 
       <div className="reviewer-content h-[100%] grid grid-responsive-1">
