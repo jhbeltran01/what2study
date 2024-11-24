@@ -23,17 +23,44 @@ function Options() {
     changeToPrivate();
   };
 
+  // const publicizeReviewer = () => {
+  //   axios
+  //     .post(`${apiRootURL}/reviewers/public/`, { reviewer: reviewer.slug })
+  //     .then((response) => {
+  //       console.log(response.status);
+  //       setIsPublic(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.request.response);
+  //     });
+  // };
+
   const publicizeReviewer = () => {
     axios
       .post(`${apiRootURL}/reviewers/public/`, { reviewer: reviewer.slug })
       .then((response) => {
         console.log(response.status);
         setIsPublic(true);
+        // Dispatch action to update Redux store
+        dispatch(setReviewerIsPublic(true)); // Update public status in Redux
       })
       .catch((err) => {
         console.log(err.request.response);
       });
   };
+  
+
+  // const changeToPrivate = () => {
+  //   axios
+  //     .delete(`${apiRootURL}/reviewers/public/${reviewer.slug}/`)
+  //     .then((response) => {
+  //       console.log(response.status);
+  //       setIsPublic(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.request.response);
+  //     });
+  // };
 
   const changeToPrivate = () => {
     axios
@@ -41,6 +68,8 @@ function Options() {
       .then((response) => {
         console.log(response.status);
         setIsPublic(false);
+        // Dispatch action to update Redux store
+        dispatch(setReviewerIsPublic(false)); // Update public status in Redux
       })
       .catch((err) => {
         console.log(err.request.response);

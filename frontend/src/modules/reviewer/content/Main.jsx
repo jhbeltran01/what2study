@@ -8,6 +8,8 @@ import AddContentOverlay from './AddContentOverlay'
 import Options from './Options'
 import { START_REVIEWING } from '@root/routes/constants'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 
 export const TitleContext = createContext()
 export const EnumTitleContext = createContext()
@@ -18,6 +20,12 @@ function Main() {
   const [titles, setTitles] = useState([])
   const [text, setText] = useState({isUpdated: false, slug: '', text: ''})
   const [willAddContent, setWillAddContent] = useState(false)
+  const navigate = useNavigate(); // Initialize useNavigate
+
+
+  const handleTitleClick = () => {
+    navigate('/reviewers'); // Redirect to Reviewer page
+  };
 
   useEffect(() => {
     /** Get the content of the reviewer */
@@ -39,7 +47,11 @@ function Main() {
       <EnumTitleContext.Provider value={[text, setText]}>
         <TitleContext.Provider value={[titles, setTitles]}>
           <div className='main-content'>
+
             <div className='main-content-options'>
+            <button className="header-title" onClick={handleTitleClick}>
+            {'← Back to Reviewers'}
+          </button>
               <h1 className='header-title'>{reviewer.name}</h1>
               <div className='review-addcontent-button'>
                 <Link to={START_REVIEWING}>Review</Link>
@@ -47,7 +59,8 @@ function Main() {
                 <Options reviewer={reviewer} />
               </div>
             </div>
-            <ul>
+
+            <ul className='content-list'>
               {titles.map((title, index) => {
                 if (title.content == undefined) { return '' }
                 
@@ -55,12 +68,14 @@ function Main() {
                 const hasNoDefinition = title.content.length == 0;
                 if (isEnumerationTitle && hasNoDefinition && title.is_in_enumeration) {
                   //return ''
-                  return false;
+                  return ''
                 }
 
                 return <Title title={title} index={index} key={title.slug} />
               })}
             </ul>
+
+
             <div>
             {willAddContent && <AddContentOverlay reviewer={reviewer} />}
           </div>

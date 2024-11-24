@@ -1,341 +1,195 @@
-html, body {
-    background-color: #ffffff;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.main-content {
+.reviewer-entry {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 2rem;
-    background-color: #ffffff;
-    height: 100%;
-    overflow-y: auto;
-    border-radius: 8px;
-  
-    .main-content-options {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        height: 70px;
-  
-        .review-addcontent-button {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            background-color: transparent;
-            justify-content: flex-end;
-  
-            .content-button {
-                padding: 0.5rem 1rem;
-                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .content-button:hover {
-                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: #ffffff;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            }
-    
-            .content-button:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-  
-            a {
-                padding: 0.5rem 1rem;
-                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
-                text-decoration: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-                transition: all 0.3s ease;
-            }
-
-            a:hover {
-                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: #ffffff;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            }
-    
-            a:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-        }
-    }
-
-    .options-container {
-        position: relative;
-    }
-    
-    .option-button {
-        padding: 0.5rem;
-        color: rgb(50, 49, 49);
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 3rem;
-    }
-
-    .public-content {
-        position: absolute;
-        top: 40px;
-        left: 0;
-        height: 40px;
-        padding: 0.5rem;
-        z-index: 10;
-        display: none;
-    }
-      
-    .public-content.visible {
-        display: block;
-    }
-
-    .public-checkbox {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-    }
-  
-    li {
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  
-        .flex {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .title-buttons {
-            display: flex;
-            gap: 0.5rem;
-            background-color: transparent;
-            align-items: center;
-        }
-    
-        .title-buttons button {
-            padding: 0.5rem 1rem;
-            background: white;
-            color: #333;
-            border: 2px solid #e1cb5e;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .title-buttons button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .title-buttons .add-button:hover {
-            background: rgb(47, 158, 47);
-            color: white;
-            border: 2px solid rgb(47, 158, 47);
-        }
-
-        .title-buttons .add-button.clicked {
-            background: rgb(47, 158, 47);
-            color: white;
-            border: 2px solid rgb(47, 158, 47);
-        }
-      
-        .title-buttons .delete-button:hover {
-            background: rgb(220, 53, 69);
-            color: white;
-            border: 2px solid rgb(220, 53, 69);
-        }
-      
-        .title-buttons .delete-button.clicked {
-            background: rgb(220, 53, 69);
-            color: white;
-            border: 2px solid rgb(220, 53, 69);
-        }
-
-        .list-definition {
-            padding: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-        }
-    
-        .definition-textarea {
-            width: 100%;
-            padding: 0.5rem;
-            resize: vertical;
-            font-size: 1rem;
-            color: #333;
-        }
-  
-        .title-input {
-            width: 100%;
-            padding: 0.5rem;
-            font-size: 1rem;
-            color: #333;
-            border: none;
-            background-color: transparent;
-        }
-    }
-}
-  
-@media (max-width: 768px) {
-    .main-content {
-        padding: 1rem;
-  
-        .main-content-options {
-            align-items: center;
-        }
-  
-        .review-addcontent-button {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-  
-        .title-w {
-            font-size: 1rem;
-        }
-  
-        button, a {
-            width: 100%;
-            text-align: center;
-        }
-    }
-
-    .add-content-overlay .overlay-content {
-        width: 90%;
-        padding: 1.5rem;
-    }
-}
-  
-.content-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.3);
-}
-  
-.content-overlay form {
-    background: #fff;
-    padding: 40px 50px;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    animation: fadeIn 0.4s ease-out;
+    margin-bottom: 1rem;
+    position: relative;
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.buttons-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1rem;
-}
-  
-.add-content-button,
-.close-button {
-    padding: 0.5rem 1rem;
-    background-color: #FEA61F;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-  
-.add-content-button:hover,
-.close-button:hover {
-    background-color: #FED65D;
-}
-  
-.add-content-button:active,
-.close-button:active {
-    transform: translateY(1px);
-}
-  
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+.reviewer-entry:hover {
+    transform: translateY(-5px); /* Subtle lift on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+    border-bottom: 3px solid #daa92b; /* Light yellowish horizontal line at the bottom */
 }
 
-.button-group {
+.reviewer-header {
     display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    width: 100%;
+    flex-direction: row; /* Align items horizontally */
+    justify-content: space-between; /* Space out title and more-options */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 0.5rem;
+    width: 100%; /* Ensure the header spans the full width of the card */
+    position: relative;
 }
-  
-.add-content-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 24px;
-    margin-left: 20rem;
+
+.reviewer-title {
+    font-weight: bold;
+    font-size: 1.125rem;
+    color: #333333;
+    margin-bottom: 0.25rem; /* Add spacing between title and date */
+    margin-left: 0.4rem;
+}
+
+.reviewer-info {
+    //display: flex;
+    gap: 0.25rem; /* Add spacing between date and other info if applicable */
+    font-size: 0.875rem;
+    color: #6b7280;
+    align-items: flex-start; /* Align date and additional info to the left */
+}
+
+.reviewer-created-by {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    align-self: flex-start; /* Keep the text on the left */
+    margin-left: 0.4rem;
+    margin-top: 0; /* Adjust the margin to reduce space above */
+}
+
+.reviewer-date {
+    margin-left: 0.4rem;
+    margin-right: 2rem;
+    margin-top: 1.5rem;
+    padding: 0;
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+
+.more-options {
+    background: none;
     border: none;
+    font-size: 1.10rem;
     cursor: pointer;
-    font-size: 16px;
-    border-radius: 6px;
+    color: #4a4a4a;
+    margin-right: 0.4rem;
+    // margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.more-options:hover {
+    color: #ff8c00;
+}
+
+// .reviewer-title {
+//     font-weight: bold;
+//     font-size: 1.125rem;
+//     color: #333333;
+//     // margin-bottom: 0.5rem;
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-info {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.25rem;
+//     margin-top: 0;
+//     align-items: flex-start; /* Ensure all info aligns to the left */
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-created-by {
+//     font-size: 0.875rem;
+//     color: #9ca3af;
+//     align-self: flex-start; /* Keep the text on the left */
+//     // margin-top: 0.1rem;
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-title {
+//     font-weight: bold;
+//     margin-left: 0.4rem;
+//     font-size: 1.125rem;
+//     color: #333333;
+//     margin-bottom: 0; /* Reduced margin between title and owner */
+// }
+
+
+
+
+
+
+.view-link {
+    display: block; /* Ensure it behaves like a button */
+    margin-top: 0.5rem; /* Add spacing if needed */
+    margin-left: 0.4rem;
+    color: #ff8c00; /* Set the color to orange */
+    text-decoration: underline; /* Add an underline */
+    font-weight: bold; /* Optional: make the text bold */
+    transition: color 0.3s ease, text-decoration 0.2s ease; /* Smooth hover effects */
+}
+
+.view-link:hover {
+    text-decoration: underline; /* Keep underline on hover */
+    color: #ff6600; /* Darker shade of orange on hover */
+}
+
+  .divider {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 1px solid #d1d5db;
   }
   
-  .add-content-button:hover {
-    background-color: #45a049;
-  }
-  
-  .close-button {
-    background: #FF4C4C;
-    color: white;
+  .create-button-add {
+    background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
     border: none;
-    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: bold;
+    text-transform: uppercase;
     cursor: pointer;
-    font-size: 16px;
-    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
   }
   
-  .close-button:hover {
-    background-color: #e03e3e;
+  .create-button-add:hover {
+    background-color: #f57c00;
+    transform: scale(1.05);
   }
   
-  textarea.new-content {
-    width: 100%;
-    height: 150px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    resize: none;
-    font-size: 14px;
+  @media (max-width: 768px) {
+    .reviewer-entry {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+  
+    .reviewer-title {
+        font-size: 1rem;
+    }
+  
+    .more-options {
+        font-size: 1rem;
+    }
+  
+    .divider {
+        margin: 1rem 0;
+    }
+  
+    .reviewer-info {
+        gap: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .reviewer-entry {
+        padding: 0.5rem;
+    }
+  
+    .more-options {
+        font-size: 1rem;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+  
+    .create-button-add {
+        padding: 0.5rem 1rem;
+    }
   }
   

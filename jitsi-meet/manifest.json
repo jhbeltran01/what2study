@@ -7,8 +7,8 @@
       "platform": "chromeos_play"
     }
   ],
-  "short_name": "StudyHive",
-  "name": "StudyHive",
+  "short_name": "Jitsi Meet",
+  "name": "Jitsi Meet",
   "icons": [
     {
       "src": "static/pwa/icons/icon192.png",

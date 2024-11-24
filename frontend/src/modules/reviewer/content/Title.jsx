@@ -195,8 +195,8 @@ function Title({title, index=null, titleSlug=null}) {
               onBlur={() => updateTitle(title.slug, isEnumerationTitle, titleSlug)}
             />
             <div className='title-buttons'>
-              <button className='add-button' onClick={() => setWillAddAContent(true) }>Add</button>
-              <button className='delete-button' onClick={() => deleteTitleFunction(index)}>Delete</button>
+              <button className='add-button' onClick={() => setWillAddAContent(true) }>+</button>
+              <button className='delete-button' onClick={() => deleteTitleFunction(index)}>-</button>
               {isEnumeration && <button>Order</button>}
             </div>
           </div>

@@ -32,8 +32,13 @@ function ReviewerCard({reviewer}) {
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
-    dispatch(setReviewerIsPublic(true))
-    navigate(routes.VIEW_CONTENT_WITHOUT_EDIT)
+    // dispatch(setReviewerIsPublic(true))
+    // navigate(routes.VIEW_CONTENT_WITHOUT_EDIT)
+      // Ensure that the public status is passed correctly
+  const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
+  dispatch(setReviewerIsPublic(isPublic)); // Update public status in Redux
+  
+  navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
   }
 
   return (
