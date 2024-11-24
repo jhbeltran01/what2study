@@ -39,23 +39,25 @@ function Form() {
       <div className='form-1'>
         <button
           onClick={() => setShowForm(false)}
+            className="close-btn"
         >
-          Close
+          x
         </button>
 
         <form onSubmit={addNote}>
-          <div>
-            <label htmlFor="name">Name</label> <br />
+        <div>
+            <label htmlFor="name">Title</label> <br />
             <input
-              className='text-black'
+              className='text-black input-title'
               value={name}
               type="text"
               id="name"
               onChange={(e) => setName(e.target.value)}
+              placeholder="Enter a title"
             />
           </div>
 
-          <button type='submit'>Submit</button>
+          <button type='submit' className='form-submit'>Add</button>
         </form>
       </div>
     </div>

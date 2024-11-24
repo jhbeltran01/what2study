@@ -95,7 +95,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
 
   return (
     <form onSubmit={handleSubmit} className="question-container grid grid-2-column-2 gap-[10px]">
-      <div>
+      <div className='question'>
         <div className="question-box">
           <h2 className="question-title">Question {currentQuestion+1}</h2>
           <p className="question-text">
