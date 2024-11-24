@@ -60,67 +60,51 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
-      <h2 className=''>Account Settings</h2>
-      <div className='settings-container'>
-        <div className='grid grid-2-column-1'>
-          <form onSubmit={updateAccount}>
-            <div>
-              <label htmlFor="username">Username</label>
-              <input 
-                value={username}
-                type="text" 
-                id="username" 
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="password">Password</label>
-              <input 
-                value={password}
-                type="password" 
-                id="password" 
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+    <div className='settings-container'>
+      <h2 className='settings-title'>Account Settings</h2>
 
-            <div>
-              <button 
-                onClick={clearForm} 
-                type='button' 
-                name="cancelButton"
-                className='mr-[1rem]'
-              >
-                Cancel
-              </button>
-              <button 
-                type='submit' 
-                name="saveButton"
-              >
-                Save
-              </button>
-            </div>
-          </form>
+      <div className='settings-grid settings-grid-2-column-1'>
+        <form className='settings-form' onSubmit={updateAccount}>
+          <div className='settings-form-group'>
+            <label className='settings-label' htmlFor="username">Username</label>
+            <input 
+              className='settings-input'
+              value={username}
+              type="text" 
+              id="username" 
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          
+          <div className='settings-form-group'>
+            <label className='settings-label' htmlFor="password">Password</label>
+            <input 
+              className='settings-input'
+              value={password}
+              type="password" 
+              id="password" 
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-          <div>
-            <h6>Password Requirements</h6>
+          <div className='settings-button-group'>
+            <button className='settings-button settings-cancel-button' onClick={clearForm} type='button'>Cancel</button>
+            <button className='settings-button settings-save-button' type='submit'>Save</button>
+          </div>
+        </form>
 
-            <ul>
-              <li>At least 8 characters</li>
-              <li>At least one uppercase letter</li>
-              <li>At least one number</li>
-              <li>At least one special character</li>
-            </ul>
+        <div className='settings-info'>
+          <h6 className='settings-info-title'>Password Requirements</h6>
 
-            <div>
-              <button 
-                onClick={deleteAccount} 
-                name="deleteButton"
-              >
-                Delete
-              </button>
-            </div>
+          <ul className='settings-info-list'>
+            <li className='settings-info-item'>At least 8 characters</li>
+            <li className='settings-info-item'>At least one uppercase letter</li>
+            <li className='settings-info-item'>At least one number</li>
+            <li className='settings-info-item'>At least one special character</li>
+          </ul>
+
+          <div className='settings-delete-button-container'>
+            <button className='settings-button settings-delete-button' onClick={deleteAccount}>Delete</button>
           </div>
         </div>
       </div>
