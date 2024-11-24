@@ -42,6 +42,9 @@ import type { AbstractProps } from '../AbstractConference';
 
 import ConferenceInfo from './ConferenceInfo';
 import { default as Notice } from './Notice';
+import Question from './Question'
+import StartReviewing from './StartReviewer/Main'
+
 
 /**
  * DOM events for when full screen mode has changed. Different browsers need
@@ -104,22 +107,10 @@ interface IProps extends AbstractProps, WithTranslation {
 
     /**
      * If visitors queue page is visible or not.
-     * NOTE: This should be set to true once we received an error on connect. Before the first connect this will always
-     * be false.
      */
     _showVisitorsQueue: boolean;
 
     dispatch: IStore['dispatch'];
-}
-
-/**
- * Returns true if the prejoin screen should be displayed and false otherwise.
- *
- * @param {IProps} props - The props object.
- * @returns {boolean} - True if the prejoin screen should be displayed and false otherwise.
- */
-function shouldShowPrejoin({ _showPrejoin, _showVisitorsQueue }: IProps) {
-    return _showPrejoin && !_showVisitorsQueue;
 }
 
 /**
@@ -226,8 +217,15 @@ class Conference extends AbstractConference<IProps, any> {
             _showLobby,
             _showPrejoin,
             _showVisitorsQueue,
-            t
+            _roomName,
+            t,
         } = this.props;
+
+        const slugifyRoomName = _roomName.toString()                 // Ensure it's a string
+                                .toLowerCase()              // Convert to lowercase
+                                .trim()                     // Remove whitespace
+                                .replace(/[\s\W-]+/g, '-')  // Replace spaces, non-word characters, and dashes with a single dash
+                                .replace(/^-+|-+$/g, '');
 
         return (
             <div
@@ -246,9 +244,13 @@ class Conference extends AbstractConference<IProps, any> {
                     <div
                         id = 'videospace'
                         onTouchStart = { this._onVidespaceTouchStart }>
-                        <LargeVideo />
-                        {
-                            _showPrejoin || _showLobby || (<>
+                        <div className='hide'>
+                            <LargeVideo />
+                        </div>
+                        
+                        <StartReviewing studypodSlug={slugifyRoomName} /> 
+
+                        {_showPrejoin || _showLobby || (<>
                                 <StageFilmstrip />
                                 <ScreenshareFilmstrip />
                                 <MainFilmstrip />
@@ -277,12 +279,13 @@ class Conference extends AbstractConference<IProps, any> {
 
                     <CalleeInfoContainer />
 
-                    { shouldShowPrejoin(this.props) && <Prejoin />}
+                    { (_showPrejoin && !_showVisitorsQueue) && <Prejoin />}
                     { (_showLobby && !_showVisitorsQueue) && <LobbyScreen />}
                     { _showVisitorsQueue && <VisitorsQueue />}
                 </div>
                 <ParticipantsPane />
                 <ReactionAnimations />
+
             </div>
         );
     }
@@ -396,9 +399,7 @@ class Conference extends AbstractConference<IProps, any> {
 
         const { dispatch, t } = this.props;
 
-        // if we will be showing prejoin we don't want to call connect from init.
-        // Connect will be dispatched from prejoin screen.
-        dispatch(init(!shouldShowPrejoin(this.props)));
+        dispatch(init());
 
         maybeShowSuboptimalExperienceNotification(dispatch, t);
     }
