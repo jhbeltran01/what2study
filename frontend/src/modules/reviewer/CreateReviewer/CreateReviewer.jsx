@@ -101,7 +101,7 @@ const CreateReviewer = () => {
           </form>
 
           <button className="create-button" onClick={handleCreateClick}>
-            Bye
+            Create
           </button>
         </div>
 
