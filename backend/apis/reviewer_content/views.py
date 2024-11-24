@@ -76,7 +76,7 @@ class DefinitionAPIView(
         DefinitionIsCorrectlyAnswered.definitions.create(
             owner=self.request.user,
             reviewer=reviewer,
-            definiion=definition
+            definition=definition,
         )
 
     def perform_destroy(self, instance):
@@ -85,9 +85,10 @@ class DefinitionAPIView(
 
     def _update_available_question_types(self):
         reviewer = self.query_params.get('reviewer', None)
+        user = self.request.user._wrapped
         question_type = QuestionType(
             reviewer=reviewer,
-            owner={'owner': self.request.user},
+            owner={'owner': user},
             for_definition=True,
             available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
         )
@@ -165,7 +166,7 @@ class EnumerationTitleAPIView(
         reviewer = self.query_params.get('reviewer', None)
         question_type = QuestionType(
             reviewer=reviewer,
-            owner=self.request.user,
+            owner={'owner': self.request.user},
             for_enumeration=True,
             for_definition=True,
             available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
@@ -264,7 +265,7 @@ class TitleAPIView(
         reviewer = self.query_params.get('reviewer', None)
         question_type = QuestionType(
             reviewer=reviewer,
-            owner=self.request.user,
+            owner={'owner': self.request.user._wrapped},
             for_enumeration=True,
             for_definition=True,
             available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()

@@ -32,25 +32,69 @@ function Main() {
     navigate(NOTE_CONTENT)
   }
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp)
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }
+    return date.toLocaleString('en-US', options).replace(',', '')
+  }
+
+  const renderRows = () => {
+    const rows = [];
+    let noteIndex = 0;
+    console.log(notes)
+    while (noteIndex < notes.length) {
+      const currentRow = [];
+      const rowCount = rows.length % 2 === 0 ? 5 : 4;
+  
+      for (let j = 0; j < rowCount && noteIndex < notes.length; j++, noteIndex++) {
+        const note = notes[noteIndex];
+        currentRow.push(
+          <button
+            key={noteIndex} 
+            className="note-card"
+            onClick={() => redirectToNoteContent(note)} 
+          >
+            <h3>{note.name}</h3>  {/* Display title */}
+          </button>
+        );
+      }
+  
+      rows.push(
+        <div key={rows.length} className="notes-row">
+          {currentRow}
+        </div>
+      );
+    }
+    return rows;
+  };  
+
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='flex gap-[10px]'>
+        <div className='text-right'>
           <button
+            className='btn-add3'
             onClick={() => setShowForm(true)}
           >
             Add
           </button>
-          {notes.map(note =>
-            <button
-              onClick={() => redirectToNoteContent(note)}
-              key={note.slug}
-            >
-              {note.name}
-            </button>
-          )}
         </div>
-        {showForm && <Form />}
+
+        <div className=''>
+          <div className=''>
+          </div>
+            <div className='notes-list'>
+              {notes.length > 0 ? renderRows() : <p>No notes available</p>}
+            </div>
+          </div>
+          {showForm && <Form />}
       </div>
     </ShowFormContext.Provider>
   )

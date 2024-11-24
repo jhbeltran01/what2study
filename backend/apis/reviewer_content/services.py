@@ -41,9 +41,9 @@ class QuestionType:
 
     def set_definition(self):
         self.definition = self.definition_is_answered_correctly.filter(
+            **self.owner,
             reviewer=self.reviewer,
             is_correctly_answered=False,
-            **self.owner,
         ).first()
         self.has_definition = self.definition is not None
 

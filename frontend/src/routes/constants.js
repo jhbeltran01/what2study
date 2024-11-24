@@ -4,6 +4,7 @@ const REVIEWERS = "/reviewers/";
 const CREATE_REVIEWER = "/reviewers/create-reviewer/"; 
 const STUDYPODS = "/study-pods/";
 const STUDYPOD_CREATE = '/study-pods/create/'
+const STUDYPOD_CONTENT = '/study-pods/content/'
 const JOIN_CALL = "/study-pods/join-call/";
 const VIEW_REVIEWER_CONTENT = '/reviewers/content/'
 const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
@@ -17,6 +18,7 @@ const SUBJECT_CREATE_REVIEWER = '/subjects/content/reviewers/create/'
 const SUBJECT_NOTE = '/subjects/notes/content'
 const SUBJECT_REVIEWER = '/subjects/reviewers/content'
 const START_REVIEWING = '/reviewers/review/'
+
 
 const ROUTES = {
   HOME_PAGE,
@@ -38,6 +40,7 @@ const ROUTES = {
   SUBJECT_NOTE,
   SUBJECT_REVIEWER,
   START_REVIEWING,
+  STUDYPOD_CONTENT,
 };
 
 export { 
@@ -61,6 +64,6 @@ export {
   SUBJECT_NOTE,
   SUBJECT_REVIEWER,
   START_REVIEWING,
-
+  STUDYPOD_CONTENT, 
 };
 

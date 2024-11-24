@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Container */
 .settings-container {
     padding: 3rem 3rem 3rem;
@@ -17,20 +18,144 @@
     color: #333;
     margin-bottom: 2rem;
     font-weight: 600;
+=======
+.settings-container {
+  background-color: #f0efef;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.settings-container h6 {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  margin-left: 100px;
+  font-weight: bold;
+}
+
+.settings-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.settings-container ul li {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 8px;
+  margin-left: 100px;
+}
+
+.settings-container button {
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.settings-container button:hover {
+  transform: scale(1.05);
+}
+
+button[name='cancelButton'] {
+  background-color: #b6b4b4;
+}
+
+button[name='cancelButton']:hover {
+  transform: scale(1.05);
+}
+
+button[name='saveButton'] {
+  background: linear-gradient(to right, #FEA61F 0%, #FED65D 100%);
+}
+
+button[name='saveButton']:hover {
+  transform: scale(1.05);
+}
+
+button[name='deleteButton'] {
+  background-color: #D56464;
+  margin-left: 100px;
+}
+
+button[name='deleteButton']:hover {
+  transform: scale(1.05);
+}
+
+.settings-container input {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.settings-container .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.settings-container .grid input {
+  width: 100%;
+}
+
+.settings-container .grid label {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #333;
+}
+/* Container */
+.settings-container {
+  padding: 3rem 3rem 3rem;
+  bottom: 3rem;
+  background-color: #fcfcfcdd;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 50rem;
+  height: 30rem;
+  margin: 13rem 20rem;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.settings-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+  font-weight: 600;
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }
 
 /* Grid Layout */
 .settings-grid {
+<<<<<<< HEAD
     display: grid;
     gap: 2rem;
 }
 
 .settings-grid-2-column-1 {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+=======
+  display: grid;
+  gap: 2rem;
+}
+
+.settings-grid-2-column-1 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }
 
 /* Form Elements */
 .settings-form {
+<<<<<<< HEAD
     background-color: #ffffff;
     padding: 1.5rem;
     border-radius: 12px;
@@ -93,10 +218,75 @@
 
 .settings-cancel-button:hover {
     background-color: #ccc;
+=======
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.settings-form-group {
+  margin-bottom: 1rem;
+}
+
+.settings-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.settings-input:focus {
+  border-color: #fea61f;
+  outline: none;
+}
+
+.settings-button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.settings-button {
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #fea61f;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.settings-button:hover {
+  background-color: #fdad33;
+  transform: translateY(-2px);
+}
+
+.settings-cancel-button {
+  background-color: #ddd;
+  color: #333;
+}
+
+.settings-cancel-button:hover {
+  background-color: #ccc;
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }
 
 /* Password Requirements */
 .settings-info-title {
+<<<<<<< HEAD
     font-size: 1.2rem;
     color: #333;
     margin-bottom: 1rem;
@@ -111,10 +301,27 @@
 
 .settings-info-item {
     margin-bottom: 0.5rem;
+=======
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.settings-info-list {
+  margin-left: 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.settings-info-item {
+  margin-bottom: 0.5rem;
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }
 
 /* Delete Button */
 .settings-delete-button-container {
+<<<<<<< HEAD
     margin-top: 1rem;
 }
 
@@ -133,10 +340,31 @@
 .settings-delete-button:hover {
     background-color: #e74a56;
     transform: translateY(-2px);
+=======
+  margin-top: 1rem;
+}
+
+.settings-delete-button {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  margin-top: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 300px;
+}
+
+.settings-delete-button:hover {
+  background-color: #e74a56;
+  transform: translateY(-2px);
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
+<<<<<<< HEAD
     .settings-container {
         padding: 1.5rem;
     }
@@ -145,4 +373,14 @@
     .settings-delete-button {
         width: 100%;
     }
+=======
+  .settings-container {
+      padding: 1.5rem;
+  }
+
+  .settings-button,
+  .settings-delete-button {
+      width: 100%;
+  }
+>>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
 }

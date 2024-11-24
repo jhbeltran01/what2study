@@ -1,33 +1,55 @@
-import React, { useState } from 'react'
-import NotesTab from './notes-tab/Main'
-import TodosTab from './todos-tab/Main'
+import React, { useState, useEffect, createContext } from 'react'
+import axios from 'axios'
+import { apiRootURL } from '@root/globals'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNotes } from '@redux/notes'
+import NotesTabContent from './notes-tab/Main'
+import TodosTabContent from './todos-tab/Main'
 
-function Main() {
+export const ShowFormContext = createContext()
+
+function NotesTab() {
+  const [showForm, setShowForm] = useState(false)
+  const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState(0)
-  const tabs = ['My Notes', 'Todo']
-  const tabContent = [<NotesTab key={1} />, <TodosTab key={2} />]
+
+  useEffect(() => {
+    axios
+      .get(`${apiRootURL}/notes/`)
+      .then(response => {
+        dispatch(setNotes(response.data.results))
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dispatch])
+
+  const tab = [<NotesTabContent key={1}/>, <TodosTabContent key={2} />][activeTab]
 
   return (
-    <div className='container-1'>
-      <div className='flex justify-between items-center'>
-        <div>
-          {tabs.map((tab, index) => 
-            <button 
-              className='btn-4'
-              key={tab}
-              onClick={() => setActiveTab(index)}
-            >
-              {tab}
-            </button>
-          )}
+    <ShowFormContext.Provider value={[showForm, setShowForm]}>
+      <div className='container-1'>
+        <div className="header-buttons">
+          <button
+            className={`${activeTab == 0 && 'active'}`}
+            onClick={() => setActiveTab(0)}
+          >
+            Notes
+          </button>
+          <button
+            className={`${activeTab == 1 && 'active'}`}
+            onClick={() => setActiveTab(1)}
+          >
+            To-Do
+          </button>
         </div>
-
-        <input type="text" />
+        
+        {tab}
+        
+        {showForm && <Form />}
       </div>
-      
-      {tabContent[activeTab]}
-    </div>
+    </ShowFormContext.Provider>
   )
 }
 
-export default Main
+export default NotesTab
