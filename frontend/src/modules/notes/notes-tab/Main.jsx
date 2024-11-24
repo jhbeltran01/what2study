@@ -45,6 +45,36 @@ function Main() {
     return date.toLocaleString('en-US', options).replace(',', '')
   }
 
+  const renderRows = () => {
+    const rows = [];
+    let noteIndex = 0;
+    console.log(notes)
+    while (noteIndex < notes.length) {
+      const currentRow = [];
+      const rowCount = rows.length % 2 === 0 ? 5 : 4;
+  
+      for (let j = 0; j < rowCount && noteIndex < notes.length; j++, noteIndex++) {
+        const note = notes[noteIndex];
+        currentRow.push(
+          <b
+            key={noteIndex} 
+            className="note-card"
+            onClick={() => redirectToNoteContent(note)} 
+          >
+            <h3>{note.name}</h3>  {/* Display title */}
+          </b>
+        );
+      }
+  
+      rows.push(
+        <div key={rows.length} className="notes-row">
+          {currentRow}
+        </div>
+      );
+    }
+    return rows;
+  };  
+
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
@@ -60,26 +90,8 @@ function Main() {
         <div className=''>
           <div className=''>
           </div>
-            <div className='note-container'>
-              {notes.map(note =>
-                  <button 
-                    className="note-button" 
-                    onClick={() => redirectToNoteContent(note)} 
-                    key={note.slug}
-                  >
-                    <div className="note-title-container">
-                      <div className="note-title">{note.name}</div>
-                      <div className="note-timestamp">
-                        {formatTimestamp(note.created_at)}
-                      </div>
-                    </div>
-                    <div className="note-content">
-                      {note.content && note.content.trim() !== "" 
-                        ? note.content 
-                        : "Content goes here..."}
-                    </div>
-                  </button>
-              )}
+            <div className='notes-list'>
+              {notes.length > 0 ? renderRows() : <p>No notes available</p>}
             </div>
           </div>
           {showForm && <Form />}
