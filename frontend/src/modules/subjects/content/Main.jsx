@@ -115,7 +115,7 @@ function Main() {
         <button onClick={() => setShowForm(true)} className="btn-add">Add</button>
       </div>
 
-      <div className='grid grid-responsive-1'>
+      <div className='notes-list'>
         {notes.length > 0 ? renderRows() : <p>No notes available</p>}
       </div>
 
