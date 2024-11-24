@@ -1,0 +1,46 @@
+.container-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;  
+  background-color: white
+}
+
+.notes-dropdown {
+  background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+  color: #333;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 700px; 
+  cursor: pointer;
+
+  option {
+    color: #333;
+    font-weight: normal; 
+  }
+
+
+  option:checked {
+    font-weight: bold;
+    color: black;
+  }
+}
+
+
+.input-content {
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: 700px;
+  width: 700px;
+  font-size: 1rem;
+  justify-content: flex-start;
+  resize: none;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}

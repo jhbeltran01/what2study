@@ -1,33 +1,103 @@
-import React, { useState } from 'react'
-import NotesTab from './notes-tab/Main'
-import TodosTab from './todos-tab/Main'
+import React, { useState, useEffect, createContext } from 'react'
+import axios from 'axios'
+import { apiRootURL } from '@root/globals'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNote } from '@redux/note'
+import { setNotes } from '@redux/notes'
+import { useNavigate } from 'react-router-dom'
+import { NOTE_CONTENT } from '@root/routes/constants'
 
-function Main() {
-  const [activeTab, setActiveTab] = useState(0)
-  const tabs = ['My Notes', 'Todo']
-  const tabContent = [<NotesTab key={1} />, <TodosTab key={2} />]
+export const ShowFormContext = createContext()
+
+function NotesTab() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const notes = useSelector(state => state.notes.value)
+  const [showForm, setShowForm] = useState(false)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    axios
+      .get(`${apiRootURL}/notes/`)
+      .then(response => {
+        dispatch(setNotes(response.data.results))
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dispatch])
+
+  const redirectToNoteContent = (note) => {
+    dispatch(setNote(note))
+    navigate(NOTE_CONTENT)
+  }
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const filteredNotes = notes.filter(note =>
+    note.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp)
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }
+    return date.toLocaleString('en-US', options).replace(',', '')
+  }
 
   return (
-    <div className='container-1'>
-      <div className='flex justify-between items-center'>
-        <div>
-          {tabs.map((tab, index) => 
+    <ShowFormContext.Provider value={[showForm, setShowForm]}>
+      <div className='container-1'>
+        <div className='flex justify-between items-center'>
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={handleSearch} 
+            placeholder="Search..." 
+            className="search-bar2"
+          />
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-add"
+          >
+            Add 
+          </button>
+        </div>
+        
+        <div className='note-container'>
+          {filteredNotes.map(note =>
             <button 
-              className='btn-4'
-              key={tab}
-              onClick={() => setActiveTab(index)}
+              className="note-button" 
+              onClick={() => redirectToNoteContent(note)} 
+              key={note.slug}
             >
-              {tab}
+              <div className="note-title-container">
+                <div className="note-title">{note.name}</div>
+                <div className="note-timestamp">
+                  {formatTimestamp(note.created_at)}
+                </div>
+              </div>
+              <div className="note-content">
+                {note.content && note.content.trim() !== "" 
+                  ? note.content 
+                  : "Content goes here..."}
+              </div>
             </button>
           )}
         </div>
-
-        <input type="text" />
+        
+        {showForm && <Form />}
       </div>
-      
-      {tabContent[activeTab]}
-    </div>
+    </ShowFormContext.Provider>
   )
 }
 
-export default Main
+export default NotesTab

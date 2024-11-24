@@ -46,11 +46,12 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
+    <div className='container-content'>
       <div>
         <select 
           defaultValue={note.slug}
           onChange={getNote}
+          className='notes-dropdown '
         >
           {notes.map(note => 
             <option 
@@ -68,6 +69,7 @@ function Main() {
             onBlur={editContent}
             value={contentInputText}
             onChange={(e) => setContentInputText(e.target.value)}
+            className='input-content'
           ></textarea>
         </form>
       </div>

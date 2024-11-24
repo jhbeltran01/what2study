@@ -10,7 +10,7 @@ function Main() {
   const todos = useSelector(state => state.todos.value)
   const todo = useSelector(state => state.todo.value)
   const [itemText, setItemText] = useState('')
-  
+
   const dispatch = useDispatch()
 
   const getTodo = (event) => {
@@ -20,25 +20,27 @@ function Main() {
   }
 
   const addTodoItem = () => {
-    axios
-      .post(
-        `${apiRootURL}/todos/${todo.slug}/items/`,
-        {text: itemText}
-      )
-      .then(response => {
-        updateUIOnAddTodoItem(todo.slug, response.data)
-        setItemText('')
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (itemText.trim()) {
+      axios
+        .post(
+          `${apiRootURL}/todos/${todo.slug}/items/`,
+          { text: itemText }
+        )
+        .then(response => {
+          updateUIOnAddTodoItem(todo.slug, response.data)
+          setItemText('')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   const updateUIOnAddTodoItem = (todoSlug, newItem) => {
     const tempTodos = todos.map(todo => {
       if (todo.slug != todoSlug) { return todo }
 
-      const tempTodo = {...todo}
+      const tempTodo = { ...todo }
       tempTodo.items = [newItem, ...todo.items]
 
       dispatch(setTodo(tempTodo))
@@ -48,41 +50,48 @@ function Main() {
     dispatch(setTodos(tempTodos))
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      addTodoItem()
+    }
+  }
+
   return (
-    <div className='container-1'>
-      <div>
+    <div className="container-4">
+      <div className="input-container">
         <select
+          className="todos-dropdown"
           defaultValue={todo.slug}
           onChange={getTodo}
         >
-          {todos.map(todo =>
-            <option
-              value={todo.slug}
-              key={todo.slug}
-            >
+          {todos.map(todo => (
+            <option value={todo.slug} key={todo.slug}>
               {todo.name}
             </option>
-          )}
+          ))}
         </select>
+
+        <input
+          value={itemText}
+          type="text"
+          onChange={(e) => setItemText(e.target.value)}
+          onKeyDown={handleKeyPress} 
+          className="add-todo"
+          placeholder="Add a new to do"
+        />
+
+        <button
+          onClick={addTodoItem}
+          className="btn-add3"
+        >
+          Add
+        </button>
       </div>
 
-      <div>
-        <div>
-          <input 
-            value={itemText}
-            type="text" 
-            onChange={(e) => setItemText(e.target.value)}
-          />
-          <button
-            onClick={addTodoItem}
-          >
-            Add
-          </button>
-        </div>
-
-        <div>
-          {todo.items.map(todoItem => <TodoItem todoItem={todoItem}  key={todoItem.slug}/>)}
-        </div>
+      <div className="todo-items-container">
+        {todo.items.map(todoItem => (
+          <TodoItem todoItem={todoItem} key={todoItem.slug} />
+        ))}
       </div>
     </div>
   )
