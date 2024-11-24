@@ -10,10 +10,10 @@ import { NOTE_CONTENT } from '@root/routes/constants'
 
 export const ShowFormContext = createContext()
 
-function NotesTab() {
-  const [searchQuery, setSearchQuery] = useState('')
+function Main() {
   const notes = useSelector(state => state.notes.value)
   const [showForm, setShowForm] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -41,17 +41,33 @@ function NotesTab() {
     note.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp)
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
+  const renderRows = () => {
+    const rows = []
+    let noteIndex = 0
+    while (noteIndex < filteredNotes.length) {
+      const currentRow = []
+      const rowCount = rows.length % 2 === 0 ? 5 : 4
+
+      for (let j = 0; j < rowCount && noteIndex < filteredNotes.length; j++, noteIndex++) {
+        const note = filteredNotes[noteIndex]
+        currentRow.push(
+          <button
+            key={noteIndex} 
+            className="note-card"
+            onClick={() => redirectToNoteContent(note)} 
+          >
+            <h3>{note.name}</h3>  {/* Display title */}
+          </button>
+        )
+      }
+
+      rows.push(
+        <div key={rows.length} className="notes-row">
+          {currentRow}
+        </div>
+      )
     }
-    return date.toLocaleString('en-US', options).replace(',', '')
+    return rows
   }
 
   return (
@@ -69,36 +85,18 @@ function NotesTab() {
             onClick={() => setShowForm(true)}
             className="btn-add"
           >
-            Add 
+            Add
           </button>
         </div>
-        
-        <div className='note-container'>
-          {filteredNotes.map(note =>
-            <button 
-              className="note-button" 
-              onClick={() => redirectToNoteContent(note)} 
-              key={note.slug}
-            >
-              <div className="note-title-container">
-                <div className="note-title">{note.name}</div>
-                <div className="note-timestamp">
-                  {formatTimestamp(note.created_at)}
-                </div>
-              </div>
-              <div className="note-content">
-                {note.content && note.content.trim() !== "" 
-                  ? note.content 
-                  : "Content goes here..."}
-              </div>
-            </button>
-          )}
+
+        <div className="notes-list">
+          {filteredNotes.length > 0 ? renderRows() : <p>No notes available</p>}
         </div>
-        
+
         {showForm && <Form />}
       </div>
     </ShowFormContext.Provider>
   )
 }
 
-export default NotesTab
+export default Main

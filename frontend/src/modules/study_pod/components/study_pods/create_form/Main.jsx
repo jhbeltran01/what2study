@@ -1,12 +1,12 @@
-import axios from 'axios'
 import React, { useState } from 'react'
+import axios from 'axios'
 import { apiRootURL } from '@root/globals'
 
-function Main() {
+function Studypod() {
   const initialSize = 10
   const [name, setName] = useState('')
   const [size, setSize] = useState(initialSize)
-  const [accessCode, setAccessCode] = useState()
+  const [accessCode, setAccessCode] = useState('')
 
   const createStudyPod = (event) => {
     event.preventDefault()
@@ -29,13 +29,13 @@ function Main() {
       })
   }
 
-  const joinStudypod = () => {
+  const joinStudypod = (event) => {
     event.preventDefault()
     
     axios
       .post(
         `${apiRootURL}/studypods/join/`,
-        {access_code: accessCode}
+        { access_code: accessCode }
       )
       .then(response => {
         setAccessCode('')
@@ -47,11 +47,12 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
-      <h2>Create Pod</h2>
+    <div className='studypod-container'>
+      <div className='studypod-wrapper'>
+      <h2 className='studypod-title'>Create Pod</h2>
 
-      <form onSubmit={createStudyPod}>
-        <div>
+      <form onSubmit={createStudyPod} className="studypod-form">
+        <div className='studypod-form-group'>
           <label htmlFor="name">Group Name</label>
           <input 
             value={name}
@@ -61,8 +62,8 @@ function Main() {
           />
         </div>
 
-        <div className='flex'>
-          <div>
+        <div className='studypod-form-row'>
+          <div className='studypod-form-group'>
             <label htmlFor="size">Group Size</label>
             <input 
               value={size}
@@ -72,34 +73,37 @@ function Main() {
             />
           </div>
 
-          <div>
+          <div className='studypod-form-group'>
             <label htmlFor="class">Class</label>
             <input type="text" id="class" />
           </div>
         </div>
 
         <div className='text-right'>
-          <button type="submit">Create</button>
+          <button type="submit" className="studypod-button">Create</button>
         </div>
       </form>
 
-      <hr />
+      <hr className="studypod-divider" />
 
-      <div>
-        <h3>Join Pod</h3>
-        <form onSubmit={joinStudypod}>
-          <label htmlFor="code">Pod Code</label>
-          <input 
-            value={accessCode}
-            type="text"
-            id="code" 
-            onChange={(e) => setAccessCode(e.target.value)}
-          />
-          <button type="submit">Join</button>
+      <div className="studypod-join-section">
+        <h3 className="studypod-subtitle">Join Pod</h3>
+        <form onSubmit={joinStudypod} className="studypod-form">
+          <div className='studypod-form-group'>
+            <label htmlFor="code">Pod Code</label>
+            <input 
+              value={accessCode}
+              type="text"
+              id="code" 
+              onChange={(e) => setAccessCode(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="studypod-button">Join</button>
         </form>
       </div>
+    </div>
     </div>
   )
 }
 
-export default Main
+export default Studypod

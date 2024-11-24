@@ -3,8 +3,7 @@ import React from 'react'
 function Header() {
   return (
     <header className='flex justify-between'>
-      <h3>Study Pod</h3>
-      <input type="text" placeholder='Search' />
+      <h2 className='btn-4'>Study Pod</h2>
     </header>
   )
 }
