@@ -4,6 +4,7 @@ import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
+import StudypodContent from '@modules/study_pod/components/study_pods/content/Main'
 import ReviewerContent from '@modules/reviewer/content/Main'
 import ReviewerContentNoEdit from '@modules/reviewer/view_content/Main'
 import Notes from '@modules/notes/Main'
@@ -114,6 +115,11 @@ const pagesData = [
         path: routes.ROUTES.START_REVIEWING,
         element:  <StartReviewing />,
         title: routes.START_REVIEWING
+      },
+      {
+        path: routes.ROUTES.STUDYPOD_CONTENT,
+        element:  <StudypodContent />,
+        title: routes.STUDYPOD_CONTENT
       },
     ]
   },
