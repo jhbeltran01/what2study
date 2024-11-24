@@ -101,8 +101,4 @@ function Options() {
   );
 }
 
-<<<<<<< HEAD
 export default Options;
-=======
-export default Options;
->>>>>>> ac10283a9dc0d46f4c37034b9439c81e10ba8f63
