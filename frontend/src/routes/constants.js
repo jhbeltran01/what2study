@@ -16,6 +16,7 @@ const SUBJECT_CONTENT = '/subjects/content/'
 const SUBJECT_CREATE_REVIEWER = '/subjects/content/reviewers/create/'
 const SUBJECT_NOTE = '/subjects/notes/content'
 const SUBJECT_REVIEWER = '/subjects/reviewers/content'
+const START_REVIEWING = '/reviewers/review/'
 
 const ROUTES = {
   HOME_PAGE,
@@ -36,6 +37,7 @@ const ROUTES = {
   SUBJECT_CREATE_REVIEWER,
   SUBJECT_NOTE,
   SUBJECT_REVIEWER,
+  START_REVIEWING,
 };
 
 export { 
@@ -57,6 +59,8 @@ export {
   SUBJECT_CONTENT,
   SUBJECT_CREATE_REVIEWER,
   SUBJECT_NOTE,
-  SUBJECT_REVIEWER
+  SUBJECT_REVIEWER,
+  START_REVIEWING,
+
 };
 

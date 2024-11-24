@@ -13,7 +13,7 @@ function Main() {
       .then(response => {
         const encryptedData = response.data.data.toString()
         window.open(
-          `${conferenceCallServer}/?encryptedData=${encryptedData}&roomName=${room.name}`, 
+          `${conferenceCallServer}/?encryptedData=${encryptedData}&roomName=${room.slug}`, 
           '_blank', 
           'noopener,noreferrer'
         )
@@ -25,7 +25,6 @@ function Main() {
 
   return (
     <div>
-      {/* <Question /> */}
       <h1>Video Conference</h1>
     </div>
   )

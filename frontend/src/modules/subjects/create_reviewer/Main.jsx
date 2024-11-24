@@ -1,6 +1,4 @@
-import searchIcon from '@assets/search.png';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import { apiRootURL } from '@root/globals';
 import { useSelector } from 'react-redux'

@@ -49,10 +49,6 @@ class ReviewerSerializer(serializers.ModelSerializer):
 
         return representation
 
-    def create(self, validated_data):
-        validated_data.pop('files', None)
-        return super().create(validated_data)
-
     def validate_name(self, value):
         slug = slugify('{}-{}'.format(value, self.owner.id))
         reviewer_exists = Reviewer.reviewers.filter(slug=slug).first() is not None
@@ -138,7 +134,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
         return value
 
     def get_owner(self, instance):
-        return UserInfoSerializer(instance.reviewer.owner).data
+        return UserInfoSerializer(instance.owner).data
 
     def get_description(self, instance):
         return instance.reviewer.description
@@ -235,7 +231,7 @@ class TitleSerializer(serializers.ModelSerializer):
             return None
 
         enum_title = EnumerationTitle.titles.filter(title=instance).first()
-        return enum_title.is_in_order
+        return enum_title is not None and enum_title.is_in_order
 
     def get_is_in_enumeration(self, instance):
         return instance.enum_title is not None

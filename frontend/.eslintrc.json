@@ -14,7 +14,11 @@
     "plugins": ["react", "react-hooks"],
     "rules": {
         // "indent": ["error", 2], 
-        // "no-mixed-spaces-and-tabs": "error"
+        // "no-mixed-spaces-and-tabs": "error",
+        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^_" }],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "off",
+        "react/no-unescaped-entities": "off"
     },
     "settings": {
         "react": {

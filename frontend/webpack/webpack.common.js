@@ -46,9 +46,9 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    new ESLintPlugin({
-      extensions: ['js', 'jsx'],
-    }),
+    // new ESLintPlugin({
+    //   extensions: ['js', 'jsx'],
+    // }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.scss', '.css'],

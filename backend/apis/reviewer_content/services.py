@@ -2,18 +2,29 @@ from common.models import Reviewer, Title, DefinitionIsCorrectlyAnswered, Enumer
 
 
 class QuestionType:
-    def __init__(self, reviewer, owner, for_definition=False, for_enumeration=False):
+    def __init__(
+        self,
+        reviewer,
+        available_question_types_obj,
+        owner,
+        for_definition=False,
+        for_enumeration=False,
+        definition_is_answered_correctly=DefinitionIsCorrectlyAnswered.definitions,
+        enumeration_is_answered_correctly=EnumerationIsCorrectlyAnswered.titles,
+    ):
         self.owner = owner
         self.reviewer = reviewer
         self.is_updated = False
         self.definition = None
         self.number_of_titles = None
         self.has_definition = None
-        self.available_question_types_obj = reviewer.available_question_types.filter(owner=owner).first()
+        self.available_question_types_obj = available_question_types_obj
         self.available_question_types = self.available_question_types_obj.available_question_types
         self.has_enumeration = None
         self.for_definition = for_definition
         self.for_enumeration = for_enumeration
+        self.definition_is_answered_correctly = definition_is_answered_correctly
+        self.enumeration_is_answered_correctly = enumeration_is_answered_correctly
 
     def update(self):
         if self.for_definition:
@@ -29,10 +40,10 @@ class QuestionType:
         self.update_reviewer()
 
     def set_definition(self):
-        self.definition = DefinitionIsCorrectlyAnswered.definitions.filter(
-            owner=self.owner,
+        self.definition = self.definition_is_answered_correctly.filter(
             reviewer=self.reviewer,
-            is_correctly_answered=False
+            is_correctly_answered=False,
+            **self.owner,
         ).first()
         self.has_definition = self.definition is not None
 
@@ -40,8 +51,8 @@ class QuestionType:
         self.number_of_titles = min(self.reviewer.titles.exclude(type=Title.Type.ENUMERATION).count(), 4)
 
     def set_enum_title(self):
-        enumeration = EnumerationIsCorrectlyAnswered.titles.filter(
-            owner=self.owner,
+        enumeration = self.enumeration_is_answered_correctly.filter(
+            **self.owner,
             reviewer=self.reviewer,
             is_correctly_answered=False
         ).first()

@@ -5,7 +5,7 @@ import { apiRootURL } from '@root/globals'
 
 function Form({subjectsState, showFormState}) {
   const [subjects, setSubjects] = subjectsState
-  const [showForm, setShowForm] = showFormState
+  const setShowForm = showFormState[1]
   const [name, setName] = useState('')
 
   const createSubject = (event) => {

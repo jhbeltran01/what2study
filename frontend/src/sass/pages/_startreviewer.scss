@@ -1,0 +1,283 @@
+@use '../abstract/variables' as var;
+
+/* General container styles */
+.question-container {
+    padding: 20px;
+    height: auto; /* Allow height to adjust based on content */
+    width: 100%; /* Set width to 100% to utilize the full width of the parent */
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    min-height: 300px; /* Maintain a minimum height for layout consistency */
+    min-width: 600px; /* Maintain a minimum width */
+    overflow: hidden; /* Prevent scrolling */
+    max-width: 1400px;
+    margin: auto;
+    margin-top: 5%;
+}
+
+/* Main question box styling */
+.question-box {
+    flex: 2; /* Allows the box to take up more space in a flex container */
+    padding: 30px; /* Inner padding for spacing */
+    background-color: #ffffff; /* Background color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 8px 16px rgba(254, 166, 31, 0.644); 
+    text-align: center; /* Center-align text */
+    overflow: hidden; 
+}
+
+.answer-container-wrapper {
+    margin: 0 auto;
+    margin-top: 20px;
+    max-width: 400px;
+  }
+  
+  .answer-box {
+    width: 100%;
+    padding: 10px;
+    background-color: #e0e0e0; /* Gray background for answer box */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    resize: none; /* Prevents resizing of the box */
+  }
+  
+  .answer-box::placeholder {
+    color: #888;
+    font-size: 16px;
+  }
+  
+
+.question-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.question-text {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+}
+
+/* Options container */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.option {
+    align-items: center;
+    padding: 1em;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:is(.correct) {
+        background-color: var.$green-1;
+    }
+
+    &:is(.wrong) {
+        background-color: var.$red-1;
+    }
+}
+
+.option.selected {
+    background-color: #fff5e5; /* Highlight selected option */
+}
+
+.option-circle {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 1.1rem;
+    color: rgb(0, 0, 0);
+    flex-shrink: 0;
+}
+
+.option-text {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Navigation buttons */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.prev-button, .next-button {
+    padding: 12px 25px;
+    background-color: #BDBDBD;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+.prev-button:hover {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+}
+
+.next-button {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+
+    &:hover {
+        background-color: #BDBDBD;
+    }
+}
+
+
+/* Right section for question numbers and submit/save buttons */
+.right-section {
+    flex: 1;
+    overflow: hidden; 
+}
+
+/* White container for the question-number-container */
+.question-number-wrapper {
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners */
+    padding: 1em;
+    box-shadow: 0 8px 16px rgba(254, 166, 31, 0.644);
+}
+
+/* Styles for question numbers */
+.question-number-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    align-items: center;
+    padding: 0.5em;
+    gap: 10px;
+}
+
+.question-number {
+    
+    background-color: #EEEEEE; /* Default background color */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Make the button circular */
+    font-size: 1.2rem; /* Font size for the number */
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    cursor: pointer; /* Pointer cursor on hover */
+  
+    &.answered {
+        background: #ffe8a2; /* Gradient background if answered */
+    }
+  }
+  
+  .question-number.active {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+  }
+
+
+  .question-number-enumeration,
+  .question-number-identification {
+    width: 60px; /* Fixed width for the circles */
+    height: 60px; /* Fixed height for the circles */
+    background-color: #EEEEEE; /* Default background color */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Make the button circular */
+    font-size: 1.2rem; /* Font size for the number */
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .question-number-enumeration.active,
+  .question-number-identification.active {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+  }
+  
+  .question-number-enumeration.has-answer,
+  .question-number-identification.has-answer {
+    background: #ffe8a2; /* Gradient background if answered */
+  }
+
+.question-number-identification {
+    &:is(.correct) {
+        background-color: var.$green-1;
+    }
+
+    &:is(.wrong) {
+        background-color: var.$red-1;
+    }
+}
+
+/* Align save and submit buttons with question number wrapper */
+.save-submit-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align buttons */
+    margin-top: 20px;
+}
+
+.save-button, .submit-button {
+    padding: 12px 25px;
+    background-color: #BDBDBD;
+    border: none;
+    border-radius: 10px; /* Rounded corners for buttons */
+    font-size: 1.1rem; /* Font size for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    width: 100%; /* Full width to match question number wrapper */
+}
+
+
+.submit-button {
+    
+}
+
+.save-button:hover {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+}
+
+.submit-button:hover {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+}
+
+.add-placeholder-button, .remove-placeholder-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+.remove-placeholder-button {
+background-color: #e74c3c;
+}
+
+.remove-placeholder-button:hover {
+background-color: #c0392b;
+}
+
+.user-answer {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    resize: none; /* Prevents resizing of the box */
+    max-width: 400px;
+    background-color: #e0e0e0;
+
+    &:is(.correct) {
+        background-color: var.$green-1;
+    }
+
+    &:is(.wrong) {
+        background-color: var.$red-1;
+    }
+}

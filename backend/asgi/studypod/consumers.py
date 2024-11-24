@@ -5,6 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.exceptions import DenyConnection
 
 from apis.authentication.serializers import UserInfoSerializer
+from apis.reviewers.serializers import ReviewerSerializer
 from asgi.studypod.services import (
     GenerateQuestion,
     GetReviewer, Answer, ReviewerList,
@@ -23,12 +24,16 @@ moderators = {}
 user_answers = {}
 # all the last action per room
 last_action = {}
+# all the questions per room
+all_questions = {}
+# all selected reviewer per room
+all_selected_reviewer = {}
 
 
 class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        global connected_users, moderators, user_answers, last_action
+        global connected_users, moderators, user_answers, last_action, all_questions, all_selected_reviewer
 
         self.study_pod_name = ''
         self.room_name = ''
@@ -40,18 +45,23 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
         self.user = None
         self.data = None
         self.last_action = last_action
+        self.will_send_message_to_room = True
+        self.all_questions = all_questions
+        self.all_selected_reviewer = all_selected_reviewer
+        self.is_update_moderator = False
 
     async def disconnect(self, close_code):
+        self.update_number_of_connected_users(DECREMENT)
+        self._update_moderator(is_disconnected=True)
         await self.channel_layer.group_discard(
             self.room_name,
             self.channel_name
         )
-        self.update_number_of_connected_users(DECREMENT)
-        self._update_moderator(is_disconnected=True)
 
     async def initiate_connect(self):
         self.study_pod_name = self.scope['url_route']['kwargs']['study_pod_slug']
         self.set_room_name(root_name='study_pod')
+
         await self._set_study_pod_instance()
         self._check_if_studypod_exists()
         await self.channel_layer.group_add(
@@ -95,27 +105,29 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
 
     def update_number_of_connected_users(self, action=INCREMENT):
         room_connected_users = self.connected_users.get(self.room_name, 0)
-        if room_connected_users == 0:
+        if room_connected_users == 0 and action == INCREMENT:
             self.connected_users[self.room_name] = 1
-            self._update_moderator()
             return
 
-        if room_connected_users == 0:
-            del self.connected_users[self.room_name]
-
         if room_connected_users > 0:
-            self.connected_users[self.room_name] = self.connected_users[self.room_name] + 1 if action == INCREMENT else self.connected_users[self.room_name] - 1
+            self.connected_users[self.room_name] = room_connected_users + 1 if action == INCREMENT else room_connected_users - 1
 
     def _update_moderator(self, is_disconnected=False):
-        local_connected_users = self.connected_users.get(self.room_name, 0)
+        if self.connected_users.get(self.room_name) is None:
+            return
+        local_connected_users = self.connected_users[self.room_name]
+
         # the first connected user is the moderator
-        if local_connected_users == 1:
+        if not is_disconnected and local_connected_users == 1:
             self._set_moderator(self.user)
+            return
 
-        if local_connected_users == 0:
+        if is_disconnected and local_connected_users == 0:
             self._set_moderator(None)
+            return
 
-        room_moderator_has_disconnected = self.moderators[self.room_name].id == self.user.id
+        has_moderator = self.moderators[self.room_name] is not None
+        room_moderator_has_disconnected =  has_moderator and self.moderators[self.room_name].id == self.user.id
 
         if is_disconnected and room_moderator_has_disconnected:
             self.moderators[self.room_name] = None
@@ -123,11 +135,15 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     def _set_moderator(self, user):
         if user is None:
             # delete all room data if all the users has disconnected
-            del self.moderators[self.room_name]
             del self.connected_users[self.room_name]
             del self.moderators[self.room_name]
-            del self.room_user_answers[self.room_name]
             del self.last_action[self.room_name]
+            if self.room_user_answers.get(self.room_name, None) is not None:
+                del self.room_user_answers[self.room_name]
+            if self.all_questions.get(self.room_name, None) is not None:
+                del self.all_questions[self.room_name]
+            if self.all_selected_reviewer.get(self.room_name, None) is not None:
+                del self.all_selected_reviewer[self.room_name]
         else:
             self.moderators[self.room_name] = user
 
@@ -138,49 +154,58 @@ class StudyPodConsumer(StudyPodBaseConsumer):
     SUBMIT_ANSWER = 'SUBMIT_ANSWER'
     SHOW_RESULTS = 'SHOW_RESULTS'
     UPDATE_MODERATOR = 'UPDATE_MODERATOR'
-    SYNC_TO_ROOM = 'SYNC_TO_ROOM'
     RETRIEVE_REVIEWER_LIST = 'RETRIEVE_REVIEWER_LIST'
+    ERROR = 'ERROR'
 
     async def connect(self):
         self.user = self.scope['user']
-        await self.initiate_connect()
-        self.update_number_of_connected_users()
-        self._update_moderator()
+        await super().initiate_connect()
+        super().update_number_of_connected_users()
+        super()._update_moderator()
         await self._set_action_to_retrieve_reviewer_list_if_the_moderator()
         await self._set_action_to_sync_to_room_if_not_the_moderator()
 
     async def receive(self, text_data=None, bytes_data=None):
+        self.is_update_moderator = False
         self.data = json.loads(text_data)
-        will_send_message_to_room = True
-        action = self.data['action']
+        self.will_send_message_to_room = True
 
+        await self._perform_action(self.data['action'])
+
+        if self.will_send_message_to_room:
+            await self._send_message_to_room()
+            if self.is_update_moderator:
+                return
+            self._set_last_action(self.data)
+        else:
+            await self._send_message_to_self()
+
+    async def _perform_action(self, action):
         match action:
-            case self.SYNC_TO_ROOM:
-                if self._has_moderator():
-                    self._sync_to_room()
-                    will_send_message_to_room = False
             case self.RETRIEVE_REVIEWER_LIST:
                 if self._has_moderator():
-                    will_send_message_to_room = await self._retrieve_reviewer_list()
+                    self.will_send_message_to_room = await self._retrieve_reviewer_list()
             case self.SELECT_REVIEWER:
                 if self._has_moderator():
                     await self._select_reviewer()
             case self.GENERATE_QUESTION:
                 if self._has_moderator():
                     await self._generate_question()
+                    print('generate question')
             case self.SUBMIT_ANSWER:
                 if self._has_moderator():
                     await self._submit_answer()
-                    will_send_message_to_room = False
+                    self.will_send_message_to_room = False
             case self.SHOW_RESULTS:
                 if self._has_moderator():
                     await self._show_results()
             case self.UPDATE_MODERATOR:
-                if not self._has_moderator():
+                if not self._has_moderator(is_update_moderator=True):
+                    self.is_update_moderator = True
                     self._update_new_moderator()
                 else:
                     self._has_existing_moderator()
-                    will_send_message_to_room = False
+                    self.will_send_message_to_room = False
             case _:
                 self.data = self._get_data(
                     self.data, {
@@ -189,12 +214,6 @@ class StudyPodConsumer(StudyPodBaseConsumer):
                     }
                 )
 
-        if will_send_message_to_room:
-            await self._send_message_to_room()
-            self._set_last_action(action)
-        else:
-            await self._send_message_to_self()
-
     async def send_message(self, event):
         await self.send(text_data=json.dumps(event['data']))
 
@@ -202,14 +221,44 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         if self.connected_users[self.room_name] != 1:
             return
 
-        self.data = {'action': "RETRIEVE_REVIEWER_LIST"}
-        await self._send_message_to_self()
+        self.data = {'action': self.RETRIEVE_REVIEWER_LIST}
+        await self._retrieve_reviewer_list()
+        self.last_action[self.room_name] = self.data
+        await super()._send_message_to_self()
 
     async def _set_action_to_sync_to_room_if_not_the_moderator(self):
         if self.connected_users[self.room_name] == 1:
             return
 
-        self.data = {'action': "SYNC_TO_ROOM"}
+        self.data = self.last_action[self.room_name]
+        action = self.data['action']
+
+        if action == self.GENERATE_QUESTION:
+            await self._sync_on_generate_question()
+            return
+
+        if action == self.SHOW_RESULTS:
+            await self._sync_on_generate_question()
+            await self._sync_to_room(self.last_action[self.room_name])
+
+        await self._sync_to_room(self.last_action[self.room_name])
+
+    async def _sync_on_generate_question(self):
+        await self._sync_to_room({
+            'action': self.SELECT_REVIEWER,
+            'reviewer': await self._get_reviewer_data(),
+        })
+        await self._sync_to_room({
+            'action': self.GENERATE_QUESTION,
+            'questions': self.all_questions[self.room_name]
+        })
+
+    @database_sync_to_async
+    def _get_reviewer_data(self):
+        return ReviewerSerializer(self.all_selected_reviewer[self.room_name]).data
+
+    async def _sync_to_room(self, data):
+        self.data = data
         await self._send_message_to_self()
 
     @staticmethod
@@ -219,50 +268,44 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             "content": content
         }
 
-    def _sync_to_room(self):
-        self.data = {
-            **self.data,
-            "last_action": self.last_action[self.room_name]
-        }
-
     async def _retrieve_reviewer_list(self):
         is_the_moderator = self.moderators[self.room_name].id == self.user.id
         reviewer_list = ReviewerList(studypod=self.study_pod)
         self.data = self._get_data(self.data, await reviewer_list.get())
         return is_the_moderator
 
-    def _set_last_action(self, action):
-        self.last_action[self.room_name] = action
+    def _set_last_action(self, data):
+        self.last_action[self.room_name] = data
 
-    def _has_moderator(self):
+    def _has_moderator(self, is_update_moderator=False):
         has_moderator = self.moderators[self.room_name] is not None
-        if not has_moderator:
-            self.data = self._get_data(
-                self.data,
-                {
-                    'has_no_moderator': True,
-                    'error': 'A moderator must be chosen first.'
-                }
-            )
+        if not is_update_moderator and not has_moderator:
+            self.data = {
+                'action': self.ERROR,
+                'has_no_moderator': True,
+                'message': 'A moderator must be chosen first.'
+            }
         return has_moderator
 
     async def _generate_question(self):
+        print('generate questions')
         question = GenerateQuestion(
-            reviewer=self.reviewer,
+            reviewer=self.all_selected_reviewer[self.room_name],
             data=self.data,
             user=self.user,
             moderator=self.moderators[self.room_name],
-            number_of_questions=self.data['number_of_questions']
+            number_of_questions=self.data['number_of_questions'],
+            studypod=self.study_pod,
         )
         self.data = await question.generate()
-        questions = self.data['questions']
-
+        questions = self.data.get('questions', None)
+        self.all_questions[self.room_name] = questions
+        print(questions)
         if questions is not None:
-            self.room_user_answers[self.room_name] = {
-                "questions": self.data['questions'],
-            }
+            self.room_user_answers[self.room_name] = []
 
     async def _select_reviewer(self):
+
         reviewer = GetReviewer(
             slug=self.data['reviewer_slug'],
             data=self.data,
@@ -272,12 +315,14 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         self.data = await reviewer.get()
         self.reviewer = reviewer.get_obj()
 
+        self.all_selected_reviewer[self.room_name] =  self.reviewer
+
     async def _submit_answer(self):
         answer = Answer(
             user=self.user,
             answers=self.data.pop('answers', []),
             user_answers=self.room_user_answers[self.room_name],
-            questions=self.room_user_answers[self.room_name]['questions'],
+            questions=self.all_questions[self.room_name],
             data=self.data,
             room_name=self.room_name
         )
@@ -285,25 +330,22 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         self.data = self._get_data(self.data, {'success': 'Answer has been submitted.'})
 
     async def _show_results(self):
-        answers = self.room_user_answers.get(self.room_name, {})
+        answers = self.room_user_answers.get(self.room_name, [])
 
         if answers is {}:
-            self. data = self._get_data(
-                self.data,
-                {
-                    'has_no_submitted_answers': True,
-                    'error': 'No submitted answers.'
-                }
-            )
+            self. data = {
+                'action': self.ERROR,
+                'has_no_submitted_answers': True,
+                'message': 'No submitted answers.'
+            }
             return
-
         self.data = self._get_data(self.data, answers)
+        self.last_action[self.room_name] = self.data
 
     def _update_new_moderator(self):
         message = 'The moderator has been'
-        moderator = None if self.data['unset_moderator'] is None else self.user
+        moderator = None if self.data.get('unset_moderator', None) is None else self.user
         self.moderators[self.room_name] = moderator
-
         self.data = self._get_data(
             self.data,
             {
@@ -314,10 +356,8 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         )
 
     def _has_existing_moderator(self):
-        self.data = self._get_data(
-            self.data,
-            {
-                'has_an_existing_moderator': True,
-                'error': 'There is an existing moderator.',
-            }
-        )
+        self.data = {
+            'action': self.ERROR,
+            'has_an_existing_moderator': True,
+            'message': 'There is an existing moderator.',
+        }

@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { apiRootURL } from '@root/globals';
 import { makeTextareaHeightToBeResponsive, performDeleteDefinition } from './services';
-import { ContentContext } from './Title';
 import { TitleContext } from './Main';
 
 function Definition({definition, titleSlug}) {

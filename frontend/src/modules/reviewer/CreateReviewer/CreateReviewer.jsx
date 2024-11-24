@@ -1,9 +1,8 @@
 import searchIcon from '@assets/search.png';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import '../../../sass/pages/_createreviewer.scss';
 import axios from 'axios';
-import { apiRootURL } from '../../../globals';
+import { apiRootURL } from '@root/globals';
 // import axios from 'axios';
 
 const initialReviewer = {
@@ -48,15 +47,17 @@ const CreateReviewer = () => {
   };
 
   const handleSubmit = async (event) => {
+   
     event.preventDefault();
-    
+
     const formData = new FormData();
-    
+
     formData.append('name', reviewer.name);
     formData.append('description', reviewer.description);
 
     Array.from(reviewer.files).forEach((file, index) => {
-      formData.append(`files[${index}]`, file);
+     
+      formData.append('files', file);
     });
 
     axios
@@ -70,10 +71,11 @@ const CreateReviewer = () => {
         }
       )
       .then(response => {
-        console.log(response.data)
         setReviewer(initialReviewer)
+        alert("Done!")
       })
       .catch(error => {
+        alert("Error!")
         console.log(error.response.data)
       })
   };
@@ -99,7 +101,7 @@ const CreateReviewer = () => {
           </form>
 
           <button className="create-button" onClick={handleCreateClick}>
-            Create
+            Bye
           </button>
         </div>
 
@@ -126,6 +128,7 @@ const CreateReviewer = () => {
                   id="uploadFile" 
                   className="input-field"
                   onChange={handleFileUpload} 
+                  multiple="multiple"
                 />
                 <label htmlFor="uploadFile" className="upload-link">
                 </label>

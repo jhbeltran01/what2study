@@ -1,0 +1,143 @@
+.header-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #4a4a4a;
+  margin-right: auto;
+  padding: 2rem 2rem;
+}
+    
+    reviewer-entry {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+  }
+  
+  .reviewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  
+  .reviewer-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .reviewer-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .reviewer-description {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .reviewer-created-by {
+    margin-top: 10px;
+    font-style: italic;
+  }
+  
+  .back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .divider {
+    margin: 20px 0;
+    border-top: 1px solid #ddd;
+  }
+  
+  .grade-container {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr; /* 1px width for the vertical line */
+    gap: 20px; /* Adjust gap as needed */
+    align-items: center; /* Align items vertically */
+    padding: 10px 0;
+  }
+  
+  .grade-description-wrapper {
+    text-align: left; /* Align text to the left */
+  }
+  
+  .grade-title-wrapper {
+    text-align: right; /* Align text to the right */
+  }
+  
+  .vertical-line {
+    width: 1px; /* Vertical line width */
+    height: 100%; /* Full height within the container */
+    background-color: #000; /* Black vertical line */
+    justify-self: center; /* Center the line horizontally */
+  }
+
+  .view-notes-section {
+    margin-top: 30px;
+  }
+  
+  .view-notes-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .view-notes-container {
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 700px; /* Adjust max-width as needed */
+    margin: 0 auto; /* Center align */
+    box-shadow: none;
+  }
+  
+  .view-notes-input {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #333;
+    resize: vertical;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .view-notes-input:focus {
+    border-color: #cfcc18;
+  }
+
+  .start-button-container {
+    margin-top: 20px; /* Space between Notes and Start Button */
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+  }
+  
+  .start-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Ensure text is centered inside the button */
+  }
+  
+  .start-button:hover {
+    background-color: #0056b3;
+  }

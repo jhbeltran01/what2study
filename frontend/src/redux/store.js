@@ -7,6 +7,7 @@ import todosReducer from './todos'
 import todoReducer from './todo'
 import userInfoReducer from './user_info'
 import subjectReducer from './subject'
+import answersReducer from './answers'
 import { loadState, saveState } from './utils' 
 
 const persistedState = loadState()
@@ -21,6 +22,7 @@ const store = configureStore({
     todo: todoReducer,
     userInfo: userInfoReducer,
     subject: subjectReducer,
+    answers: answersReducer
   },
   preloadedState: persistedState
 })
@@ -35,6 +37,7 @@ store.subscribe(() => {
     todo: store.getState().todo,
     userInfo: store.getState().userInfo,
     subject: store.getState().subject,
+    answers: store.getState().answers,
   })
 })
 

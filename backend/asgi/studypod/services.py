@@ -1,19 +1,10 @@
 from channels.db import database_sync_to_async
 
 from apis.authentication.serializers import UserInfoSerializer
-from apis.questions.services import Question
+from apis.questions.services import Question, embeddings
 from apis.reviewers.serializers import ReviewerSerializer
 from apis.studypods.serializers import StudypodReviewerSerializer
 from common.models import Reviewer, StudypodReviewer
-
-
-def get_error_data(data, message):
-    return {
-        **data,
-        'message': {
-            "error": message
-        }
-    }
 
 
 class GetReviewer:
@@ -55,6 +46,7 @@ class GenerateQuestion:
         data,
         user,
         moderator,
+        studypod,
         number_of_questions=1,
     ):
         self.reviewer = reviewer
@@ -62,23 +54,32 @@ class GenerateQuestion:
         self.user = user
         self.moderator = moderator
         self.number_of_questions = number_of_questions
+        self.studypod = studypod
 
     @database_sync_to_async
     def generate(self):
         if self.reviewer is None:
             return get_error_data(self.data, "Please select a reviewer.")
-
+        print(self.user.username, self.moderator.username)
         if self.user.id != self.moderator.id:
             return get_error_data(self.data, "The moderator is the only one that can generate a question.")
 
         if self.number_of_questions < 1:
             return get_error_data(self.data, "Number of questions must be atleast 1.")
 
+        obj = self.studypod.available_types.filter(studypod=self.studypod).first()
+        types = obj.available_question_types
+
+        if 'E' in types:
+            types.remove('E')
+        print(types)
         question = Question(
             reviewer_obj=self.reviewer,
-            number_of_questions=self.number_of_questions
+            number_of_questions=self.number_of_questions,
+            studypod=self.studypod,
+            available_question_types=types,
         )
-
+        print(question.generate(), 'generate - 82')
         return {
             **self.data,
             "questions": question.generate()
@@ -93,17 +94,23 @@ class Answer:
         self.questions = questions
         self.room_name = room_name
         self.data = data
+        self.embedded_question_answers = []
 
     def submit(self):
         if self.user_answers is None:
             return get_error_data(self.data, "Please generate a question first.")
 
-        self._check_answer()
+        self._embed_question_answers()
 
-        self.user_answers[str(self.user.id)] = {
+        self._check_answer()
+        self.user_answers.append({
             "answers": self.answers,
             "user": UserInfoSerializer(self.user).data
-        }
+        })
+
+    def _embed_question_answers(self):
+        for question in self.questions:
+            print(question)
 
     def _check_answer(self):
         for index in range(len(self.answers)):
@@ -118,3 +125,10 @@ class ReviewerList:
     def get(self):
         reviewers = StudypodReviewer.reviewers.filter(studypod=self.studypod)
         return StudypodReviewerSerializer(reviewers, many=True).data
+
+
+def get_error_data(data, message):
+    return {
+        'action': 'ERROR',
+        'message':  message,
+    }
