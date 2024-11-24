@@ -1,0 +1,194 @@
+.reviewer-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  position: relative;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reviewer-entry:hover {
+  transform: translateY(-5px); /* Subtle lift on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+  border-bottom: 3px solid #daa92b; /* Light yellowish horizontal line at the bottom */
+}
+
+.reviewer-header {
+  display: flex;
+  flex-direction: row; /* Align items horizontally */
+  justify-content: space-between; /* Space out title and more-options */
+  align-items: center; /* Vertically align items */
+  margin-bottom: 0.5rem;
+  width: 100%; /* Ensure the header spans the full width of the card */
+  position: relative;
+}
+
+.reviewer-title {
+  font-weight: bold;
+  font-size: 1.125rem;
+  color: #333333;
+  margin-bottom: 0.25rem; /* Add spacing between title and date */
+  margin-left: 0.4rem;
+}
+
+.reviewer-info {
+  //display: flex;
+  gap: 0.25rem; /* Add spacing between date and other info if applicable */
+  font-size: 0.875rem;
+  color: #6b7280;
+  align-items: flex-start; /* Align date and additional info to the left */
+}
+
+.reviewer-created-by {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  align-self: flex-start; /* Keep the text on the left */
+  margin-left: 0.4rem;
+  margin-top: 0; /* Adjust the margin to reduce space above */
+}
+
+.reviewer-date {
+  margin-left: 0.4rem;
+  margin-right: 2rem;
+  margin-top: 1.5rem;
+  padding: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.more-options {
+  background: none;
+  border: none;
+  font-size: 1.10rem;
+  cursor: pointer;
+  color: #4a4a4a;
+  margin-right: 0.4rem;
+  // margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.more-options:hover {
+  color: #ff8c00;
+}
+
+// .reviewer-title {
+//     font-weight: bold;
+//     font-size: 1.125rem;
+//     color: #333333;
+//     // margin-bottom: 0.5rem;
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-info {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.25rem;
+//     margin-top: 0;
+//     align-items: flex-start; /* Ensure all info aligns to the left */
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-created-by {
+//     font-size: 0.875rem;
+//     color: #9ca3af;
+//     align-self: flex-start; /* Keep the text on the left */
+//     // margin-top: 0.1rem;
+//     margin-left: 0.4rem;
+// }
+
+// .reviewer-title {
+//     font-weight: bold;
+//     margin-left: 0.4rem;
+//     font-size: 1.125rem;
+//     color: #333333;
+//     margin-bottom: 0; /* Reduced margin between title and owner */
+// }
+
+
+
+
+
+
+.view-link {
+  display: block; /* Ensure it behaves like a button */
+  margin-top: 0.5rem; /* Add spacing if needed */
+  margin-left: 0.4rem;
+  color: #ff8c00; /* Set the color to orange */
+  text-decoration: underline; /* Add an underline */
+  font-weight: bold; /* Optional: make the text bold */
+  transition: color 0.3s ease, text-decoration 0.2s ease; /* Smooth hover effects */
+}
+
+.view-link:hover {
+  text-decoration: underline; /* Keep underline on hover */
+  color: #ff6600; /* Darker shade of orange on hover */
+}
+
+.divider {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid #d1d5db;
+}
+
+.create-button-add {
+  background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.create-button-add:hover {
+  background-color: #f57c00;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .reviewer-entry {
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+  }
+
+  .reviewer-title {
+      font-size: 1rem;
+  }
+
+  .more-options {
+      font-size: 1rem;
+  }
+
+  .divider {
+      margin: 1rem 0;
+  }
+
+  .reviewer-info {
+      gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewer-entry {
+      padding: 0.5rem;
+  }
+
+  .more-options {
+      font-size: 1rem;
+      top: 0.5rem;
+      right: 0.5rem;
+  }
+
+  .create-button-add {
+      padding: 0.5rem 1rem;
+  }
+}
