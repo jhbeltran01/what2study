@@ -26,7 +26,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
   }, [questions])
 
   useEffect(() => {
-    if (answers.answers.length == 0 || answers.answers[currentQuestion].user_answers.length == 0) { 
+    if (answers.answers == undefined || answers.answers.length == 0 || answers.answers[currentQuestion].user_answers.length == 0) { 
       setAnswerText('')
       return 
     }

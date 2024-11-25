@@ -30,7 +30,7 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
   }, [questions])
 
   useEffect(() => {
-    if (answers.answers == 0 || answers.answers[currentQuestion].user_answers.length == 0) { 
+    if (answers.answers == undefined || answers.answers == 0 || answers.answers[currentQuestion].user_answers.length == 0) { 
       setPlaceholders([''])
       return 
     }

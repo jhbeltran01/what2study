@@ -89,7 +89,7 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
             <div className="options-container">
               {['A', 'B', 'C', 'D'].map((option, index) => {
                 const optionText = question.choices[index]
-                const hasAnswers =  answers.answers.length > 0 && answers.answers[currentQuestion].user_answers != undefined
+                const hasAnswers =  answers.answers != undefined && answers.answers.length > 0 && answers.answers[currentQuestion].user_answers != undefined
                 const userAnswer = hasAnswers && answers.answers[currentQuestion].user_answers[0]
                 const hasAnswer = userAnswer != undefined 
                 const selectedAnswer =  hasAnswer && userAnswer.answer
