@@ -1,6 +1,7 @@
 import Home from '@modules/home_page/Home';
 import Homepage from "@modules/home_page/Homepage";
 import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
+import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
@@ -40,6 +41,11 @@ const pagesData = [
         path: routes.ROUTES.CREATE_REVIEWER, 
         element: <CreateReviewer />,
         title: routes.CREATE_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.EDIT_REVIEWER, 
+        element: <EditReviewer />,
+        title: routes.EDIT_REVIEWER, 
       },
       {
         path: routes.ROUTES.STUDYPODS,

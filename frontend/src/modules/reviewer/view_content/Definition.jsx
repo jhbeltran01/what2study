@@ -3,9 +3,11 @@ import React from 'react'
 
 function Definition({definition}) {
   return (
-    <div className='px-[1em]'>
-      {definition.text}
-    </div>
+<div className='reviewer-definition-container'>
+  {definition.text}
+</div>
+
+
   )
 }
 

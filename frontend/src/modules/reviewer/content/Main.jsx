@@ -22,7 +22,6 @@ function Main() {
   const [willAddContent, setWillAddContent] = useState(false)
   const navigate = useNavigate(); // Initialize useNavigate
 
-
   const handleTitleClick = () => {
     navigate('/reviewers'); // Redirect to Reviewer page
   };
@@ -47,14 +46,11 @@ function Main() {
       <EnumTitleContext.Provider value={[text, setText]}>
         <TitleContext.Provider value={[titles, setTitles]}>
           <div className='main-content'>
-
             <div className='main-content-options'>
-            <button className="header-title" onClick={handleTitleClick}>
-            {'← Back to Reviewers'}
-          </button>
+            <button className='back-reviewer-button' onClick={handleTitleClick}>Back</button>
               <h1 className='header-title'>{reviewer.name}</h1>
               <div className='review-addcontent-button'>
-                <Link to={START_REVIEWING}>Review</Link>
+                <Link to={START_REVIEWING}>Start Reviewer</Link>
                 <button className='content-button' onClick={() => setWillAddContent(!willAddContent)}>Add Content</button>
                 <Options reviewer={reviewer} />
               </div>
