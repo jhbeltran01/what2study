@@ -56,6 +56,14 @@
     }
 }
 
+.sidebar-title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1rem;
+    color: black;
+    flex-grow: 1; /* Allow title to take up remaining space */
+    text-align: left; /* Ensure the text aligns properly */
+  }
+
 .sidebar-link-normal,
 .logout-button {
     @include sync-background;

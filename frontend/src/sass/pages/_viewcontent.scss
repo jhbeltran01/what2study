@@ -33,7 +33,7 @@ html, body {
             .content-button {
                 padding: 0.5rem 1rem;
                 background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
+                color: rgb(0, 0, 0);
                 border: none;
                 border-radius: 10px;
                 cursor: pointer;
@@ -55,7 +55,7 @@ html, body {
             a {
                 padding: 0.5rem 1rem;
                 background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
+                color: rgb(0, 0, 0);
                 text-decoration: none;
                 border-radius: 10px;
                 cursor: pointer;
@@ -97,7 +97,7 @@ html, body {
             
             input[type="checkbox"]:checked + label,
             input[type="checkbox"]:not(:checked) + label {
-                color: #ffffff;
+                color: #000000;
             }
 
             label {
@@ -146,10 +146,10 @@ html, body {
             }
         }
 
-          .back-reviewer-button {
+          .content-back-reviewer-button {
             padding: 0.5rem 1rem;
             background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-            color: white;
+            color: rgb(0, 0, 0);
             text-decoration: none;
             border-radius: 10px;
             cursor: pointer;
@@ -195,7 +195,6 @@ html, body {
             color: #333;
             border: 2px solid #e1cb5e;
             border-radius: 8px;
-            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -258,7 +257,8 @@ html, body {
 
 
     
-        .definition-textarea {
+        .definition-textarea,
+        .new-definition-textarea {
             width: 100%;
             border-left: 4px solid #FF9F00; /* Highlight bar */
             color: #333;

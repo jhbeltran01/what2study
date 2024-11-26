@@ -71,7 +71,7 @@
 .back-reviewer-button {
   padding: 0.5rem 1rem;
   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
   border-radius: 10px;
   cursor: pointer;
@@ -85,7 +85,7 @@
 
 .back-reviewer-button:hover {
   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-  color: #ffffff;
+  color: #000000;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }

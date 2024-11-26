@@ -13,9 +13,9 @@ const CreateReviewer = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [reviewer, setReviewer] = useState(initialReviewer);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0); // State for upload progress
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState(''); // State to hold error messages
-
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
@@ -35,11 +35,6 @@ const CreateReviewer = () => {
       ...reviewer,
       files: event.target.files
     });
-
-    if (event.target.files.length > 0) {
-      setSuccessMessage('Files uploaded successfully!');
-      setTimeout(() => setSuccessMessage(''), 5000);
-    }
   };
 
   const handleChange = (event) => {
@@ -52,38 +47,49 @@ const CreateReviewer = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
+    if (reviewer.files.length === 0) {
+      console.error('No files uploaded.');
+      setErrorMessage('Please upload at least one file.');
+      setSuccessMessage('');
+      setTimeout(() => setErrorMessage(''), 5000);
+      return; // Stop submission
+    }
+  
     const formData = new FormData();
     formData.append('name', reviewer.name);
     formData.append('description', reviewer.description);
-    
+  
     Array.from(reviewer.files).forEach((file) => {
       formData.append('files', file);
     });
-    
+  
     try {
       const response = await axios.post(`${apiRootURL}/reviewers/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        onUploadProgress: (progressEvent) => {
+          const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentage); // Update progress percentage
+        },
       });
-    
-      console.log('API Response:', response);
-    
+  
       if (response.status === 200) {
         setReviewer(initialReviewer); // Clear form fields
         setSuccessMessage('Reviewer created successfully!');
-        setErrorMessage(''); // Clear error message if success
-        setTimeout(() => setSuccessMessage(''), 5000); // Clear the success message after 5 seconds
+        setErrorMessage('');
+        setTimeout(() => setSuccessMessage(''), 5000);
+        setUploadProgress(0); // Reset progress bar
       }
     } catch (error) {
       console.error(error.response?.data || error.message);
-      setErrorMessage('Error creating reviewer, please try again.'); // Set error message
-      setSuccessMessage(''); // Clear success message if error
-      setTimeout(() => setErrorMessage(''), 5000); // Clear the error message after 5 seconds
+      setErrorMessage('Error creating reviewer, please try again.');
+      setSuccessMessage('');
+      setTimeout(() => setErrorMessage(''), 5000);
+      setUploadProgress(0); // Reset progress bar
     }
   };
-  
   
 
   return (
@@ -94,29 +100,30 @@ const CreateReviewer = () => {
         </button>
       </div>
       <div className="create-reviewer-content">
-  {successMessage && (
-    <div className="success-message">
-      {successMessage}
-      <button
-        className="close-message-button"
-        onClick={() => setSuccessMessage('')}
-      >
-        &times;
-      </button>
-    </div>
-  )}
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
+            <button
+              className="close-message-button"
+              onClick={() => setSuccessMessage('')}
+            >
+              &times;
+            </button>
+          </div>
+        )}
 
-  {errorMessage && (
-    <div className="error-message">
-      {errorMessage}
-      <button
-        className="close-message-button"
-        onClick={() => setErrorMessage('')}
-      >
-        &times;
-      </button>
-    </div>
-  )}
+        {errorMessage && (
+          <div className="error-message">
+            {errorMessage}
+            <button
+              className="close-message-button"
+              onClick={() => setErrorMessage('')}
+            >
+              &times;
+            </button>
+          </div>
+        )}
+
         <form className="reviewer-form" onSubmit={handleSubmit}>
           <div className="form-group reviewer-name-group">
             <label htmlFor="reviewerName">Reviewer Name:</label>
@@ -143,6 +150,18 @@ const CreateReviewer = () => {
               />
             </div>
           </div>
+
+          {uploadProgress > 0 && (
+  <div className="progress-bar-container">
+    <div
+      className="progress-bar"
+      style={{ width: `${uploadProgress}%` }}
+    ></div>
+    <span className="progress-percentage">{uploadProgress}%</span>
+  </div>
+)}
+
+
 
           <div className="form-group">
             <label htmlFor="description">Description:</label>

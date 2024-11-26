@@ -27,9 +27,9 @@ const Sidebar = () => {
                         }
                         key={index}
                     >
-                        <img src={item.icon} alt={item.title} className="sidebar-icon" />
-                        <span>{item.title}</span>
-                    </NavLink>
+                        {/* <img src={item.icon} alt={item.title} className="sidebar-icon" /> */}
+                        <span className="sidebar-title">{item.title}</span>
+                        </NavLink>
                 ))
             }
             <button onClick={logoutUser} className='sidebar-link-normal sidebar-link-hover radius logout-button'>Logout</button>
