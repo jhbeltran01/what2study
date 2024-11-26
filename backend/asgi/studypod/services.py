@@ -61,7 +61,6 @@ class GenerateQuestion:
     def generate(self):
         if self.reviewer is None:
             return get_error_data(self.data, "Please select a reviewer.")
-        print(self.user.username, self.moderator.username)
         if self.user.id != self.moderator.id:
             return get_error_data(self.data, "The moderator is the only one that can generate a question.")
 
@@ -73,14 +72,12 @@ class GenerateQuestion:
 
         if 'E' in types:
             types.remove('E')
-        print(types)
         question = Question(
             reviewer_obj=self.reviewer,
             number_of_questions=self.number_of_questions,
             studypod=self.studypod,
             available_question_types=types,
         )
-        print(question.generate(), 'generate - 82')
         return {
             **self.data,
             "questions": question.generate()
@@ -130,7 +127,6 @@ class Answer:
                 self.embedded_question_answers[index]
             ) * 100
             is_correct = accuracy > 96
-            print(is_correct)
             self.answers[index]['is_correct'] = bool(is_correct)
 
 
