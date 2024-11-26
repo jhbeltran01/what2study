@@ -1,4 +1,5 @@
 from channels.db import database_sync_to_async
+import numpy as np
 
 from apis.authentication.serializers import UserInfoSerializer
 from apis.questions.services import Question, embeddings
@@ -95,12 +96,14 @@ class Answer:
         self.room_name = room_name
         self.data = data
         self.embedded_question_answers = []
+        self.embedded_user_answers = []
 
     def submit(self):
         if self.user_answers is None:
             return get_error_data(self.data, "Please generate a question first.")
 
         self._embed_question_answers()
+        self._embed_user_answers()
 
         self._check_answer()
         self.user_answers.append({
@@ -110,11 +113,25 @@ class Answer:
 
     def _embed_question_answers(self):
         for question in self.questions:
-            print(question)
+            self.embedded_question_answers.append(
+                embeddings.embed_query(question['answer'])
+            )
+
+    def _embed_user_answers(self):
+        for answer in self.answers:
+            self.embedded_user_answers.append(
+                embeddings.embed_query(answer['text'])
+            )
 
     def _check_answer(self):
         for index in range(len(self.answers)):
-            self.answers[index]['is_correct'] = True
+            accuracy = np.dot(
+                self.embedded_user_answers[index],
+                self.embedded_question_answers[index]
+            ) * 100
+            is_correct = accuracy > 96
+            print(is_correct)
+            self.answers[index]['is_correct'] = bool(is_correct)
 
 
 class ReviewerList:
