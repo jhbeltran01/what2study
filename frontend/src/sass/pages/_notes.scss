@@ -7,29 +7,14 @@ html, body {
   overflow: hidden;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding: 0 1rem;
-}
+.container-1 {
+  background-color: white;  
+  padding: 1rem;  
 
-.header-buttons {
-  display: flex;
-
-  button {
-      margin-right: 1rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-  }
-
-  .active {
-      font-weight: bold;
-      color: #FEA61F; 
+  .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -122,5 +107,45 @@ html, body {
   p {
       font-size: 1.25rem; 
       color: #555555;
+  }
+}
+
+.container-1 {
+  background-color: white;  
+  padding: 1rem;
+
+  .flex {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem; 
+  }
+
+  .btn-4-container {
+    display: flex;
+    justify-content: flex-start;  
+    gap: 0.3rem;  
+  }
+
+  .btn-4 {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #4a4a4a;
+    border: none;  
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      color: #FEA61F; 
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.active {
+      color: #FEA61F;
+    }
   }
 }
