@@ -17,6 +17,7 @@ import Subjects from '@modules/subjects/Main'
 import SubjectContent from '@modules/subjects/content/Main'
 import CreateSubjectReviewer from '@modules/subjects/create_reviewer/Main'
 import StartReviewing from '@modules/reviewer/StartReviewer/Main.jsx'
+import StudypodStartReviewing from '@modules/study_pod/components/study_pods/StartReviewer/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -126,6 +127,11 @@ const pagesData = [
         path: routes.ROUTES.STUDYPOD_CONTENT,
         element:  <StudypodContent />,
         title: routes.STUDYPOD_CONTENT
+      },
+      {
+        path: routes.ROUTES.STUDYPOD_START_REVIEWER,
+        element:  <StudypodStartReviewing />,
+        title: routes.STUDYPOD_START_REVIEWER
       },
     ]
   },

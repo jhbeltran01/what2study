@@ -1,7 +1,7 @@
 @use '../abstract/variables' as var;
 
 .login-page {
-	background-image: url('../assets/auth.png');
+	background-image: url('@assets/auth.png');
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;

@@ -59,7 +59,7 @@
   text-align: center;  
 }
 
-.form-1 > button {
+.form-1 > .close-btn {
   align-self: flex-end; 
   background: none;
   color: black;
@@ -69,25 +69,25 @@
   margin-bottom: 15px;
 }
 
-form {
+.form-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 100%;
 }
 
-// form div {
-//   display: flex;
-//   align-items: center; 
-//   gap: 10px; 
-// }
+.form-group {
+  display: flex;
+  align-items: center; 
+  gap: 10px; 
+}
 
-label {
+.form-label {
   font-weight: bold;
   flex-shrink: 0;  
 }
 
-input {
+.input-title {
   padding: 8px;
   border-radius: 5px;
   font-size: 14px;
@@ -112,74 +112,4 @@ input {
   &:hover {
     transform: scale(1.1);  
   }
-}
-
-.note-container {
-  display: flex;
-  flex-wrap: wrap;           
-  justify-content: flex-start; 
-  gap: 10px;                 
-  padding: 0;                
-}
-
-.note-container {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);  
-  gap: 20px;  
-  justify-items: start;  
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.note-button {
-  background: linear-gradient(to bottom, #FED65D 27%, #f4f4f4 25%);
-  color: #333;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%; 
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; 
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 30px;
-  position: relative;      
-}
-
-.note-title {
-  font-weight: bold;
-  margin-bottom: 8px; 
-}
-
-.note-content {
-  margin-bottom: 20px; 
-}
-
-.note-timestamp {
-  font-size: 0.75rem; 
-  color: gray;         
-  position: absolute;  
-  bottom: 10px;       
-  left: 10px;         
-}
-
-.note-content {
-  margin-top: 10px;
-  flex-grow: 1; 
-  text-align: center;  
-  font-size: 0.9rem;
-  color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}  
-
-.input-title {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  width: 100%;
 }
