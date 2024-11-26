@@ -1,4 +1,4 @@
-export const rootWebSocketURL = 'http://127.0.0.1:8000/ws'
+export const rootWebSocketURL = 'https://workable-oyster-regularly.ngrok-free.app/ws'
 export const actions = {
   GENERATE_QUESTION: 'GENERATE_QUESTION',
   SELECT_REVIEWER: 'SELECT_REVIEWER',

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { JOIN_CALL } from '@root/routes/constants';
 import { setStudypod } from "@redux/studypod"
 import { useDispatch } from 'react-redux';
-import { STUDYPOD_CONTENT } from '@root/routes/constants';
+import { STUDYPOD_CONTENT, STUDYPOD_START_REVIEWER } from '@root/routes/constants';
 
 
 function Card({studypod}) {
@@ -14,7 +14,7 @@ function Card({studypod}) {
     <div>
       <h1>{studypod.name}</h1>
       <Link 
-        to={JOIN_CALL}
+        to={STUDYPOD_START_REVIEWER}
         onClick={() => dispatch(setStudypod(studypod))}
       >
         Join

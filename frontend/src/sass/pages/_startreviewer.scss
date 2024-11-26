@@ -284,3 +284,35 @@ background-color: #c0392b;
         background-color: var.$red-1;
     }
 }
+
+.submit-success {
+    background-color: var.$green-1;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+.submit-error {
+    background-color: var.$red-1;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+
+.username-answer {
+    background: linear-gradient(180deg, #FEA61F, #FED65D);
+    padding: 1em 2em;
+    border-radius: 5px;
+}
+
+.action-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.error-message {
+    position: fixed;
+    top: 20px;
+    right: 0;
+    left: 0;
+}

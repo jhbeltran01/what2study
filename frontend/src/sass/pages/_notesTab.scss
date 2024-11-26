@@ -9,13 +9,14 @@
   cursor: pointer;  
   transition: background-color 0.3s ease; 
 
-  &:hover {
-    background-color: #FED65D;
-  }
 
   position: absolute;
   top: 15px; 
   right: 10px;  
+  
+  &:hover {
+    background-color: #FED65D;
+  }
 }
 
 .search-bar2 {
@@ -28,14 +29,13 @@
   font-size: 1rem;
   width: 250px;  
   max-width: 100%;   
+  position: absolute;
+  top: 15px;  
+  right: 120px; 
 
   &::placeholder {
     color: #a1a1a1;
-  }
-
-  position: absolute;
-  top: 15px;  
-  right: 120px;  
+  } 
 }
 
 
