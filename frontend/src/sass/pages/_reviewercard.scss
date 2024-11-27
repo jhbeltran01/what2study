@@ -1,18 +1,28 @@
-.reviewer-entry {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    position: relative;
-    background-color: #ffffff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+.container { /* Parent container for .reviewer-entry elements */
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  // gap: 2rem; /* Optional: Adjust spacing between grid items */
+  box-sizing: border-box; /* Ensures padding doesn't add to the width */
 }
+
+.reviewer-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin: 0rem 1rem; /* Remove side margins to fit the full width of the container */
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: auto; /* Take full width of the container */
+}
+
+// .reviewer-content {
+//   margin-bottom: 0.5rem;
+// }
 
 .reviewer-entry:hover {
     transform: translateY(-5px); /* Subtle lift on hover */
@@ -22,29 +32,29 @@
 
 .reviewer-header {
     display: flex;
-    flex-direction: row; /* Align items horizontally */
+    // flex-direction: row; /* Align items horizontally */
     justify-content: space-between; /* Space out title and more-options */
     align-items: center; /* Vertically align items */
-    margin-bottom: 0.5rem;
+    // margin-bottom: 0.5rem;
     width: 100%; /* Ensure the header spans the full width of the card */
     position: relative;
 }
 
 .reviewer-title {
     font-weight: bold;
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     color: #333333;
-    margin-bottom: 0.25rem; /* Add spacing between title and date */
+    // margin-bottom: 0.25rem; /* Add spacing between title and date */
     margin-left: 0.4rem;
 }
 
-.reviewer-info {
-    //display: flex;
-    gap: 0.25rem; /* Add spacing between date and other info if applicable */
-    font-size: 0.875rem;
-    color: #6b7280;
-    align-items: flex-start; /* Align date and additional info to the left */
-}
+// .reviewer-info {
+//     //display: flex;
+//     gap: 0.25rem; /* Add spacing between date and other info if applicable */
+//     font-size: 0.875rem;
+//     color: #6b7280;
+//     align-items: flex-start; 
+// }
 
 .reviewer-created-by {
     font-size: 0.875rem;
@@ -63,58 +73,131 @@
     color: #9ca3af;
 }
 
-.more-options {
+.more-options-container {
+    position: relative;
+  }
+  
+  .options-menu {
+    position: absolute;
+    top: 2rem; /* Adjust to align with your layout */
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 10;
+    width: 120px; /* Adjust based on content */
+  }
+  
+  .options-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    text-align: left;
     background: none;
     border: none;
-    font-size: 1.10rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .options-item:hover {
+    background-color: #f3f4f6;
+    color: #ff6600;
+  }
+  
+  .more-options {
+    background: none;
+    border: none;
+    font-size: 0.875rem;
     cursor: pointer;
     color: #4a4a4a;
-    margin-right: 0.4rem;
-    // margin-bottom: 0.5rem;
     transition: color 0.3s ease;
-}
-
-.more-options:hover {
+  }
+  
+  .more-options:hover {
     color: #ff8c00;
+  }
+
+  /* Modal Overlay */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Dim background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-// .reviewer-title {
-//     font-weight: bold;
-//     font-size: 1.125rem;
-//     color: #333333;
-//     // margin-bottom: 0.5rem;
-//     margin-left: 0.4rem;
-// }
+/* Modal Container */
+.delete-modal {
+  background: #ffffff; /* Clean white background */
+  border-radius: 16px;
+  padding: 2rem;
+  width: 360px; /* Balanced width */
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
 
-// .reviewer-info {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.25rem;
-//     margin-top: 0;
-//     align-items: flex-start; /* Ensure all info aligns to the left */
-//     margin-left: 0.4rem;
-// }
+/* Modal Title */
+.delete-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 1rem;
+}
 
-// .reviewer-created-by {
-//     font-size: 0.875rem;
-//     color: #9ca3af;
-//     align-self: flex-start; /* Keep the text on the left */
-//     // margin-top: 0.1rem;
-//     margin-left: 0.4rem;
-// }
+/* Modal Message */
+.delete-modal-message {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
 
-// .reviewer-title {
-//     font-weight: bold;
-//     margin-left: 0.4rem;
-//     font-size: 1.125rem;
-//     color: #333333;
-//     margin-bottom: 0; /* Reduced margin between title and owner */
-// }
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
 
+/* Confirm Button */
+.confirm-delete {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
+.confirm-delete:hover {
+  background: #d9363e;
+}
 
+/* Cancel Button */
+.cancel-delete {
+  background: #f3f4f6;
+  color: #333333;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-
+.cancel-delete:hover {
+  background: #e5e7eb;
+}
 
 .view-link {
     display: block; /* Ensure it behaves like a button */

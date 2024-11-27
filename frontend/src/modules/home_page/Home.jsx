@@ -8,7 +8,9 @@ import ReviewerCard from './ReviewerCard';
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTabName, setActiveTabName] = useState(constants.PUBLIC_TAB)
-  const [reviewers, setReviewers] = useState([])
+  const [reviewers, setReviewers] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
+
 
   useEffect(() => {
     axios
@@ -31,10 +33,19 @@ const Home = () => {
     console.log('Search term:', searchTerm);
   };
 
+  const handleFocus = () => {
+    setIsClicked(true);  // Set to true when the search input is focused
+  };
+  
+  const handleBlur = () => {
+    setIsClicked(false);  // Set to false when the search input loses focus
+  };
+  
+
   return (
     <div className="homepage-section p-4 flex flex-col">
-      <div className="mb-4 flex justify-between items-center">
-        <div className="header-buttons">
+      <div className="home-header mb-4 flex justify-between items-center">
+        <div className="home-header-buttons">
           <button
             onClick={() => handleClick(constants.PUBLIC_TAB)}
             className={activeTabName === constants.PUBLIC_TAB ? 'active' : ''}
@@ -55,21 +66,23 @@ const Home = () => {
           </button>
         </div>
         
-        <form className="block relative" onSubmit={handleSearchSubmit}>
+        <form className="home-search-containerr" onSubmit={handleSearchSubmit}>
           <input
             type="text"
             placeholder="Search..."
-            className="search-bar w-[100%]"
+            className="home-search-barr w-[100%]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
           />
-          <button type="submit" className="pos-item-1">
-            <img className="icon-2" src={searchIcon} alt="Search" />
+          <button type="submit" className="home-search-buttonn">
+            <img className="home-search-iconn" src={searchIcon} alt="Search" />
           </button>
         </form>
       </div>
 
-      <section className='reviewer-content h-[100%] grid grid-responsive-1'>
+      <section className='home-reviewer-content h-[100%] grid grid-responsive-1'>
         {reviewers.map((reviewer) => {
           return <ReviewerCard reviewer={reviewer} key={reviewer.slug}/>
         })}

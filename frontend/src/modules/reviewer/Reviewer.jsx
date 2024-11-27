@@ -34,21 +34,21 @@ const Reviewer = () => {
 
   return (
     <section className="homepage-section p-4 flex flex-col">
-      <div className="header flex items-center justify-between mb-4">
-        <h1 className="header-title">My Reviewers</h1>
+      <div className="rev-header flex items-center justify-between mb-4">
+        <h1 className="rev-header-title">My Reviewers</h1>
         <div className="actions flex items-center gap-4">
-          <form className="search-containerr" onSubmit={handleSearchSubmit}>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="search-barr"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button type="submit" className="search-buttonn">
-              <img src={searchIcon} alt="Search" className="search-iconn" />
-            </button>
-          </form>
+        <form className="search-containerr" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="search-barr w-[100%]"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit" className="search-buttonn">
+            <img className="search-iconn" src={searchIcon} alt="Search" />
+          </button>
+        </form>
           <button className="create-buttonn" onClick={handleCreateClick}>
             Create
           </button>

@@ -1,51 +1,38 @@
-html, body {
-  background-color: #ffffff; /* Set the background color to white */
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Align search and create features */
-.header {
+.rev-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start; /* Ensures vertical alignment */
-  margin-bottom: 1rem;
-  padding: 1rem;
-  //position: relative;
+  justify-content: space-between; /* Ensures title and actions are spaced apart */
+  align-items: center; /* Vertically centers the elements */
+  padding: 2rem;
+  margin: 0.5;
 }
 
-.header-title {
-  font-size: 1.125rem;
+.rev-header-title {
+  font-size: 1.1rem;
   font-weight: bold;
   color: #4a4a4a;
 }
 
 .actions {
   display: flex;
-  align-items: center;
+  align-items: center; /* Aligns actions vertically with the title */
   gap: 1rem;
-  margin-left: 42rem;
-  margin-bottom: 3rem;
-  margin-top: 1.5rem;
-  position: absolute;
-
-  margin-bottom: 0.5rem;
 }
 
 .search-containerr {
   position: relative;
   display: flex;
-  align-items: center; /* Aligns search bar with icon */
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  width: 400px;
 }
 
 .search-barr {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
-  border-radius: 999px;
+  border-radius: 10px;
   outline: none;
-  width: 400px;
+  width: 400px; /* Adjusted for better responsiveness */
 }
 
 .search-buttonn {
@@ -67,15 +54,19 @@ html, body {
 .create-buttonn {
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   border: none;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
+  width: 60px;
+  height: 37px;
   transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+  font-size: 0.8rem
 }
 
-.create-button:hover {
+.create-buttonn:hover {
   background-color: #f59e0b;
 }
 

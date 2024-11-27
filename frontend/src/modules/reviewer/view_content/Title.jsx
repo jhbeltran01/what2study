@@ -11,21 +11,25 @@ function Title({title}) {
   const isEnumerationTitleWithDefinition =  contents.length > 0 && isEnumerationTitle
 
   return (
-    <li className={`px-[1em] ${!isEnumerationContent && 'mb-[1rem]'}`}>
-      <div>
-        <p>{title.text}</p>
-      </div>
-      
-      <ul>
-        {contents.map(content => {
-            if (isDefinition || isEnumerationTitleWithDefinition) {
-              return <Definition definition={content} key={content.slug} />
-            }
-            
-            return <Title title={content} key={content.slug} />
-        })}
-      </ul>
-    </li>
+<li
+  className={`reviewer-title-item ${
+    !isEnumerationContent ? '' : 'reviewer-title-item-no-margin'
+  }`}
+>
+  <div>
+    <p>{title.text}</p>
+  </div>
+  <ul className="reviewer-title-content">
+    {contents.map(content => {
+      if (isDefinition || isEnumerationTitleWithDefinition) {
+        return <Definition definition={content} key={content.slug} />
+      }
+      return <Title title={content} key={content.slug} />
+    })}
+  </ul>
+</li>
+
+
   )
 }
 
