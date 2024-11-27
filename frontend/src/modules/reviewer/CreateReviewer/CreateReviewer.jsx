@@ -93,9 +93,9 @@ const CreateReviewer = () => {
   
 
   return (
-    <section className="create-section p-4 flex flex-col">
+    <section className="create-reviewer-section p-4 flex flex-col">
       <div className="create-reviewer-header flex items-center justify-between mb-4">
-        <button className="back-create-button" onClick={handleTitleClick}>
+        <button className="back-createrev-button" onClick={handleTitleClick}>
           Back
         </button>
       </div>
@@ -124,8 +124,8 @@ const CreateReviewer = () => {
           </div>
         )}
 
-        <form className="reviewer-form" onSubmit={handleSubmit}>
-          <div className="form-group reviewer-name-group">
+        <form className="create-reviewer-form" onSubmit={handleSubmit}>
+          <div className="create-form-group reviewer-name-group">
             <label htmlFor="reviewerName">Reviewer Name:</label>
             <input
               type="text"
@@ -138,7 +138,7 @@ const CreateReviewer = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="create-form-group">
             <label>Upload Content:</label>
             <div className="upload-field">
               <input
@@ -163,7 +163,7 @@ const CreateReviewer = () => {
 
 
 
-          <div className="form-group">
+          <div className="create-form-group">
             <label htmlFor="description">Description:</label>
             <input
               type="text"
