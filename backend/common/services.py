@@ -1,6 +1,7 @@
 import random
 import string
 from datetime import datetime
+import uuid
 
 
 def generate_access_code():
@@ -13,4 +14,6 @@ def generate_access_code():
 
 
 def generate_unique_id():
-    return datetime.now().strftime("%Y%m%d%H%M%S%f")
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")  # Timestamp down to microseconds
+    unique_suffix = uuid.uuid4().hex[:8]  # Shortened UUID for uniqueness
+    return f"{timestamp}-{unique_suffix}"

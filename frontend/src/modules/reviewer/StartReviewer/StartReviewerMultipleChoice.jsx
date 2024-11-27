@@ -34,7 +34,7 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
   };
 
   const handleNext = () => {
-    if (currentQuestion < 10) {
+    if (currentQuestion+1 < 10) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
