@@ -60,8 +60,8 @@ function Main() {
   }
 
   return (
-    <div className='container-1'>
-      <h2 className='btn-4'>Account Settings</h2>
+    <div className='container-settings'>
+      <p className='btn-44'>Account Settings</p>
       <div className='settings-container'>
         <div className='grid grid-2-column-1'>
           <form onSubmit={updateAccount}>

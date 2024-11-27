@@ -79,7 +79,7 @@
   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
   color: rgb(0, 0, 0);
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.3s;
   transition: all 0.3s ease;
@@ -96,6 +96,8 @@
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .success-message {
   background-color: #4caf50; /* Green background for success */
