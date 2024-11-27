@@ -28,7 +28,7 @@ function Content() {
         <Link to={STUDYPOD_CREATE}>Add</Link>
       </div>
 
-      <div>
+      <div className='grid grid-responsive-1'>
         {
           studypods.map((group) => {
             return <Card

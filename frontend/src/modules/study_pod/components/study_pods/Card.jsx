@@ -11,20 +11,31 @@ function Card({studypod}) {
   const dispatch = useDispatch()
 
   return (
-    <div>
-      <h1>{studypod.name}</h1>
-      <Link 
-        to={STUDYPOD_START_REVIEWER}
-        onClick={() => dispatch(setStudypod(studypod))}
-      >
-        Join
-      </Link>
-      <Link 
-        to={STUDYPOD_CONTENT}
-        onClick={() => dispatch(setStudypod(studypod))}
-      >
-        View
-      </Link>
+    <div className='subject-button'>
+      <div className="subject-title-container">
+        <p className="subject-title">{studypod.name}</p>
+      </div>
+      
+      <div className='subject-content flex-col pb-[1rem] mt'>
+        <p>{studypod.access_code}</p>
+
+        <div className='flex'>
+          <Link
+            className='view-link'
+            to={STUDYPOD_START_REVIEWER}
+            onClick={() => dispatch(setStudypod(studypod))}
+          >
+            Join
+          </Link>
+          <Link
+            className='view-link'
+            to={STUDYPOD_CONTENT}
+            onClick={() => dispatch(setStudypod(studypod))}
+          >
+            View
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
