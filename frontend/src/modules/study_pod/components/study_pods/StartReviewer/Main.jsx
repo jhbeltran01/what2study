@@ -109,7 +109,7 @@ function Main() {
       <ResultsContext.Provider value={results}>
         <AnswerIsSubmittedContext.Provider value={answerIsSubmitted}>
           <SocketContext.Provider value={socket}>
-            <div className='container-1'>
+            <div className='container-2'>
               {displayReviewers && <ReviewersList reviewers={reviewers}/>}
               {startReview && <StartReviewer questions={questions} />}
               {hasError && <ErrorMessage message={errorMessage} />}
