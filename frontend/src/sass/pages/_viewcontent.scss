@@ -157,14 +157,14 @@ html, body {
             transition: all 0.3s ease;
         }
 
-        .back-reviewer-button:hover {
+        .content-back-reviewer-button:hover {
             background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
             color: #ffffff;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .back-reviewer-button:active {
+        .content-back-reviewer-button:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }

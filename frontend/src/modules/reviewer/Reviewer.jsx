@@ -49,7 +49,7 @@ const Reviewer = () => {
             <img className="search-iconn" src={searchIcon} alt="Search" />
           </button>
         </form>
-          <button className="create-buttonn" onClick={handleCreateClick}>
+          <button className="create-rev-button" onClick={handleCreateClick}>
             Create
           </button>
         </div>

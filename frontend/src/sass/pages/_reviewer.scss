@@ -1,20 +1,46 @@
+// .rev-header {
+//   display: flex;
+//   justify-content: space-between; /* Ensures title and actions are spaced apart */
+//   align-items: center; /* Vertically centers the elements */
+//   padding: 2rem;
+//   margin: 0.5;
+// }
+
+// .rev-header-title {
+//   font-size: 1.1rem;
+//   font-weight: bold;
+//   color: #4a4a4a;
+// }
+
 .rev-header {
   display: flex;
-  justify-content: space-between; /* Ensures title and actions are spaced apart */
-  align-items: center; /* Vertically centers the elements */
-  padding: 2rem;
-  margin: 0.5;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+  justify-content: space-between; 
 }
 
+// .rev-header-title {
+//   display: flex;
+//   gap: 2rem;
+//   padding: 1rem;
+// }
+
 .rev-header-title {
-  font-size: 1.1rem;
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  font-size: 1.125rem;
   font-weight: bold;
   color: #4a4a4a;
 }
 
 .actions {
   display: flex;
-  align-items: center; /* Aligns actions vertically with the title */
+  align-items: center;
+  margin-left: 2rem;
   gap: 1rem;
 }
 
@@ -51,22 +77,28 @@
   margin-right: 10px;
 }
 
-.create-buttonn {
+.create-rev-button {
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: rgb(0, 0, 0);
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
   cursor: pointer;
-  width: 60px;
+  width: 80%;
   height: 37px;
   transition: background-color 0.3s ease;
   margin-top: 0.5rem;
-  font-size: 0.8rem
+  font-size: 1rem;
+  margin-right: 3rem;
+  
+  /* Center the text horizontally and vertically */
+  display: flex;
+  justify-content: center;  /* Horizontally center */
+  align-items: center;  /* Vertically center */
+  text-align: center;  /* Ensure the text aligns correctly */
 }
 
-.create-buttonn:hover {
+.create-rev-button:hover {
   background-color: #f59e0b;
 }
 
