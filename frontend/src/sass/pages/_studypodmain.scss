@@ -1,0 +1,114 @@
+.studypod-container {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+  }
+  
+  .studypod-wrapper {
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    width: 100%;
+  }
+  
+  .studypod-title, .studypod-subtitle {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .studypod-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .studypod-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .studypod-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .studypod-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    label {
+      font-size: 0.9rem;
+      color: #555;
+      align-self: flex-start; 
+      margin-bottom: 0.2rem;    
+    }
+  
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.2s ease-in-out;
+  
+      &:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+    }
+  }
+  
+  .studypod-form-row {
+    display: flex;
+    gap: 1rem;
+  
+    .studypod-form-group {
+      flex: 1;
+    }
+  }
+  
+  .studypod-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: black;
+    background: linear-gradient(to right, #FEA61F 0%, #FED65D 100%);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    white-space: nowrap;
+    min-width: 120px; 
+    text-align: center;
+    width: 100%; 
+    
+    &:hover {
+      background-color: #FEA61F;
+    }
+  
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+  
+  .studypod-divider {
+    margin: 2rem 0;
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+  }
+  
+  .studypod-join-section {
+    margin-top: 2rem;
+  
+    .studypod-form-group {
+      margin-bottom: 1rem;
+      width: 100%; 
+    }
+  }
+  

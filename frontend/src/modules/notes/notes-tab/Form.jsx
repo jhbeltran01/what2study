@@ -19,7 +19,7 @@ function Form() {
     axios
       .post(
         `${apiRootURL}/notes/`,
-        {name: name},
+        { name: name},
       )
       .then(response => {
         updateUIOnAddNote(response.data)
@@ -29,7 +29,7 @@ function Form() {
         console.log(err)
       })
   }
-  
+
   const updateUIOnAddNote = (note) => {
     dispatch(setNotes([note, ...notes]))
   }
@@ -39,14 +39,14 @@ function Form() {
       <div className='form-1'>
         <button
           onClick={() => setShowForm(false)}
-            className="close-btn"
+          className="close-btn"
         >
           x
         </button>
 
-        <form onSubmit={addNote}>
-        <div>
-            <label htmlFor="name">Title</label> <br />
+        <form onSubmit={addNote} className='form-container'>
+          <div className='form-group'>
+            <label htmlFor="name" className='form-label'>Title</label> <br />
             <input
               className='text-black input-title'
               value={name}

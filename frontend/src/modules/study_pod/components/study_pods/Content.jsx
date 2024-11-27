@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 function Content() {
   const [studypods, setStudypods] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     const url = `${apiRootURL}/studypods/`
@@ -21,16 +22,30 @@ function Content() {
       })
   }, [])
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const filteredStudypods = studypods.filter(pod =>
+    pod.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div className='mt-[2rem]'>
-      <div className='text-right'>
-        <Link to={STUDYPOD_CREATE}>Add</Link>
+      <div className='flex justify-between items-center mb-[1rem]'>
+        <input 
+          type="text" 
+          value={searchQuery}
+          onChange={handleSearch} 
+          placeholder="Search..." 
+          className="search-bar2"
+        />
+        <Link to={STUDYPOD_CREATE} className="btn-add">Add</Link>
       </div>
 
-      <div>
+      <div className='grid grid-responsive-1'>
         {
-          studypods.map((group) => {
+          filteredStudypods.map((group) => {
             return <Card
               key={group.id}
               studypod={group}

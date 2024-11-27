@@ -191,7 +191,6 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             case self.GENERATE_QUESTION:
                 if self._has_moderator():
                     await self._generate_question()
-                    print('generate question')
             case self.SUBMIT_ANSWER:
                 if self._has_moderator():
                     await self._submit_answer()
@@ -288,7 +287,6 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         return has_moderator
 
     async def _generate_question(self):
-        print('generate questions')
         question = GenerateQuestion(
             reviewer=self.all_selected_reviewer[self.room_name],
             data=self.data,
@@ -300,7 +298,6 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         self.data = await question.generate()
         questions = self.data.get('questions', None)
         self.all_questions[self.room_name] = questions
-        print(questions)
         if questions is not None:
             self.room_user_answers[self.room_name] = []
 

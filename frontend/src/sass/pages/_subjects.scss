@@ -37,6 +37,11 @@
   align-items: center;
   text-align: center;
   gap: 5px; 
+
+  &:is(.mt) {
+    margin-top: 0;
+    justify-content: end;
+  }
 }
 
 .subject-stat {

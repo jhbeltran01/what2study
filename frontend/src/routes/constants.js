@@ -6,6 +6,7 @@ const EDIT_REVIEWER = "/reviewers/edit-reviewer/";
 const STUDYPODS = "/study-pods/";
 const STUDYPOD_CREATE = '/study-pods/create/'
 const STUDYPOD_CONTENT = '/study-pods/content/'
+const STUDYPOD_START_REVIEWER = '/study-pods/start-reviewing/'
 const JOIN_CALL = "/study-pods/join-call/";
 const VIEW_REVIEWER_CONTENT = '/reviewers/content/'
 const VIEW_CONTENT_WITHOUT_EDIT =  '/reviewer/content/view'
@@ -43,6 +44,7 @@ const ROUTES = {
   SUBJECT_REVIEWER,
   START_REVIEWING,
   STUDYPOD_CONTENT,
+  STUDYPOD_START_REVIEWER,
 };
 
 export { 
@@ -68,5 +70,6 @@ export {
   SUBJECT_REVIEWER,
   START_REVIEWING,
   STUDYPOD_CONTENT, 
+  STUDYPOD_START_REVIEWER,
 };
 

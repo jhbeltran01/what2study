@@ -57,7 +57,8 @@ const StartReviewerIdentification = ({question}) => {
                   return (
                     <div className=' mb-[1rem]'>
                       <div className={`flex items-center justify-between ${answer.is_correct ? 'submit-success' : 'submit-error'}`}  key={user.username}>
-                        {answer.text} <p className='username-answer'>{user.username}</p>
+                        <div>{answer.text}</div> 
+                        <p className='username-answer'>{user.username}</p>
                       </div>
                     </div>
                   )
