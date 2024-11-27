@@ -11,7 +11,7 @@ import { TODOS_CONTENT } from '@root/routes/constants'
 export const ShowFormContext = createContext()
 
 function Main() {
-  const [searchQuery, setSearchQuery] = useState('') // State for search query
+  const [searchQuery, setSearchQuery] = useState('') 
   const todos = useSelector(state => state.todos.value)
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch()
@@ -41,15 +41,22 @@ function Main() {
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='text-right'>
+        <div className='flex justify-between items-center'>
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={handleSearch} 
+            placeholder="Search..."
+            className="search-bar2"  // Apply your search bar class here
+          />
           <button
             onClick={() => setShowForm(true)}
-            className="btn-add3"
+            className="btn-add"  // Apply your Add button class here
           >
             Add
           </button>
         </div>
-        
+
         <div className='todo-container'>
           {filteredTodos.map(todo =>
             <button 

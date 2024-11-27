@@ -1,6 +1,7 @@
 import Home from '@modules/home_page/Home';
 import Homepage from "@modules/home_page/Homepage";
 import CreateReviewer from '@modules/reviewer/CreateReviewer/CreateReviewer';
+import EditReviewer from '@modules/reviewer/EditReviewer/EditReviewer';
 import Reviewer from '@modules/reviewer/Reviewer';
 import JoinCall from '@modules/study_pod/components/join_call/Main';
 import StudyPod from '@modules/study_pod/components/study_pods/Main';
@@ -16,6 +17,7 @@ import Subjects from '@modules/subjects/Main'
 import SubjectContent from '@modules/subjects/content/Main'
 import CreateSubjectReviewer from '@modules/subjects/create_reviewer/Main'
 import StartReviewing from '@modules/reviewer/StartReviewer/Main.jsx'
+import StudypodStartReviewing from '@modules/study_pod/components/study_pods/StartReviewer/Main'
 import React from "react";
 import * as routes from "./constants";
 
@@ -40,6 +42,11 @@ const pagesData = [
         path: routes.ROUTES.CREATE_REVIEWER, 
         element: <CreateReviewer />,
         title: routes.CREATE_REVIEWER, 
+      },
+      {
+        path: routes.ROUTES.EDIT_REVIEWER, 
+        element: <EditReviewer />,
+        title: routes.EDIT_REVIEWER, 
       },
       {
         path: routes.ROUTES.STUDYPODS,
@@ -120,6 +127,11 @@ const pagesData = [
         path: routes.ROUTES.STUDYPOD_CONTENT,
         element:  <StudypodContent />,
         title: routes.STUDYPOD_CONTENT
+      },
+      {
+        path: routes.ROUTES.STUDYPOD_START_REVIEWER,
+        element:  <StudypodStartReviewing />,
+        title: routes.STUDYPOD_START_REVIEWER
       },
     ]
   },

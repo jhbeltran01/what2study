@@ -4,6 +4,7 @@ import ReviewersList from './ReviewersList.jsx'
 import StartReviewer from './StartReviewer.jsx'
 import ErrorMessage from './ErrorMessage.jsx'
 import ActionButtons from './ActionButtons.jsx'
+import { useSelector } from 'react-redux'
 
 export const SocketContext = createContext()
 export const AnswerIsSubmittedContext = createContext()
@@ -11,7 +12,7 @@ export const ResultsContext = createContext()
 export const WillShowResultsContext = createContext()
 
 function Main() {
-  const roomName = 'science-1-1'
+  const studypod = useSelector(state => state.studypod.value)
   const [socket, setSocket] = useState(null)
   const [reviewers, setReviewers] = useState([])
   const [displayReviewers, setDisplayReviewers] = useState(false)
@@ -25,7 +26,7 @@ function Main() {
 
   useEffect(() => {
     if (socket == null) {
-      setSocket(new WebSocket(`${rootWebSocketURL}/study-pod/${roomName}/`))
+      setSocket(new WebSocket(`${rootWebSocketURL}/study-pod/${studypod.slug}/`))
       return
     }
 
@@ -108,7 +109,7 @@ function Main() {
       <ResultsContext.Provider value={results}>
         <AnswerIsSubmittedContext.Provider value={answerIsSubmitted}>
           <SocketContext.Provider value={socket}>
-            <div className='container-1'>
+            <div className='container-2'>
               {displayReviewers && <ReviewersList reviewers={reviewers}/>}
               {startReview && <StartReviewer questions={questions} />}
               {hasError && <ErrorMessage message={errorMessage} />}

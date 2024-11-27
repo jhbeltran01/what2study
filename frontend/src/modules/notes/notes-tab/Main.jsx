@@ -13,6 +13,7 @@ export const ShowFormContext = createContext()
 function Main() {
   const notes = useSelector(state => state.notes.value)
   const [showForm, setShowForm] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -32,29 +33,23 @@ function Main() {
     navigate(NOTE_CONTENT)
   }
 
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp)
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    }
-    return date.toLocaleString('en-US', options).replace(',', '')
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value)
   }
 
+  const filteredNotes = notes.filter(note =>
+    note.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   const renderRows = () => {
-    const rows = [];
-    let noteIndex = 0;
-    console.log(notes)
-    while (noteIndex < notes.length) {
-      const currentRow = [];
-      const rowCount = rows.length % 2 === 0 ? 5 : 4;
-  
-      for (let j = 0; j < rowCount && noteIndex < notes.length; j++, noteIndex++) {
-        const note = notes[noteIndex];
+    const rows = []
+    let noteIndex = 0
+    while (noteIndex < filteredNotes.length) {
+      const currentRow = []
+      const rowCount = rows.length % 2 === 0 ? 5 : 4
+
+      for (let j = 0; j < rowCount && noteIndex < filteredNotes.length; j++, noteIndex++) {
+        const note = filteredNotes[noteIndex]
         currentRow.push(
           <button
             key={noteIndex} 
@@ -63,38 +58,42 @@ function Main() {
           >
             <h3>{note.name}</h3>  {/* Display title */}
           </button>
-        );
+        )
       }
-  
+
       rows.push(
         <div key={rows.length} className="notes-row">
           {currentRow}
         </div>
-      );
+      )
     }
-    return rows;
-  };  
+    return rows
+  }
 
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='text-right'>
+        <div className='flex justify-between items-center'>
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={handleSearch} 
+            placeholder="Search..." 
+            className="search-bar2"
+          />
           <button
-            className='btn-add3'
             onClick={() => setShowForm(true)}
+            className="btn-add"
           >
             Add
           </button>
         </div>
 
-        <div className=''>
-          <div className=''>
-          </div>
-            <div className='notes-list'>
-              {notes.length > 0 ? renderRows() : <p>No notes available</p>}
-            </div>
-          </div>
-          {showForm && <Form />}
+        <div className="notes-list">
+          {filteredNotes.length > 0 ? renderRows() : <p>No notes available</p>}
+        </div>
+
+        {showForm && <Form />}
       </div>
     </ShowFormContext.Provider>
   )

@@ -42,42 +42,36 @@ function ReviewerCard({reviewer}) {
   }
 
   return (
-    <div className="reviewer-entry">
-      <div>
-        <div className="flex justify-between items-center">
-          <h2 className="reviewer-title">{reviewer.name}</h2>
-          
-          <button onClick={() => updatedBookmarkStatus(!isBookmarked)}>
+    <div className="home-reviewer-entry">
+        <div className="home-bookmark  flex justify-between items-center">
+          <h2 className="home-reviewer-title">{reviewer.name}</h2> 
+          <button className='bookmark-button' onClick={() => updatedBookmarkStatus(!isBookmarked)}>
             <img 
-              className={`${isBookmarked && 'bookmarked'}`}
+              className={`bookmark-icon ${isBookmarked && 'bookmarked'}`}
               src={bookmark} 
               alt="bookmark icon" 
             />
           </button>
         </div>
-
-        <p className="reviewer-date">{reviewer.created_at}</p>
-
-        <div className='flex gap-[10px]'>
+        <p className='home-reviewer-description'>{reviewer.description ? reviewer.description : 'No description' }</p>
+        {/* <div className='home-icon flex gap-[10px]'>
           <img 
             className='icon-3'
             src={owner.profile_picture ? owner.profile_picture : personIcon} 
             alt="person icon" 
           />
+          <p className='home-reviewer-owner'>{owner.first_name} {owner.last_name}</p>
+        </div> */}
 
-          <p>{owner.first_name} {owner.last_name}</p>
-        </div>
+        <p className="home-reviewer-date">{reviewer.created_at}</p>
 
-        <p>{reviewer.description ? reviewer.description : 'No description' }</p>
-    
         <button 
           onClick={redirectToSelectedReviewerContent} 
-          className='view-link'
+          className='home-view-link'
         >
           View
         </button>
       </div>
-    </div>
   )
 }
 

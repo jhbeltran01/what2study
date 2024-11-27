@@ -45,19 +45,20 @@ function Form() {
           x
         </button>
 
-        <form onSubmit={addTodo}>
-          <div>
-            <label htmlFor="name">Name</label> <br />
+        <form onSubmit={addTodo} className='form-container'>
+          <div className='form-group'>
+            <label htmlFor="name" className='form-label'>Title</label> <br />
             <input
-              className='text-black'
+              className='text-black input-title'
               value={name}
               type="text"
               id="name"
               onChange={(e) => setName(e.target.value)}
+              placeholder="Enter a title"
             />
           </div>
 
-          <button type='submit'>Add</button>
+          <button type='submit' className='form-submit'>Add</button>
         </form>
       </div>
     </div>
