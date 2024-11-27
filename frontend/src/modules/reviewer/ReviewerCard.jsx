@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { setReviewer, setReviewerSlug } from '@redux/reviewer';
 import * as routes from '@root/routes/constants';
 import { useNavigate } from 'react-router-dom';
-
+import { apiRootURL } from '@root/globals';
+import axios from 'axios';
 function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT }) {
   const [showOptions, setShowOptions] = useState(false);
   const dispatch = useDispatch();
@@ -18,14 +19,25 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
     navigate('/edit-reviewers');
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmed = window.confirm(`Are you sure you want to delete ${reviewer.name}?`);
     if (confirmed) {
-      console.log(`Deleting reviewer: ${reviewer.name}`);
-      // Dispatch a delete action or API call here
+        try {
+            const response = await axios.delete(`${apiRootURL}/reviewers/${reviewer.slug}/`);
+            if (response.status === 204) {
+                alert("Reviewer successfully deleted.");
+                location.reload()
+            } else {
+                alert("Failed to delete the reviewer.");
+            }
+        } catch (error) {
+            console.error("Error deleting reviewer:", error);
+            alert("An error occurred while trying to delete the reviewer.");
+        }
       setShowOptions(false);
     }
-  };
+};
+
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer));

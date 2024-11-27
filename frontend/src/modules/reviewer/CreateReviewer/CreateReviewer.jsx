@@ -74,8 +74,9 @@ const CreateReviewer = () => {
           setUploadProgress(percentage); // Update progress percentage
         },
       });
-  
-      if (response.status === 200) {
+    
+      console.log('API Response:', response);
+      if (response) {
         setReviewer(initialReviewer); // Clear form fields
         setSuccessMessage('Reviewer created successfully!');
         setErrorMessage('');
