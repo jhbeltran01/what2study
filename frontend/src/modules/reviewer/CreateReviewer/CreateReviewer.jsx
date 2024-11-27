@@ -69,8 +69,7 @@ const CreateReviewer = () => {
       });
     
       console.log('API Response:', response);
-    
-      if (response.status === 200) {
+      if (response) {
         setReviewer(initialReviewer); // Clear form fields
         setSuccessMessage('Reviewer created successfully!');
         setErrorMessage(''); // Clear error message if success
