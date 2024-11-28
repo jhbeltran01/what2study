@@ -1,4 +1,4 @@
-import searchIcon from '@assets/search.png';
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRootURL } from '@root/globals';
