@@ -45,9 +45,9 @@ const Reviewer = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="search-buttonn">
+          {/* <button type="submit" className="search-buttonn">
             <img className="search-iconn" src={searchIcon} alt="Search" />
-          </button>
+          </button> */}
         </form>
           <button className="create-rev-button" onClick={handleCreateClick}>
             Create

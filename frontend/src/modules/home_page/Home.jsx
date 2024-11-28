@@ -76,9 +76,9 @@ const Home = () => {
                 onFocus={handleFocus}
                 onBlur={handleBlur}
           />
-          <button type="submit" className="home-search-buttonn">
+          {/* <button type="submit" className="home-search-buttonn">
             <img className="home-search-iconn" src={searchIcon} alt="Search" />
-          </button>
+          </button> */}
         </form>
       </div>
 
