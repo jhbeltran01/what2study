@@ -24,7 +24,7 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
     if (confirmed) {
         try {
             const response = await axios.delete(`${apiRootURL}/reviewers/${reviewer.slug}/`);
-            if (response.status === 204) {
+            if (response) {
                 alert("Reviewer successfully deleted.");
                 location.reload()
             } else {
