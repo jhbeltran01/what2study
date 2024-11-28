@@ -13,7 +13,7 @@ function NoContent() {
     <section className="no-content-section p-4 flex flex-col">
       <div className="no-content-header flex items-center justify-between mb-4">
         <button className="no-content-header-title" onClick={handleTitleClick}>
-          {'← Back'}
+          {'Back'}
         </button>
       </div>
 

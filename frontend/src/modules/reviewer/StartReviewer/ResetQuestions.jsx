@@ -1,43 +1,46 @@
-import axios from 'axios'
-import React from 'react'
-import { apiRootURL } from '@root/globals'
-import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import axios from 'axios';
+import React from 'react';
+import { apiRootURL } from '@root/globals';
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
-function ResetQuestions({generateQuestions}) {
-  const reviewer = useSelector(state => state.reviewer.value)
+function ResetQuestions({ generateQuestions }) {
+  const reviewer = useSelector(state => state.reviewer.value);
 
   const resetQuestions = () => {
     axios
       .post(`${apiRootURL}/questions/reset/${reviewer.slug}/`)
       .then(response => {
-        generateQuestions()
+        generateQuestions();
       })
       .catch(err => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
+
   return (
-    <div>
-      <div>
-        <div>
+    <div className="quiz-reset-container">
+      <div className="quiz-reset-content">
+        <div className="quiz-reset-text">
           <p>Congratulations!</p>
-          <p>You've answered all the questions correctly—great job! Your hard work and knowledge truly shine.</p>
-          <p>Would you like to challenge yourself and take the quiz again to see if you can beat your previous performance? Let's go!</p>
+          <p>
+            You've answered all the questions correctly—great job! Your hard work and knowledge truly shine.
+          </p>
+          <p>
+            Would you like to challenge yourself and take the quiz again to see if you can beat your previous performance? Let's go!
+          </p>
         </div>
 
-        <button
-          onClick={resetQuestions}
-        >
+        <button className="quiz-reset-button" onClick={resetQuestions}>
           Reset
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 ResetQuestions.propTypes = {
-  generateQuestions: PropTypes.func.isRequired
-}
+  generateQuestions: PropTypes.func.isRequired,
+};
 
-export default ResetQuestions
+export default ResetQuestions;
