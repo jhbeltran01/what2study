@@ -63,6 +63,7 @@ html, body {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  margin-top: 40px;
 }
 
 .notes-row {
@@ -85,7 +86,7 @@ html, body {
   justify-content: center;
   cursor: default;
   margin-bottom: -40px;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
 
   &:hover {
       transform: scale(1.05); 
@@ -124,8 +125,6 @@ html, body {
     display: flex;
     justify-content: flex-start;  
     gap: 0.3rem;  
-    // margin-top: 1.2rem;
-    // margin-left: 1.3rem;
   }
 
   .rev-header {
@@ -163,3 +162,21 @@ html, body {
     }
   }
 }
+
+.delete-note-icon {
+  margin-left: 20px;
+}
+
+@keyframes subtleWiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.wiggle {
+  animation: subtleWiggle 1s ease-in-out infinite;  
+}
+
+
