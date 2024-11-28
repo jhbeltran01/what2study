@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { apiRootURL } from '@root/globals'
 
-function Form({subjectsState, showFormState}) {
+function Form({ subjectsState, showFormState, setMessage, closeMessageAfterTimeout }) {
   const [subjects, setSubjects] = subjectsState
   const setShowForm = showFormState[1]
   const [name, setName] = useState('')
@@ -11,16 +11,27 @@ function Form({subjectsState, showFormState}) {
   const createSubject = (event) => {
     event.preventDefault()
 
+    if (!name) {
+      setMessage({ text: 'Class title is required', type: 'error' })
+      closeMessageAfterTimeout()
+      return
+    }
+
     axios
       .post(
         `${apiRootURL}/subjects/`,
-        {name: name}
+        { name: name }
       )
       .then(response => {
         setSubjects([response.data, ...subjects])
         setName('')
+        setMessage({ text: 'Class added successfully', type: 'success' })
+        closeMessageAfterTimeout()
+        setShowForm(false)
       })
       .catch(err => {
+        setMessage({ text: 'Failed to add class', type: 'error' })
+        closeMessageAfterTimeout()
         console.log(err)
       })
   }
@@ -30,20 +41,21 @@ function Form({subjectsState, showFormState}) {
       <div className='form-1'>
         <button
           onClick={() => setShowForm(false)}
-            className="close-btn"
+          className="close-btn"
         >
           x
         </button>
 
-        <form onSubmit={createSubject}>
-          <div>
-            <label htmlFor="name">Class</label> <br />
+        <form onSubmit={createSubject} className='form-container'>
+          <div className='form-group'>
+            <label htmlFor="name" className='form-label'>Class</label> <br />
             <input
               value={name}
-              className='text-black'
+              className='text-black input-title'
               type="text"
               id="name"
               onChange={(e) => setName(e.target.value)}
+              placeholder="Enter a class"
             />
           </div>
 
@@ -56,7 +68,9 @@ function Form({subjectsState, showFormState}) {
 
 Form.propTypes = {
   subjectsState: PropTypes.array.isRequired,
-  showFormState: PropTypes.array.isRequired
+  showFormState: PropTypes.array.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  closeMessageAfterTimeout: PropTypes.func.isRequired
 }
 
 export default Form

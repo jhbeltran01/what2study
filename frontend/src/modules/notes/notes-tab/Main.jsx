@@ -14,6 +14,7 @@ function Main() {
   const notes = useSelector(state => state.notes.value)
   const [showForm, setShowForm] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isDeleteMode, setIsDeleteMode] = useState(false)  
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -37,6 +38,21 @@ function Main() {
     setSearchQuery(e.target.value)
   }
 
+  const handleDeleteNote = async (noteId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this note?");
+    if (confirmed) {
+      try {
+        await axios.delete(`${apiRootURL}/notes/${noteId}/`)
+        alert('Note deleted successfully.');
+        const response = await axios.get(`${apiRootURL}/notes/`)
+        dispatch(setNotes(response.data.results));
+      } catch (error) {
+        console.error('Error deleting note:', error)
+        alert('An error occurred while trying to delete the note.');
+      }
+    }
+  }  
+  
   const filteredNotes = notes.filter(note =>
     note.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -47,20 +63,35 @@ function Main() {
     while (noteIndex < filteredNotes.length) {
       const currentRow = []
       const rowCount = rows.length % 2 === 0 ? 5 : 4
-
+  
       for (let j = 0; j < rowCount && noteIndex < filteredNotes.length; j++, noteIndex++) {
         const note = filteredNotes[noteIndex]
         currentRow.push(
-          <button
+          <div 
             key={noteIndex} 
-            className="note-card"
-            onClick={() => redirectToNoteContent(note)} 
+            id={`note-${note.id}`}  
+            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`} 
           >
-            <h3>{note.name}</h3>  {/* Display title */}
-          </button>
+            <div className="note-card">
+              <button
+                className="note-card-button"
+                onClick={() => redirectToNoteContent(note)} 
+              >
+                <h3>{note.name}</h3>  {/* Display title */}
+              </button>
+              {isDeleteMode && (
+                <button 
+                  onClick={() => handleDeleteNote(note.id)} 
+                  className="delete-note-icon"
+                >
+                  🗑️ 
+                </button>
+              )}
+            </div>
+          </div>
         )
       }
-
+  
       rows.push(
         <div key={rows.length} className="notes-row">
           {currentRow}
@@ -69,11 +100,11 @@ function Main() {
     }
     return rows
   }
-
+  
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='flex justify-between items-center'>
+        <div className='flex'>
           <input 
             type="text" 
             value={searchQuery}
@@ -81,12 +112,33 @@ function Main() {
             placeholder="Search..." 
             className="search-bar2"
           />
-          <button
-            onClick={() => setShowForm(true)}
-            className="btn-add"
-          >
-            Add
-          </button>
+          <div className="flex gap-2">
+            {!isDeleteMode && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="btn-add"
+              >
+                Add
+              </button>
+            )}
+
+            {!isDeleteMode && (
+              <button
+                onClick={() => setIsDeleteMode(true)}
+                className="btn-delete"
+              >
+                Delete
+              </button>
+            )}
+            {isDeleteMode && (
+              <button
+                onClick={() => setIsDeleteMode(false)}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="notes-list">
@@ -99,4 +151,4 @@ function Main() {
   )
 }
 
-export default Main
+export default Main 

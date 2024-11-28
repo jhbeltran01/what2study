@@ -9,30 +9,52 @@ function Form() {
   const todos = useSelector(state => state.todos.value)
   const setShowForm = useContext(ShowFormContext)[1]
   const [name, setName] = useState('')
+  const [message, setMessage] = useState({ text: '', type: '' })
   const dispatch = useDispatch()
 
   const addTodo = (event) => {
     event.preventDefault()
 
-    if (name == '') { return }
+    if (name === '') {
+      setMessage({ text: 'Title is required', type: 'error' })
+      closeMessageAfterTimeout()
+      return
+    }
+
+    const existingTodo = todos.find(todo => todo.name.toLowerCase() === name.toLowerCase())
+    if (existingTodo) {
+      setMessage({ text: 'To do with this title already exists', type: 'error' })
+      closeMessageAfterTimeout()
+      return
+    }
 
     axios
       .post(
         `${apiRootURL}/todos/`,
-        {name: name}
+        { name: name }
       )
       .then(response => {
         updateUIOnAddTodo(response.data)
+        setMessage({ text: 'To do added successfully', type: 'success' })
+        closeMessageAfterTimeout()
         setName('')
         setShowForm(false)
       })
       .catch(err => {
+        setMessage({ text: 'Failed to add to do', type: 'error' })
+        closeMessageAfterTimeout()
         console.log(err)
       })
   }
 
   const updateUIOnAddTodo = (todo) => {
     dispatch(setTodos([todo, ...todos]))
+  }
+
+  const closeMessageAfterTimeout = () => {
+    setTimeout(() => {
+      setMessage({ text: '', type: '' })
+    }, 5000) 
   }
 
   return (
@@ -57,6 +79,12 @@ function Form() {
               placeholder="Enter a title"
             />
           </div>
+
+          {message.text && (
+            <div className={`message ${message.type}`}>
+              {message.text}
+            </div>
+          )}
 
           <button type='submit' className='form-submit'>Add</button>
         </form>
