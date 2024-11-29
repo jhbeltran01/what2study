@@ -53,12 +53,13 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         self.update_number_of_connected_users(DECREMENT)
         self._update_moderator(is_disconnected=True)
+        await self._update_number_of_connected_user_in_room_ui()
+        await self._send_notif_on_user_disconnect()
+        await self._send_notif_on_moderator_disconnect()
         await self.channel_layer.group_discard(
             self.room_name,
             self.channel_name
         )
-        await self._update_number_of_connected_user_in_room_ui()
-        await self._send_notif_on_user_disconnect()
 
     async def initiate_connect(self):
         self.study_pod_name = self.scope['url_route']['kwargs']['study_pod_slug']
@@ -135,6 +136,7 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
         if is_disconnected and room_moderator_has_disconnected:
             self.moderators[self.room_name] = None
 
+
     def _set_moderator(self, user):
         if user is None:
             # delete all room data if all the users has disconnected
@@ -163,6 +165,7 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
             '{} has disconnected'.format(self.user.username)
         )
         await self._send_message_to_room()
+        print(self.data)
 
 
 class StudyPodConsumer(StudyPodBaseConsumer):
@@ -374,6 +377,7 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         answer.submit()
         self.data = self._get_data(self.data, {'success': 'Answer has been submitted.'})
         await self._update_number_of_submissions()
+        await self._send_submitted_an_answer_message()
 
 
     async def _show_results(self):
@@ -433,6 +437,40 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         data = {
             'action': self.UPDATE_NUMBER_OF_SUBMISSIONS,
             'number_of_submissions': len(self.room_user_answers[self.room_name])
+        }
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'send_message',
+                'data': data
+            }
+        )
+
+    async def _send_submitted_an_answer_message(self):
+        data = {
+            'action': self.SUCCESS,
+            'message': '{} has submitted an answer.'.format(self.user.username)
+        }
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'send_message',
+                'data': data
+            }
+        )
+
+    async def _send_notif_on_moderator_disconnect(self):
+        moderator = self.moderators.get(self.room_name, None)
+
+        if moderator is not None:
+            return
+
+        data = {
+            'action': self.UPDATE_MODERATOR,
+            'content': {
+                'message': 'The moderator has left the room.'.format(self.user.username),
+                'moderator': None
+            }
         }
         await self.channel_layer.group_send(
             self.room_name,

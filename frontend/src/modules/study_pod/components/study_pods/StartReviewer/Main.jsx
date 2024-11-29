@@ -5,6 +5,8 @@ import StartReviewer from './StartReviewer.jsx'
 import ErrorMessage from './ErrorMessage.jsx'
 import ActionButtons from './ActionButtons.jsx'
 import { useSelector } from 'react-redux'
+import Header from './Header.jsx'
+import SuccessMessage from './SuccessMessage.jsx'
 
 export const SocketContext = createContext()
 export const AnswerIsSubmittedContext = createContext()
@@ -23,6 +25,9 @@ function Main() {
   const [errorMessage, setErrorMessage] = useState('')
   const [results, setResults] = useState({})
   const [willShowResults, setWillShowResults] = useState(false)
+  const [roomInfo, setRoomInfo] = useState({})
+  const [successMessages, setSuccessMessages] = useState([])
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   useEffect(() => {
     if (socket == null) {
@@ -33,8 +38,20 @@ function Main() {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       console.log(data)
-      setAnswerIsSubmitted(false)
-      setWillShowResults(false)
+      
+      if (data.action == actions.RETRIEVE_REVIEWER_LIST
+        || data.action == actions.SELECT_REVIEWER
+        || data.action == actions.GENERATE_QUESTION
+        || data.action == actions.SUBMIT_ANSWER
+        || data.action == actions.SHOW_RESULTS
+      ) {
+        setAnswerIsSubmitted(false)
+        setWillShowResults(false)
+      }
+
+      if (data.action == actions.RETRIEVE_REVIEWER_LIST) {
+        setStartReview(false)
+      }
       
       switch(data.action) {
         case actions.RETRIEVE_REVIEWER_LIST:
@@ -50,12 +67,34 @@ function Main() {
           submitAnswer(data.content)
           break
         case actions.ERROR:
-          setError(data.message)
+          addSuccessMessages(data.message, true)
           break
         case actions.SHOW_RESULTS:
           showResults(data.content)
           break
+        case actions.GET_ROOM_INFO:
+          updateRoomInfo(data.content)
+          break
+        case actions.UPDATE_CONNECTED_USER:
+          updateConnectedUsers(data.connected_users)
+          break
+        case actions.UPDATE_NUMBER_OF_SUBMISSIONS:
+          updateNumberOfSubmissions(data.number_of_submissions)
+          break
+        case actions.SUCCESS:
+          addSuccessMessages(data.message)
+          break
+        case actions.UPDATE_MODERATOR:
+          updateModerator(data.content.moderator)
+          addSuccessMessages(data.content.message)
       } 
+    };
+
+    socket.onopen = (event) => {
+      const message = JSON.stringify({
+        action: actions.GET_ROOM_INFO
+      })
+      socket.send(message)
     };
 
     socket.onclose = (event) => {
@@ -70,6 +109,7 @@ function Main() {
       socket.close()
     }
   }, [socket])
+
 
   const retrieveReviewerList = (reviewers) => {
     setReviewers(reviewers)
@@ -89,19 +129,44 @@ function Main() {
     setAnswerIsSubmitted(true)
   }
 
-  const setError = (message) => {
-    setHasError(true)
-    setErrorMessage(message)
-
-    setTimeout(() => {
-      setHasError(false)
-      setErrorMessage('')
-    }, 5000)
-  }
-
   const showResults = (results) => {
     setWillShowResults(true)
     setResults(results)
+  }
+
+  const updateRoomInfo = (content) => {
+    setRoomInfo(content)
+  }
+
+  const updateConnectedUsers = (connectedUsers) => {
+    setRoomInfo(prevState => ({...prevState, connected_users: connectedUsers}))
+  }
+
+  const updateNumberOfSubmissions = (numberOfSubmissions) => {
+    setRoomInfo(prevState => ({...prevState, number_of_submissions: numberOfSubmissions}))
+  }
+
+  const addSuccessMessages = (message, isError=false) => {
+    const messageData = {
+      id: 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+      text: message,
+      isError: isError
+    }
+
+    setSuccessMessages(prevState => [messageData, ...prevState])
+    setShowSuccessMessage(true)
+
+    setTimeout(() => {
+      setSuccessMessages(prevState => {
+        prevState.pop()
+        setShowSuccessMessage(prevState.length > 0)
+        return [...prevState]
+      })
+    }, 5000)
+  }
+
+  const updateModerator = (moderator) => {
+    setRoomInfo(prevState => ({...prevState, moderator: moderator}))
   }
 
   return (
@@ -110,6 +175,12 @@ function Main() {
         <AnswerIsSubmittedContext.Provider value={answerIsSubmitted}>
           <SocketContext.Provider value={socket}>
             <div className='container-2'>
+              {showSuccessMessage && <SuccessMessage messages={successMessages} />}
+              <Header
+                moderator={roomInfo.moderator}
+                numberOfConnectedUsers={roomInfo.connected_users}
+                numberOfSubmissions={roomInfo.number_of_submissions}
+              />
               {displayReviewers && <ReviewersList reviewers={reviewers}/>}
               {startReview && <StartReviewer questions={questions} />}
               {hasError && <ErrorMessage message={errorMessage} />}
