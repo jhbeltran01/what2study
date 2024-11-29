@@ -1,0 +1,92 @@
+body {
+    font-family: 'Josefin Sans', sans-serif;
+  }
+
+// Define the artistic animation (small to big, with rotation and shadow)
+@keyframes artisticEffect {
+    0% {
+      opacity: 0;
+      transform: scale(0.3) rotate(-10deg); /* Start small and rotate */
+      text-shadow: 
+        0 0 5px #fea61f,   /* Yellowish shade at the start */
+        0 0 10px #fed65d;   /* Lighter yellow shade */
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.1) rotate(10deg); /* Scale slightly bigger with rotation */
+      text-shadow: 
+        0 0 10px #fea61f,   /* Stronger yellowish glow */
+        0 0 20px #fed65d;   /* Brighter lighter yellow glow */
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg); /* End with normal size and no rotation */
+      text-shadow: 
+        0 0 15px #fea61f,   /* Strong yellow glow */
+        0 0 30px #fed65d;   /* Stronger light yellow glow */
+    }
+  }
+  
+  .congratulations {
+    font-weight: bold;
+    font-size: 3rem; /* Larger font size for more impact */
+    color: #ff6347; /* Vibrant red color */
+    animation: artisticEffect 1.5s ease-out forwards; /* Apply artistic animation */
+    text-transform: uppercase; /* Make text all caps for more boldness */
+    letter-spacing: 2px; /* Add some spacing between the letters */
+  }
+  
+  
+  
+.quiz-reset-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: flex;
+    // margin: auto;
+    left: 20px;
+    right: 20px;
+  }
+  
+  .quiz-reset-content {
+    padding-left: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-right: 2rem;
+    margin-top: 12rem;
+    width: 400px;
+    height: auto;
+    background-color: #fafafa;
+    border-radius: 10px;
+    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(254, 166, 31, 0.644);
+
+  }
+  
+  .quiz-reset-text p {
+    margin: 10px 10px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .quiz-reset-button {
+    margin-top: 30px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 400px;
+  }
+  
+  .quiz-reset-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .congratulations {
+    font-weight: bold;
+    font-size: 1rem;
+  }

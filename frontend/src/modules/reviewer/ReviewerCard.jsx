@@ -16,7 +16,9 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
   const handleEdit = () => {
     // setShowOptions(false); // Close the menu
     // navigate(routes.EDIT_REVIEWER.replace(':slug', reviewer.slug));
-    navigate('/edit-reviewers');
+    // navigate('/edit-reviewers');
+    navigate('/reviewers/edit-reviewer');
+
   };
 
   const handleDelete = async () => {
@@ -24,7 +26,7 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
     if (confirmed) {
         try {
             const response = await axios.delete(`${apiRootURL}/reviewers/${reviewer.slug}/`);
-            if (response.status === 204) {
+            if (response) {
                 alert("Reviewer successfully deleted.");
                 location.reload()
             } else {

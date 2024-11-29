@@ -5,11 +5,12 @@
     @include sync-background;
     
     font-family: 'Josefin Sans', sans-serif; 
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     text-align: center; 
     color: black; 
-    padding: 0.5em 0;
+    padding-top: 2.5rem;
+    padding-bottom: 1.5rem;
 }
 
 .sidebar-section {
@@ -36,8 +37,7 @@
 
 }
 
-.sidebar-link-active,
-.logout-button {
+.sidebar-link-active {
     background-color: #ffffff;;
     padding: 0.5rem 2rem;
     width: 85%;
@@ -56,8 +56,22 @@
     }
 }
 
-.sidebar-link-normal,
-.logout-button {
+.sidebar-title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bold;
+    font-size: 1.125rem;
+    color: #060606;
+    margin-left: 1.5rem; /* Consistent alignment */
+    text-align: left;
+}
+
+  .sidebar-title.active {
+    color: #ff8c00;
+  }
+
+
+
+.sidebar-link-normal {
     @include sync-background;
     padding: 0.5rem 2rem;
     width: 100%;
@@ -71,20 +85,15 @@
     transition: background-color 0.3s ease;
 }
 
-.sidebar-link-hover:not(.sidebar-link-active ):hover {
+.sidebar-link-hover:not(.sidebar-link-active):hover {
     background: #e2e8f0;
     font-weight: bold;
 }
 
-.logout-button {
-    margin-top: auto; 
-}
+// .logout-button {
+//     margin-top: auto; 
+// }
 
-.sidebar-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 0.75rem;
-}
 
 /* Styles for larger screens */
 @media (min-width: 768px) {

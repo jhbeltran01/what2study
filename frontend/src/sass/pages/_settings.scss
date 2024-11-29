@@ -1,10 +1,39 @@
+.container-settings {
+  display: flex;
+  justify-content: center;  /* Center content horizontally */
+  align-items: center;      /* Center content vertically */
+  height: 100vh;            /* Full viewport height */
+  position: relative;       /* Ensure absolute positioning works for btn-44 */
+  margin: 0;
+  flex-direction: column;   /* Stack elements vertically */
+}
+
+.btn-44 {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #4a4a4a;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  white-space: nowrap;
+  position: absolute;       /* Position it at the top-left */
+  top: 2rem;
+  left: 2rem;
+}
+
 .settings-container {
   background-color: #f0efef;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  height: 100rem;
+  margin-bottom: 3rem;
+  height: auto;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Ensures content within is aligned properly */
 }
 
 .settings-container h6 {

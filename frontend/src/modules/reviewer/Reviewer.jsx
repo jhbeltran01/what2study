@@ -1,4 +1,4 @@
-import searchIcon from '@assets/search.png';
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRootURL } from '@root/globals';
@@ -45,11 +45,11 @@ const Reviewer = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="search-buttonn">
+          {/* <button type="submit" className="search-buttonn">
             <img className="search-iconn" src={searchIcon} alt="Search" />
-          </button>
+          </button> */}
         </form>
-          <button className="create-buttonn" onClick={handleCreateClick}>
+          <button className="create-rev-button" onClick={handleCreateClick}>
             Create
           </button>
         </div>

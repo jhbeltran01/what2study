@@ -47,7 +47,7 @@ function Main() {
         <TitleContext.Provider value={[titles, setTitles]}>
           <div className='main-content'>
             <div className='main-content-options'>
-            <button className='back-reviewer-button' onClick={handleTitleClick}>Back</button>
+            <button className='content-back-reviewer-button' onClick={handleTitleClick}>Back</button>
               <h1 className='header-title'>{reviewer.name}</h1>
               <div className='review-addcontent-button'>
                 <Link to={START_REVIEWING}>Start Reviewer</Link>

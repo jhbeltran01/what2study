@@ -1,136 +1,94 @@
-.create-section {
+
+/* General Section Styling */
+.create-reviewer-section {
   background-color: #ffffff;
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
+/* Header Styling */
 .create-reviewer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   width: 100%;
-  margin-bottom: 2rem; /* Add some space between header and form */
+  margin-bottom: 2rem;
 }
 
 .header-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333333;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.header-title:hover {
+  color: #fea61f;
 }
 
-.search-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-  flex-grow: 1;
-  max-width: 300px; /* Limit the width of the search bar */
-}
-
-.search-bar {
-  padding: 0.75rem 1.25rem;
-  border-radius: 999px;
-  border: 1px solid #d1d5db;
-  width: 100%;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-
-  &:focus {
-    border-color: #fea61f; /* Focus color change */
-  }
-}
-
-.search-icon {
+.back-createrev-button {
   position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
+  top: 0; /* Aligns with the top of the header */
+  left: 0; /* Places it at the leftmost */
+  margin: 1rem; /* Same margins as desired for the back button */
 }
 
-.create-button {
+.guide-button {
+  position: absolute;
+  top: 0; /* Aligns with the top of the header */
+  right: 0; /* Places it at the rightmost */
+  margin: 1rem; /* Same margins as desired for the guide button */
+  padding: 0.5rem 1rem;
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
-  color: white;
-  border-radius: 999px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background: linear-gradient(90deg, #fea61f 0%, #fed65d 80%);
-  }
-}
-
-.success-message {
-  background-color: #4caf50; /* Green background for success */
-  color: white;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  text-align: center;
-  width: 100%;
-  position: relative;
-}
-
-.success-message button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: none;
+  color: #000000;
   border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* Error Message */
-.error-message {
-  background-color: #f44336; /* Red background for error */
-  color: white;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 1rem;
-  text-align: center;
-  width: 100%;
-  position: relative;
-}
-
-.error-message button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.close-message-button {
-  background: none;
+.guide-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.guide-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.back-createrev-button {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
+  color: #000000;
   border: none;
-  color: white;
-  font-size: 1.2rem;
-  margin-left: 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.back-createrev-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
+.back-createrev-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Container */
 .create-reviewer-content {
   background-color: #ffffff;
   padding: 2rem;
@@ -138,43 +96,48 @@
   width: 100%;
   max-width: 600px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  margin-top: 5rem;
+  margin: 2rem 0;
 }
 
-.reviewer-form {
+.create-reviewer-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.form-group {
+/* Form Groups */
+.create-form-group {
   display: flex;
   flex-direction: column;
 }
 
-label {
-  font-size: 1rem;
+.rev-label-name,
+.rev-label-upload,
+.rev-label-description {
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: #333333;
   margin-bottom: 0.5rem;
 }
 
+/* Input Fields */
 .input-field {
-  padding: 1rem;
+  padding: 0.8rem 1rem;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 1rem;
   background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-
-  &:focus {
-    border-color: #fea61f;
-    outline: none;
-  }
 }
 
+.input-field:focus {
+  border-color: #fea61f;
+  box-shadow: 0 0 5px rgba(254, 166, 31, 0.4);
+  outline: none;
+}
+
+/* File Upload */
 .upload-field {
   display: flex;
   flex-direction: column;
@@ -182,47 +145,205 @@ label {
 
 .upload-link {
   color: #fea61f;
+  font-weight: 500;
   margin-top: 0.5rem;
   cursor: pointer;
-  font-weight: 500;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
+.upload-link:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
 .submit-button {
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
-  color: white;
+  color: #000000;
   border: none;
   padding: 1rem 2rem;
   border-radius: 6px;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
   align-self: center;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background: linear-gradient(90deg, #fea61f 0%, #fed65d 80%);
-  }
 }
 
-.back-create-button {
+.submit-button:hover {
+  background: linear-gradient(90deg, #fea61f 0%, #fed65d 80%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.submit-button:active {
+  transform: translateY(2px);
+}
+
+/* Messages */
+.rev-success-message,
+.rev-error-message {
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.rev-success-message {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.rev-error-message {
+  background-color: #f44336;
+  color: #ffffff;
+}
+
+.rev-close-message-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #fea61f;
+  transition: width 0.3s ease;
+}
+
+.progress-percentage {
+  font-size: 0.9rem;
+  color: #333333;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+/* Pop-Up Overlay */
+/* General Pop-Up Styling */
+.sample-popup,
+.guide-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Guide Content */
+.guide-content,
+.sample-content {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: slide-down 0.3s ease-out;
+}
+
+/* Header and Text Styling */
+.guide-content h2,
+.sample-content h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.guide-content p {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.guide-content code {
+  font-family: "Courier New", Courier, monospace;
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Sample Image */
+.sample-image {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 2rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sample-button {
+  position: absolute;
+  top: 0; /* Aligns with the top of the header */
+  right: 6rem; /* Place it to the left of the "Guide" button */
+  margin: 1rem;
   padding: 0.5rem 1rem;
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
-  color: white;
-  border-radius: 10px;
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.back-create-button:hover {
+.sample-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.back-create-button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.sample-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
+/* Close Button */
+.close-popup-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-popup-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Pop-Up Animation */
+@keyframes slide-down {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
