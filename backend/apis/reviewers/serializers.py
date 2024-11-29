@@ -17,6 +17,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
     titles = serializers.SerializerMethodField(read_only=True)
     is_public = serializers.SerializerMethodField(read_only=True)
+    desc_1 = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Reviewer
@@ -24,6 +25,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
             'name',
             'owner',
             'description',
+            'desc_1',
             'slug',
             'is_public',
             'titles',
@@ -76,6 +78,10 @@ class ReviewerSerializer(serializers.ModelSerializer):
         except:
             return False
 
+    def get_desc_1(self, instance):
+        return instance.description[:15]
+
+
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):
     reviewer = serializers.CharField(max_length=100)
     is_public = serializers.BooleanField()
@@ -88,6 +94,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
     name = serializers.CharField(default='')
     is_bookmarked = serializers.SerializerMethodField(read_only=True)
     titles = serializers.SerializerMethodField(read_only=True)
+    desc_1 = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = PublicReviewer
@@ -97,6 +104,7 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             'slug',
             'owner',
             'description',
+            'desc_1',
             'is_bookmarked',
             'titles',
             'created_at',
@@ -155,6 +163,12 @@ class PublicReviewerSerializer(serializers.ModelSerializer):
             }
         ).data
         return data.get('titles', [])
+
+    def get_desc_1(self, instance):
+        desc = instance.reviewer.description
+        if len(desc) > 30:
+            desc = desc[:30] + '...'
+        return desc
 
 
 class RecentlyViewedQueryParamSerializer(serializers.Serializer):

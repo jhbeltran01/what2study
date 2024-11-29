@@ -32,14 +32,11 @@ function ReviewerCard({reviewer}) {
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
-    // dispatch(setReviewerIsPublic(true))
-    // navigate(routes.VIEW_CONTENT_WITHOUT_EDIT)
+    dispatch(setReviewerIsPublic(true))
       // Ensure that the public status is passed correctly
-  const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
-  dispatch(setReviewerIsPublic(isPublic)); // Update public status in Redux
-  
-  navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
-  }
+    const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
+    navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
+    }
 
   return (
     <div className="home-reviewer-entry">
@@ -53,7 +50,7 @@ function ReviewerCard({reviewer}) {
             />
           </button>
         </div>
-        <p className='home-reviewer-description'>{reviewer.description ? reviewer.description : 'No description' }</p>
+        <p className='home-reviewer-description'>{reviewer.desc_1 ? reviewer.desc_1 : 'No description' }</p>
         {/* <div className='home-icon flex gap-[10px]'>
           <img 
             className='icon-3'

@@ -15,6 +15,7 @@ function Main() {
   };
 
   useEffect(() => {
+    console.log(reviewer)
     if (!reviewer.is_public) return;
 
     // Add reviewer to recently viewed
