@@ -1,4 +1,4 @@
-export const rootWebSocketURL = 'https://workable-oyster-regularly.ngrok-free.app/ws'
+export const rootWebSocketURL = '/ws' // 'https://workable-oyster-regularly.ngrok-free.app/ws'
 export const actions = {
   GENERATE_QUESTION: 'GENERATE_QUESTION',
   SELECT_REVIEWER: 'SELECT_REVIEWER',
@@ -7,6 +7,10 @@ export const actions = {
   UPDATE_MODERATOR: 'UPDATE_MODERATOR',
   RETRIEVE_REVIEWER_LIST: 'RETRIEVE_REVIEWER_LIST',
   ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  GET_ROOM_INFO: 'GET_ROOM_INFO',
+  UPDATE_CONNECTED_USER: 'UPDATE_CONNECTED_USER',
+  UPDATE_NUMBER_OF_SUBMISSIONS: 'UPDATE_NUMBER_OF_SUBMISSIONS',
 }
 export const questionType = {
   IDENTIFICATION: 'IDENTIFICATION',
