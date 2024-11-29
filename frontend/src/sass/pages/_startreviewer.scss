@@ -255,7 +255,6 @@
     width: 100%; /* Full width to match question number wrapper */
 }
 
-
 .submit-button {
     margin-top: 10px;
 }
@@ -317,7 +316,6 @@ background-color: #c0392b;
     border-radius: 5px;
 }
 
-
 .username-answer {
     background: linear-gradient(180deg, #FEA61F, #FED65D);
     padding: 1em 2em;
@@ -330,52 +328,10 @@ background-color: #c0392b;
     right: 20px;
 }
 
-.error-message {
+.error-message-2 {
     position: fixed;
     top: 20px;
     right: 0;
     left: 0;
 }
 
-
-
-.quiz-reset-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    height: 500px;
-  }
-  
-  .quiz-reset-content {
-    text-align: center;
-  }
-  
-  .quiz-reset-text p {
-    margin: 10px 0;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .quiz-reset-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .quiz-reset-button:hover {
-    background-color: #0056b3;
-  }
-  

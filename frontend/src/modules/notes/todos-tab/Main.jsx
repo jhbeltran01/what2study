@@ -35,17 +35,17 @@ function Main() {
     setSearchQuery(e.target.value)
   }
 
-  const handleDeleteTodo = async (todoId) => {
+  const handleDelete = async (todoSlug) => {
     const confirmed = window.confirm("Are you sure you want to delete this to do?")
     if (confirmed) {
       try {
-        await axios.delete(`${apiRootURL}/todos/${todoId}/`)
-        alert('Todo deleted successfully.')
+        await axios.delete(`${apiRootURL}/todos/${todoSlug}/`)  
+        alert('To do deleted successfully.')
         const response = await axios.get(`${apiRootURL}/todos/`)
         dispatch(setTodos(response.data.results))
       } catch (error) {
-        console.error('Error deleting todo:', error)
-        alert('An error occurred while trying to delete the todo.')
+        console.error('Error deleting to do:', error)
+        alert('An error occurred while trying to delete the to do.')
       }
     }
   }
@@ -66,8 +66,8 @@ function Main() {
         currentRow.push(
           <div
             key={todoIndex}
-            id={`todo-${todo.id}`} 
-            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`} 
+            id={`todo-${todo.id}`}
+            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`}
           >
             <div className="note-card">
               <button
@@ -78,10 +78,10 @@ function Main() {
               </button>
               {isDeleteMode && (
                 <button
-                  onClick={() => handleDeleteTodo(todo.id)}
+                  onClick={() => handleDelete(todo.slug)} 
                   className="delete-note-icon"
                 >
-                  🗑️ 
+                  🗑️
                 </button>
               )}
             </div>
@@ -140,7 +140,7 @@ function Main() {
         </div>
 
         <div className="notes-list">
-          {filteredTodos.length > 0 ? renderRows() : <p>No todos available</p>}
+          {filteredTodos.length > 0 ? renderRows() : <p>It looks like you don't have any todos right now. Why not add some?</p>}
         </div>
 
         {showForm && <Form />}

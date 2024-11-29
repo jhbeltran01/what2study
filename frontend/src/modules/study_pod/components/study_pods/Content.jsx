@@ -47,7 +47,7 @@ function Content() {
         {
           filteredStudypods.map((group) => {
             return <Card
-              key={group.id}
+              key={group.slug}
               studypod={group}
             />
           })

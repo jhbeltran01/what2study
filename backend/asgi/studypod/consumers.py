@@ -8,7 +8,7 @@ from apis.authentication.serializers import UserInfoSerializer
 from apis.reviewers.serializers import ReviewerSerializer
 from asgi.studypod.services import (
     GenerateQuestion,
-    GetReviewer, Answer, ReviewerList,
+    GetReviewer, Answer, ReviewerList, get_error_data,
 )
 from common.models import StudyPod
 
@@ -53,6 +53,9 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         self.update_number_of_connected_users(DECREMENT)
         self._update_moderator(is_disconnected=True)
+        await self._update_number_of_connected_user_in_room_ui()
+        await self._send_notif_on_user_disconnect()
+        await self._send_notif_on_moderator_disconnect()
         await self.channel_layer.group_discard(
             self.room_name,
             self.channel_name
@@ -115,6 +118,7 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
     def _update_moderator(self, is_disconnected=False):
         if self.connected_users.get(self.room_name) is None:
             return
+
         local_connected_users = self.connected_users[self.room_name]
 
         # the first connected user is the moderator
@@ -127,10 +131,11 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
             return
 
         has_moderator = self.moderators[self.room_name] is not None
-        room_moderator_has_disconnected =  has_moderator and self.moderators[self.room_name].id == self.user.id
+        room_moderator_has_disconnected = has_moderator and self.moderators[self.room_name].id == self.user.id
 
         if is_disconnected and room_moderator_has_disconnected:
             self.moderators[self.room_name] = None
+
 
     def _set_moderator(self, user):
         if user is None:
@@ -147,6 +152,21 @@ class StudyPodBaseConsumer(AsyncWebsocketConsumer):
         else:
             self.moderators[self.room_name] = user
 
+    async def _update_number_of_connected_user_in_room_ui(self):
+        self.data = {
+            'action': 'UPDATE_CONNECTED_USER',
+            'connected_users': self.connected_users.get(self.room_name, 0)
+        }
+        await self._send_message_to_room()
+
+    async def _send_notif_on_user_disconnect(self):
+        self.data = get_error_data(
+            self.data,
+            '{} has disconnected'.format(self.user.username)
+        )
+        await self._send_message_to_room()
+        print(self.data)
+
 
 class StudyPodConsumer(StudyPodBaseConsumer):
     GENERATE_QUESTION = 'GENERATE_QUESTION'
@@ -156,6 +176,10 @@ class StudyPodConsumer(StudyPodBaseConsumer):
     UPDATE_MODERATOR = 'UPDATE_MODERATOR'
     RETRIEVE_REVIEWER_LIST = 'RETRIEVE_REVIEWER_LIST'
     ERROR = 'ERROR'
+    SUCCESS = 'SUCCESS'
+    GET_ROOM_INFO = 'GET_ROOM_INFO'
+    UPDATE_CONNECTED_USER = 'UPDATE_CONNECTED_USER'
+    UPDATE_NUMBER_OF_SUBMISSIONS = 'UPDATE_NUMBER_OF_SUBMISSIONS'
 
     async def connect(self):
         self.user = self.scope['user']
@@ -164,6 +188,8 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         super()._update_moderator()
         await self._set_action_to_retrieve_reviewer_list_if_the_moderator()
         await self._set_action_to_sync_to_room_if_not_the_moderator()
+        await self._send_notification_on_entering_the_room()
+        await self._update_number_of_connected_user_in_room_ui()
 
     async def receive(self, text_data=None, bytes_data=None):
         self.is_update_moderator = False
@@ -171,6 +197,10 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         self.will_send_message_to_room = True
 
         await self._perform_action(self.data['action'])
+
+        if self.data['action'] == self.ERROR:
+            await self._send_message_to_self()
+            return
 
         if self.will_send_message_to_room:
             await self._send_message_to_room()
@@ -205,6 +235,9 @@ class StudyPodConsumer(StudyPodBaseConsumer):
                 else:
                     self._has_existing_moderator()
                     self.will_send_message_to_room = False
+            case self.GET_ROOM_INFO:
+                 self._get_room_info()
+                 self.will_send_message_to_room = False
             case _:
                 self.data = self._get_data(
                     self.data, {
@@ -223,7 +256,7 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         self.data = {'action': self.RETRIEVE_REVIEWER_LIST}
         await self._retrieve_reviewer_list()
         self.last_action[self.room_name] = self.data
-        await super()._send_message_to_self()
+        await super()._send_message_to_room()
 
     async def _set_action_to_sync_to_room_if_not_the_moderator(self):
         if self.connected_users[self.room_name] == 1:
@@ -238,18 +271,36 @@ class StudyPodConsumer(StudyPodBaseConsumer):
 
         if action == self.SHOW_RESULTS:
             await self._sync_on_generate_question()
-            await self._sync_to_room(self.last_action[self.room_name])
+            await self._sync_to_room({
+                'action': self.SHOW_RESULTS,
+                'content': self.room_user_answers.get(self.room_name, []),
+                'is_room_sync': True
+            })
 
-        await self._sync_to_room(self.last_action[self.room_name])
+        data = {
+            **self.last_action[self.room_name],
+            'is_room_sync': True,
+        }
+        await self._sync_to_room(data)
+
+    async def _send_notification_on_entering_the_room(self):
+        self.data = {
+            'action': self.SUCCESS,
+            'message': '{} has joined the room.'.format(self.user.username)
+        }
+        await self._send_message_to_room()
 
     async def _sync_on_generate_question(self):
         await self._sync_to_room({
             'action': self.SELECT_REVIEWER,
             'reviewer': await self._get_reviewer_data(),
+            'is_room_sync': True,
         })
+
         await self._sync_to_room({
             'action': self.GENERATE_QUESTION,
-            'questions': self.all_questions[self.room_name]
+            'questions': self.all_questions[self.room_name],
+            'is_room_sync': True
         })
 
     @database_sync_to_async
@@ -288,7 +339,7 @@ class StudyPodConsumer(StudyPodBaseConsumer):
 
     async def _generate_question(self):
         question = GenerateQuestion(
-            reviewer=self.all_selected_reviewer[self.room_name],
+            reviewer=self.all_selected_reviewer.get(self.room_name, None),
             data=self.data,
             user=self.user,
             moderator=self.moderators[self.room_name],
@@ -325,11 +376,21 @@ class StudyPodConsumer(StudyPodBaseConsumer):
         )
         answer.submit()
         self.data = self._get_data(self.data, {'success': 'Answer has been submitted.'})
+        await self._update_number_of_submissions()
+        await self._send_submitted_an_answer_message()
+
 
     async def _show_results(self):
         answers = self.room_user_answers.get(self.room_name, [])
 
-        if answers is {}:
+        if self.user.id != self.moderators[self.room_name].id:
+            self.data = get_error_data(
+                self.data,
+                'The moderator is the only one that can show the results.'
+            )
+            return
+
+        if len(answers) == 0:
             self. data = {
                 'action': self.ERROR,
                 'has_no_submitted_answers': True,
@@ -338,6 +399,8 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             return
         self.data = self._get_data(self.data, answers)
         self.last_action[self.room_name] = self.data
+        self.room_user_answers[self.room_name] = []
+        await self._update_number_of_submissions()
 
     def _update_new_moderator(self):
         message = 'The moderator has been'
@@ -358,3 +421,61 @@ class StudyPodConsumer(StudyPodBaseConsumer):
             'has_an_existing_moderator': True,
             'message': 'There is an existing moderator.',
         }
+
+    def _get_room_info(self):
+        moderator = self.moderators[self.room_name]
+        self.data = {
+            **self.data,
+            'content': {
+                'moderator': UserInfoSerializer(self.moderators[self.room_name]).data if moderator is not None else None,
+                'connected_users': self.connected_users[self.room_name],
+                'number_of_submissions': len(self.room_user_answers.get(self.room_name, []))
+            }
+        }
+
+    async def _update_number_of_submissions(self):
+        data = {
+            'action': self.UPDATE_NUMBER_OF_SUBMISSIONS,
+            'number_of_submissions': len(self.room_user_answers[self.room_name])
+        }
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'send_message',
+                'data': data
+            }
+        )
+
+    async def _send_submitted_an_answer_message(self):
+        data = {
+            'action': self.SUCCESS,
+            'message': '{} has submitted an answer.'.format(self.user.username)
+        }
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'send_message',
+                'data': data
+            }
+        )
+
+    async def _send_notif_on_moderator_disconnect(self):
+        moderator = self.moderators.get(self.room_name, None)
+
+        if moderator is not None:
+            return
+
+        data = {
+            'action': self.UPDATE_MODERATOR,
+            'content': {
+                'message': 'The moderator has left the room.'.format(self.user.username),
+                'moderator': None
+            }
+        }
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'send_message',
+                'data': data
+            }
+        )

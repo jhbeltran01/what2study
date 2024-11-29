@@ -111,8 +111,8 @@ body, html {
   background-color: #ffffff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: calc(100% - 2rem); /* Adjust for side padding/margin */
+  position: relative; /* To position success message within the card */
 }
-
 
 .home-reviewer-entry:hover {
   transform: translateY(-5px);
@@ -126,6 +126,27 @@ body, html {
   // align-items: center;
   width: 100%;
   // margin-bottom: 0.5rem;
+}
+
+.bookmark-success-message {
+  color: #fff;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 14px;
+  background-color: #FFA500; /* Light orange background */
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the message */
+  width: 100%;
+  text-align: center;
+}
+
+
+.bookmark-icon.bookmarked {
+  filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
 }
 
 .home-reviewer-title {
@@ -197,6 +218,14 @@ body, html {
   color: #ff6600;
   text-decoration: underline;
 }
+
+.bookmark-success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 
 @media (min-width: 768px) {
   .home-reviewer-entry {

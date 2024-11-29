@@ -15,10 +15,10 @@ from asgi.asgi_auth.services import get_user_from_tokens
 
 class CustomAuthMiddleware(AuthMiddleware):
     async def resolve_scope(self, scope):
-        cookies = scope.get('cookies', {})
         scope["user"]._wrapped = await get_user(scope)
 
         if not scope['user'].is_authenticated:
+            cookies = scope.get('cookies', {})
             # JWT Token authentication will be used for authentication
             # if the websocket request is from other server
             user = await get_user_from_tokens(cookies)
