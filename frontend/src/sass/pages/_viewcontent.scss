@@ -33,9 +33,9 @@ html, body {
             .content-button {
                 padding: 0.5rem 1rem;
                 background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
+                color: rgb(0, 0, 0);
                 border: none;
-                border-radius: 10px;
+                border-radius: 999px;
                 cursor: pointer;
                 transition: background-color 0.3s;
             }
@@ -55,9 +55,9 @@ html, body {
             a {
                 padding: 0.5rem 1rem;
                 background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-                color: white;
+                color: rgb(0, 0, 0);
                 text-decoration: none;
-                border-radius: 10px;
+                border-radius: 999px;
                 cursor: pointer;
                 transition: background-color 0.3s;
                 transition: all 0.3s ease;
@@ -82,10 +82,22 @@ html, body {
                 padding: 0.5rem 1rem; /* Increased top/bottom padding for better alignment */
                 background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
                 color: white;
-                border-radius: 10px;
+                border-radius: 999px;
                 cursor: pointer;
                 transition: all 0.3s ease;
                 height: 40px; /* Set a fixed height for consistency */
+            }
+
+            .public-checkbox:hover {
+                background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+                color: #ffffff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+    
+            .public-checkbox:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
             
             input[type="checkbox"] {
@@ -97,7 +109,7 @@ html, body {
             
             input[type="checkbox"]:checked + label,
             input[type="checkbox"]:not(:checked) + label {
-                color: #ffffff;
+                color: #000000;
             }
 
             label {
@@ -109,6 +121,7 @@ html, body {
             .public-label {
                 font-size: 1rem;
                 color: #333;
+                margin-top: 8px;
             }
             
             .public-checkbox label {
@@ -146,25 +159,25 @@ html, body {
             }
         }
 
-          .back-reviewer-button {
+          .content-back-reviewer-button {
             padding: 0.5rem 1rem;
             background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-            color: white;
+            color: rgb(0, 0, 0);
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 999px;
             cursor: pointer;
             transition: background-color 0.3s;
             transition: all 0.3s ease;
         }
 
-        .back-reviewer-button:hover {
+        .content-back-reviewer-button:hover {
             background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
             color: #ffffff;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .back-reviewer-button:active {
+        .content-back-reviewer-button:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -195,7 +208,6 @@ html, body {
             color: #333;
             border: 2px solid #e1cb5e;
             border-radius: 8px;
-            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -258,7 +270,8 @@ html, body {
 
 
     
-        .definition-textarea {
+        .definition-textarea,
+        .new-definition-textarea {
             width: 100%;
             border-left: 4px solid #FF9F00; /* Highlight bar */
             color: #333;
@@ -347,7 +360,7 @@ html, body {
     background-color: #FEA61F;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 999px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -385,7 +398,7 @@ html, body {
     background: white;
     color: #333;
     border: 2px solid #e1cb5e;
-    border-radius: 8px;
+    border-radius: 999px;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -409,7 +422,7 @@ html, body {
     background: white;
     color: #333;
     border: 2px solid #e1cb5e;
-    border-radius: 8px;
+    border-radius: 999px;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;

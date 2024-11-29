@@ -9,32 +9,32 @@ export const SidebarData = [
     {
         title: "Home",
         path: "/",
-        icon: homeIcon,
+        // icon: homeIcon,
     },
     {
         title: "Reviewers",
         path: "/reviewers",
-        icon: reviewerIcon,
+        // icon: reviewerIcon,
     },
     {
         title: "Notes",
         path: "/notes",
-        icon: notesIcon,
+        // icon: notesIcon,
     },
     {
         title: "Subjects",
         path: "/subjects",
-        icon: classesIcon,
+        // icon: classesIcon,
     },
     {
         title: "Study Pod",
         path: "/study-pods",
-        icon: studypodIcon,
+        // icon: studypodIcon,
     },
     {
         title: "Settings",
         path: "/settings",
-        icon: settingsIcon,
+        // icon: settingsIcon,
     },
     // Add more items as needed
 ];

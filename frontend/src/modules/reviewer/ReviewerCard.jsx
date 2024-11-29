@@ -16,7 +16,9 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
   const handleEdit = () => {
     // setShowOptions(false); // Close the menu
     // navigate(routes.EDIT_REVIEWER.replace(':slug', reviewer.slug));
-    navigate('/edit-reviewers');
+    // navigate('/edit-reviewers');
+    navigate('/reviewers/edit-reviewer');
+
   };
 
   const handleDelete = async () => {

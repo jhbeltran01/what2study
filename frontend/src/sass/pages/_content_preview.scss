@@ -71,16 +71,15 @@
 .back-reviewer-button {
   padding: 0.5rem 1rem;
   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
   transition: all 0.3s ease;
-  width: auto;
-  height: auto;
   margin-top: 2rem;
   margin-left: 2rem;
+  border-radius: 999px;
 }
 
 .back-reviewer-button:hover {
@@ -94,3 +93,26 @@
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+// .create-rev-button {
+//   padding: 0.5rem 1rem;
+//   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+//   color: rgb(0, 0, 0);
+//   text-decoration: none;
+//   border-radius: 10px;
+//   cursor: pointer;
+//   transition: background-color 0.3s;
+//   transition: all 0.3s ease;
+// }
+
+// .create-rev-button:hover {
+//   background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+//   color: #ffffff;
+//   transform: translateY(-2px);
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+// }
+
+// .create-rev-button:active {
+//   transform: translateY(0);
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// }

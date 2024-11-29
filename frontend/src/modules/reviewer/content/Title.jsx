@@ -227,7 +227,7 @@ function Title({title, index=null, titleSlug=null}) {
               {
                 willAddAContent && !isEnumeration
                 && <textarea
-                  className='w-[100%] text-red-700'
+                  className='new-definition-textarea w-[100%] text-red-700'
                   value={newContentValue}
                   onChange={handleNewContentChange}
                   onBlur={() => addAContent(title.slug)}
