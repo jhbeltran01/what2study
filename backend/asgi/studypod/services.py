@@ -59,10 +59,11 @@ class GenerateQuestion:
 
     @database_sync_to_async
     def generate(self):
-        if self.reviewer is None:
-            return get_error_data(self.data, "Please select a reviewer.")
         if self.user.id != self.moderator.id:
             return get_error_data(self.data, "The moderator is the only one that can generate a question.")
+
+        if self.reviewer is None:
+            return get_error_data(self.data, "Please select a reviewer.")
 
         if self.number_of_questions < 1:
             return get_error_data(self.data, "Number of questions must be atleast 1.")
@@ -103,6 +104,14 @@ class Answer:
         self._embed_user_answers()
 
         self._check_answer()
+
+        for index, user_answer  in enumerate(self.user_answers):
+            if user_answer['user']['username'] != self.user.username:
+                continue
+
+            self.user_answers[index]['answers'] = self.answers
+            return
+
         self.user_answers.append({
             "answers": self.answers,
             "user": UserInfoSerializer(self.user).data
