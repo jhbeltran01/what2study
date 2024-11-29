@@ -15,7 +15,8 @@ function Main() {
   const notes = useSelector(state => state.notes.value)
   const [reviewers, setReviewers] = useState([])
   const [activeTab, setActiveTab] = useState(0)
-  const [searchQuery, setSearchQuery] = useState('')  
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isDeleteMode, setIsDeleteMode] = useState(false)  
   const tabNames = ['Reviewers', 'Notes']
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch()
@@ -23,10 +24,10 @@ function Main() {
 
   useEffect(() => {
     switch (activeTab) {
-      case 0: 
+      case 0:
         getReviewers()
         break
-      case 1: 
+      case 1:
         getNotes()
         break
     }
@@ -59,10 +60,31 @@ function Main() {
     setSearchQuery(e.target.value)
   }
 
+  const handleDelete = async (noteId) => {  
+    const confirmed = window.confirm("Are you sure you want to delete this note?");
+    if (confirmed) {
+      try {
+        await axios.delete(`${apiRootURL}/notes/${noteId}/`);
+        alert('Note deleted successfully.');
+        const response = await axios.get(`${apiRootURL}/subjects/${subject.slug}/notes/`);
+        dispatch(setNotes(response.data.results));
+      } catch (error) {
+        console.error('Error deleting note:', error);
+        alert('An error occurred while trying to delete the note.');
+      }
+    }
+  };
+
   const reviewersTabContent = () => (
     <div className='mt-[2rem]' key={1}>
       <div className='text-right'>
-        <Link to={SUBJECT_CREATE_REVIEWER} className="btn-add">Add</Link>
+        {(!isDeleteMode && (
+          <Link to={SUBJECT_CREATE_REVIEWER} className="btn-add">Add</Link>
+        )) || (
+          <button onClick={() => setIsDeleteMode(false)} className="btn-cancel">
+            Cancel
+          </button>
+        )}
       </div>
 
       <div className='grid grid-responsive-1'>
@@ -90,13 +112,27 @@ function Main() {
       for (let j = 0; j < rowCount && noteIndex < filteredNotes.length; j++, noteIndex++) {
         const note = filteredNotes[noteIndex];
         currentRow.push(
-          <button
+          <div 
             key={noteIndex} 
-            className="note-card"
-            onClick={() => redirectToNoteContent(note)} 
+            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`} 
           >
-            <h3>{note.name}</h3>  {/* Display title */}
-          </button>
+            <div className="note-card">
+              <button
+                className="note-card-button"
+                onClick={() => redirectToNoteContent(note)} 
+              >
+                <h3>{note.name}</h3>
+              </button>
+              {isDeleteMode && (
+                <button 
+                  onClick={() => handleDelete(note.id)}  
+                  className="delete-note-icon"
+                >
+                  🗑️ 
+                </button>
+              )}
+            </div>
+          </div>
         );
       }
   
@@ -107,16 +143,22 @@ function Main() {
       );
     }
     return rows;
-  };  
+  };
 
   const notesTabContent = () => (
     <div className='mt-[2rem]' key={2}>
       <div className='text-right'>
-        <button onClick={() => setShowForm(true)} className="btn-add">Add</button>
+        {(!isDeleteMode && (
+          <button onClick={() => setShowForm(true)} className="btn-add">Add</button>
+        )) || (
+          <button onClick={() => setIsDeleteMode(false)} className="btn-cancel">
+            Cancel
+          </button>
+        )}
       </div>
 
       <div className='notes-list'>
-        {notes.length > 0 ? renderRows() : <p>No notes available</p>}
+      {notes.length > 0 ? renderRows() : <p>Hey there! Looks like you don't have any notes yet. Start adding some!</p>}
       </div>
 
       {showForm && <CreateNoteForm setShowForm={setShowForm} />}
@@ -133,7 +175,7 @@ function Main() {
   return (
     <div className='container-1'>
       <header className='flex justify-between'>
-      <p className='subject-name'>{subject.name}</p>
+        <p className='subject-name'>{subject.name}</p>
         <input
           type="text"
           value={searchQuery}
@@ -151,9 +193,28 @@ function Main() {
         ))}
       </div>
 
+      <div className="flex gap-2 mt-2">
+        {!isDeleteMode ? (
+          <>
+            <button
+              onClick={() => setIsDeleteMode(true)}
+              className="btn-delete"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="btn-add"
+            >
+              Add
+            </button>
+          </>
+        ) : null}
+      </div>
+
       {tabs[activeTab]}
     </div>
   )
 }
 
-export default Main
+export default Main 

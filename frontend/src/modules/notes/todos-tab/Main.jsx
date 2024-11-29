@@ -11,9 +11,10 @@ import { TODOS_CONTENT } from '@root/routes/constants'
 export const ShowFormContext = createContext()
 
 function Main() {
-  const [searchQuery, setSearchQuery] = useState('') 
+  const [searchQuery, setSearchQuery] = useState('')
   const todos = useSelector(state => state.todos.value)
   const [showForm, setShowForm] = useState(false)
+  const [isDeleteMode, setIsDeleteMode] = useState(false) 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -31,44 +32,115 @@ function Main() {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value) 
+    setSearchQuery(e.target.value)
+  }
+
+  const handleDelete = async (todoSlug) => {
+    const confirmed = window.confirm("Are you sure you want to delete this to do?")
+    if (confirmed) {
+      try {
+        await axios.delete(`${apiRootURL}/todos/${todoSlug}/`)  
+        alert('To do deleted successfully.')
+        const response = await axios.get(`${apiRootURL}/todos/`)
+        dispatch(setTodos(response.data.results))
+      } catch (error) {
+        console.error('Error deleting to do:', error)
+        alert('An error occurred while trying to delete the to do.')
+      }
+    }
   }
 
   const filteredTodos = todos.filter(todo =>
     todo.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const renderRows = () => {
+    const rows = []
+    let todoIndex = 0
+    while (todoIndex < filteredTodos.length) {
+      const currentRow = []
+      const rowCount = rows.length % 2 === 0 ? 5 : 4
+
+      for (let j = 0; j < rowCount && todoIndex < filteredTodos.length; j++, todoIndex++) {
+        const todo = filteredTodos[todoIndex]
+        currentRow.push(
+          <div
+            key={todoIndex}
+            id={`todo-${todo.id}`}
+            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`}
+          >
+            <div className="note-card">
+              <button
+                className="note-card-button"
+                onClick={() => redirectToTodoContent(todo)}
+              >
+                <h3>{todo.name}</h3>
+              </button>
+              {isDeleteMode && (
+                <button
+                  onClick={() => handleDelete(todo.slug)} 
+                  className="delete-note-icon"
+                >
+                  🗑️
+                </button>
+              )}
+            </div>
+          </div>
+        )
+      }
+
+      rows.push(
+        <div key={rows.length} className="notes-row">
+          {currentRow}
+        </div>
+      )
+    }
+    return rows
+  }
+
   return (
     <ShowFormContext.Provider value={[showForm, setShowForm]}>
       <div>
-        <div className='flex justify-between items-center'>
-          <input 
-            type="text" 
+        <div className="flex">
+          <input
+            type="text"
             value={searchQuery}
-            onChange={handleSearch} 
+            onChange={handleSearch}
             placeholder="Search..."
-            className="search-bar2"  // Apply your search bar class here
+            className="search-bar2"
           />
-          <button
-            onClick={() => setShowForm(true)}
-            className="btn-add"  // Apply your Add button class here
-          >
-            Add
-          </button>
+          <div className="flex gap-2">
+            {!isDeleteMode && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="btn-add"
+              >
+                Add
+              </button>
+            )}
+
+            {!isDeleteMode && (
+              <button
+                onClick={() => setIsDeleteMode(true)}
+                className="btn-delete"
+              >
+                Delete
+              </button>
+            )}
+
+            {isDeleteMode && (
+              <button
+                onClick={() => setIsDeleteMode(false)}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className='todo-container'>
-          {filteredTodos.map(todo =>
-            <button 
-              className="todo-button" 
-              onClick={() => redirectToTodoContent(todo)} 
-              key={todo.slug}
-            >
-              <div className="todo-title-container">
-                <div className="todo-title">{todo.name}</div>
-              </div>
-            </button>
-          )}
+        <div className="notes-list">
+          {filteredTodos.length > 0 ? renderRows() : <p>It looks like you don't have any todos right now. Why not add some?</p>}
         </div>
 
         {showForm && <Form />}

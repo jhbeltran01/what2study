@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;  
-  background-color: white
+  background-color: white;
+  flex-direction: column; 
 }
 
 .notes-dropdown {
@@ -22,13 +23,11 @@
     font-weight: normal; 
   }
 
-
   option:checked {
     font-weight: bold;
     color: black;
   }
 }
-
 
 .input-content {
   background-color: #f4f4f4;
@@ -43,4 +42,30 @@
   resize: none;
   transition: background-color 0.3s ease;
   margin-top: 20px;
+}
+
+.back-notes-button {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute; 
+  top: 40px; 
+  left: 320px; 
+  z-index: 10; 
+}
+
+.back-notes-button:hover {
+  background: linear-gradient(90deg, #FEA61F 0%, #FED65D 100%);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-notes-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

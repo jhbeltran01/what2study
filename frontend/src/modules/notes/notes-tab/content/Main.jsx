@@ -11,13 +11,18 @@ function Main() {
   const dispatch = useDispatch()
   const [contentInputText, setContentInputText] = useState(note.content)
 
+  // Handle the back button click
+  const handleTitleClick = () => {
+    window.history.back();  // Navigates back to the previous page
+  }
+
   const editContent = (event) => {
     const content = event.target.value
 
     axios
       .patch(
         `${apiRootURL}/notes/${note.slug}/`,
-        {content: content}
+        { content: content }
       )
       .then(response => {
         dispatch(updateNote(response.data))
@@ -30,48 +35,56 @@ function Main() {
 
   const updateNotes = (newNote) => {
     const tempNotes = notes.map(note => {
-      if (note.slug != newNote.slug) { return note }
+      if (note.slug !== newNote.slug) { return note }
       return newNote
     })
 
     dispatch(setNotes(tempNotes))
   }
-  
+
   const getNote = (event) => {
     const selectedNoteSlug = event.target.value
-    const note = notes.filter(note => note.slug == selectedNoteSlug)[0]
+    const selectedNote = notes.filter(note => note.slug === selectedNoteSlug)[0]
 
-    dispatch(setNote(note))
-    setContentInputText(note.content)
+    dispatch(setNote(selectedNote))
+    setContentInputText(selectedNote.content)
   }
 
   return (
-    <div className='container-content'>
-      <div>
-        <select 
-          defaultValue={note.slug}
-          onChange={getNote}
-          className='notes-dropdown '
-        >
-          {notes.map(note => 
-            <option 
-              value={note.slug}
-              key={note.slug}
-            >
-              {note.name}
-            </option>
-          )}
-        </select>
+    <div>
+      {/* Back Button */}
+      <button className="back-notes-button" onClick={handleTitleClick}>
+        Back
+      </button>
 
-        <form>
-          <textarea
-            rows={10}
-            onBlur={editContent}
-            value={contentInputText}
-            onChange={(e) => setContentInputText(e.target.value)}
-            className='input-content'
-          ></textarea>
-        </form>
+      {/* Container content for dropdown and textarea */}
+      <div className="container-content">
+        <div>
+          <select 
+            defaultValue={note.slug}
+            onChange={getNote}
+            className="notes-dropdown"
+          >
+            {notes.map(note => (
+              <option 
+                value={note.slug}
+                key={note.slug}
+              >
+                {note.name}
+              </option>
+            ))}
+          </select>
+
+          <form>
+            <textarea
+              rows={10}
+              onBlur={editContent}
+              value={contentInputText}
+              onChange={(e) => setContentInputText(e.target.value)}
+              className="input-content"
+            ></textarea>
+          </form>
+        </div>
       </div>
     </div>
   )

@@ -1,100 +1,88 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setTodo } from '@redux/todo'
-import { setTodos } from '@redux/todos'
-import TodoItem from './TodoItem'
-import axios from 'axios'
-import { apiRootURL } from '@root/globals'
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiRootURL } from '@root/globals';
+import { updateTodo, setTodo } from '@redux/todo';
+import { setTodos } from '@redux/todos';
 
-function Main() {
-  const todos = useSelector(state => state.todos.value)
-  const todo = useSelector(state => state.todo.value)
-  const [itemText, setItemText] = useState('')
+function ToDo() {
+  const todo = useSelector(state => state.todo.value);
+  const todos = useSelector(state => state.todos.value);
+  const dispatch = useDispatch();
+  const [contentInputText, setContentInputText] = useState(todo.content);
 
-  const dispatch = useDispatch()
+  // Handle the back button click
+  const handleTitleClick = () => {
+    // You can modify this function to navigate to a different page or any other behavior
+    // For example, navigating back to the previous page:
+    window.history.back();
+  };
+
+  const editContent = (event) => {
+    const content = event.target.value;
+
+    axios
+      .patch(`${apiRootURL}/todos/${todo.slug}/`, { content })
+      .then((response) => {
+        dispatch(updateTodo(response.data));
+        updateTodos(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const updateTodos = (newTodo) => {
+    const tempTodos = todos.map((todo) => {
+      if (todo.slug !== newTodo.slug) {
+        return todo;
+      }
+      return newTodo;
+    });
+
+    dispatch(setTodos(tempTodos));
+  };
 
   const getTodo = (event) => {
-    const selectedTodoSlug = event.target.value
-    const todo = todos.filter(todo => todo.slug == selectedTodoSlug)[0]
-    dispatch(setTodo(todo))
-  }
+    const selectedTodoSlug = event.target.value;
+    const selectedTodo = todos.filter((todo) => todo.slug === selectedTodoSlug)[0];
 
-  const addTodoItem = () => {
-    if (itemText.trim()) {
-      axios
-        .post(
-          `${apiRootURL}/todos/${todo.slug}/items/`,
-          { text: itemText }
-        )
-        .then(response => {
-          updateUIOnAddTodoItem(todo.slug, response.data)
-          setItemText('')
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  }
-
-  const updateUIOnAddTodoItem = (todoSlug, newItem) => {
-    const tempTodos = todos.map(todo => {
-      if (todo.slug != todoSlug) { return todo }
-
-      const tempTodo = { ...todo }
-      tempTodo.items = [newItem, ...todo.items]
-
-      dispatch(setTodo(tempTodo))
-
-      return tempTodo
-    })
-    dispatch(setTodos(tempTodos))
-  }
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      addTodoItem()
-    }
-  }
+    dispatch(setTodo(selectedTodo));
+    setContentInputText(selectedTodo.content);
+  };
 
   return (
-    <div className="container-4">
-      <div className="input-container">
-        <select
-          className="todos-dropdown"
-          defaultValue={todo.slug}
-          onChange={getTodo}
-        >
-          {todos.map(todo => (
-            <option value={todo.slug} key={todo.slug}>
-              {todo.name}
-            </option>
-          ))}
-        </select>
+    <div>
+      <button className="back-notes-button" onClick={handleTitleClick}>
+        Back
+      </button>
+      <div className="container-content">
+        <div>
+          <select
+            defaultValue={todo.slug}
+            onChange={getTodo}
+            className="notes-dropdown"
+          >
+            {todos.map((todo) => (
+              <option value={todo.slug} key={todo.slug}>
+                {todo.name}
+              </option>
+            ))}
+          </select>
 
-        <input
-          value={itemText}
-          type="text"
-          onChange={(e) => setItemText(e.target.value)}
-          onKeyDown={handleKeyPress} 
-          className="add-todo"
-          placeholder="Add a new to do"
-        />
-
-        <button
-          onClick={addTodoItem}
-          className="btn-add3"
-        >
-          Add
-        </button>
-      </div>
-
-      <div className="todo-items-container">
-        {todo.items.map(todoItem => (
-          <TodoItem todoItem={todoItem} key={todoItem.slug} />
-        ))}
+          <form>
+            <textarea
+              rows={10}
+              onBlur={editContent}
+              value={contentInputText}
+              onChange={(e) => setContentInputText(e.target.value)}
+              className="input-content"
+            ></textarea>
+          </form>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Main
+export default ToDo;
