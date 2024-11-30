@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiRootURL } from '@root/globals';
+import { useSelector } from 'react-redux';
 
 const initialReviewer = {
   name: '',
@@ -10,7 +11,7 @@ const initialReviewer = {
 };
 
 const EditReviewer = () => {
-  const [reviewer, setReviewer] = useState(initialReviewer);
+  const [reviewer, setReviewer] = useState(useSelector(state => state.reviewer.value));
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -20,7 +21,7 @@ const EditReviewer = () => {
   useEffect(() => {
     const fetchReviewerData = async () => {
       try {
-        const response = await axios.get(`${apiRootURL}/reviewers/${id}`);
+        const response = await axios.get(`${apiRootURL}/reviewers/${reviewer.slug}`);
         if (response.data) {
           setReviewer(response.data); // Populate form with existing reviewer data
         }
@@ -66,7 +67,7 @@ const EditReviewer = () => {
       setSuccessMessage('');
       return;
     }
-    if (reviewer.files.length === 0) {
+    if (reviewer.files == undefined || reviewer.files.length === 0) {
       setErrorMessage('Please upload at least one file.');
       setSuccessMessage('');
       return;
@@ -81,7 +82,7 @@ const EditReviewer = () => {
     });
 
     try {
-      const response = await axios.put(`${apiRootURL}/reviewers/${id}`, formData, {
+      const response = await axios.patch(`${apiRootURL}/reviewers/${reviewer.slug}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

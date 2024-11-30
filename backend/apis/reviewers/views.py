@@ -90,7 +90,7 @@ class ReviewersAPIView(
         )
 
     def patch(self, request, *args, **kwargs):
-        if self.slug is not None:
+        if self.slug is None:
             raise exceptions.MethodNotAllowed('PATCH')
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
