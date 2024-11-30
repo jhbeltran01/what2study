@@ -61,7 +61,7 @@ function Main() {
             Add
           </button>
         </header>
-  
+
         <div className="flex gap-2">
           {!isDeleteMode && (
             <button
@@ -83,17 +83,23 @@ function Main() {
         </div>
 
         <div className='mt-2rem grid grid-responsive-1'>
-          {subjects.filter(subject =>
-            subject.name.toLowerCase().includes(searchQuery.toLowerCase())
-          ).map(subject => (
-            <div key={subject.slug} className="subject-card">
-              <Card 
-                subject={subject} 
-                isDeleteMode={isDeleteMode} 
-                handleDelete={handleDelete} 
-              />
-            </div>
-          ))}
+          {subjects.length === 0 && !isDeleteMode ? (
+            <p className="no-subjects-message">
+              You don't have any subjects yet.
+            </p>
+          ) : (
+            subjects.filter(subject =>
+              subject.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ).map(subject => (
+              <div key={subject.slug} className="subject-card">
+                <Card 
+                  subject={subject} 
+                  isDeleteMode={isDeleteMode} 
+                  handleDelete={handleDelete} 
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -101,6 +107,8 @@ function Main() {
         <Form
           subjectsState={[subjects, setSubjects]}
           showFormState={[showForm, setShowForm]}
+          setMessage={(msg) => console.log(msg)}  
+          closeMessageAfterTimeout={() => setTimeout(() => {}, 3000)}  
         />
       )}
     </div>
