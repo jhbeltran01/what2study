@@ -68,6 +68,7 @@
   padding: 0.5rem 1rem;
   transition: color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
+  margin-left: 15px;
 }
 
 .subject-delete-icon {
@@ -80,4 +81,10 @@
   cursor: pointer;
   color: #888;
   transition: color 0.3s ease;
+}
+
+.no-subjects-message {
+  text-align: center;
+  margin-top: 2rem;
+  margin-left: -20px;
 }

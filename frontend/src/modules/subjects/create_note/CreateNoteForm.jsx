@@ -33,10 +33,19 @@ function CreateNoteForm({ setShowForm }) {
         setShowForm(false)
       })
       .catch(err => {
-        setMessage({ text: 'Failed to add note', type: 'error' })
-        closeMessageAfterTimeout()
-        console.log(err)
-      })
+        // Log the complete error to the console
+        console.log("Error details:", err);
+      
+        // Optionally, log the error response if it exists
+        if (err.response) {
+          console.log("Error Response:", err.response);
+          console.log("Error Status:", err.response.status);
+          console.log("Error Message:", err.response.data);
+        }
+      
+        setMessage({ text: 'Failed to add note', type: 'error' });
+        closeMessageAfterTimeout();
+      });      
   }
 
   const updateUIOnAddNote = (note) => {
