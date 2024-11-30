@@ -104,6 +104,8 @@ class Document:
     def _identify_content_type(self, marker):
         match marker:
             case self.DEFINITION_MARK:
+                if self.new_title is None:
+                    return
                 self._add_to_definitions()
                 self._add_identification_to_question_types()
                 self._add_to_definition_is_answered_correctly_objs()
@@ -113,6 +115,8 @@ class Document:
                 self._add_to_enum_title()
                 self._add_to_enumeration_is_answered_correctly_objs()
             case self.ENUMERATION_TITLE_MARK:
+                if self.new_enum_title is None:
+                    return
                 self.new_title = self._create_title(
                     title_type=Title.Type.ENUMERATION_TITLE,
                     enum_title=self.new_enum_title
@@ -135,6 +139,8 @@ class Document:
         )
 
     def _add_to_definitions(self):
+        if self.new_title is None:
+            return
         self.definition = Definition.definitions.create(
             owner=self.owner,
             reviewer=self.reviewer,
