@@ -123,9 +123,16 @@ body, html {
 .home-bookmark {
   display: flex;
   justify-content: space-between;
-  // align-items: center;
+  align-items: center;
   width: 100%;
-  // margin-bottom: 0.5rem;
+}
+
+.bookmark-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 5px;
 }
 
 .bookmark-success-message {
@@ -145,9 +152,9 @@ body, html {
 }
 
 
-.bookmark-icon.bookmarked {
-  filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
-}
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
+// }
 
 .home-reviewer-title {
   font-weight: bold;
@@ -170,9 +177,13 @@ body, html {
   transition: all 0.3s ease;
 }
 
-.bookmark-icon.bookmarked {
-  filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
-}
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(47%) sepia(63%) saturate(525%) hue-rotate(10deg) brightness(91%) contrast(101%);
+// }
+
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
+// }
 
 .home-reviewer-description {
   font-size: 1rem;
