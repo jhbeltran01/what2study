@@ -180,6 +180,7 @@ function Main() {
                 moderator={roomInfo.moderator}
                 numberOfConnectedUsers={roomInfo.connected_users}
                 numberOfSubmissions={roomInfo.number_of_submissions}
+                displayReviewers={displayReviewers}
               />
               {displayReviewers && <ReviewersList reviewers={reviewers}/>}
               {startReview && <StartReviewer questions={questions} />}

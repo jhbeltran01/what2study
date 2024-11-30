@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiRootURL } from '@root/globals';
-import { updateTodo, setTodo } from '@redux/todo';
+import { setTodo } from '@redux/todo';
 import { setTodos } from '@redux/todos';
 
 function ToDo() {
@@ -24,7 +24,7 @@ function ToDo() {
     axios
       .patch(`${apiRootURL}/todos/${todo.slug}/`, { content })
       .then((response) => {
-        dispatch(updateTodo(response.data));
+        dispatch(setTodo(response.data));
         updateTodos(response.data);
       })
       .catch((err) => {

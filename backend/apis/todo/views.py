@@ -55,7 +55,8 @@ class TodoAPIView(
         return self.destroy(request, *args, **kwargs) 
     
     # Updates an existing Todo.
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
+        kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
     
     # Filters Todos to only those owned by the current user.
