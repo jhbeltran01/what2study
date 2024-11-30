@@ -579,6 +579,10 @@ video {
   }
 }
 
+.visible {
+  visibility: visible;
+}
+
 .static {
   position: static;
 }
@@ -630,6 +634,10 @@ video {
 
 .mt-\[2rem\] {
   margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .block {
@@ -714,6 +722,10 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-\[1em\] {
+  padding: 1em;
 }
 
 .px-\[1em\] {
