@@ -20,6 +20,7 @@ function ReviewerCard({reviewer}) {
       .post(
         `${apiRootURL}/reviewers/public/bookmark/`
         + `?reviewer=${reviewer.slug}&is_bookmarked=${is_bookmarked}`
+        + `&is_public=${reviewer.is_public}`
       )
       .then(response => {
         response
@@ -31,9 +32,10 @@ function ReviewerCard({reviewer}) {
   }
 
   const redirectToSelectedReviewerContent = () => {
+    console.log(reviewer)
     dispatch(setReviewer(reviewer))
-    dispatch(setReviewerIsPublic(true))
-      // Ensure that the public status is passed correctly
+    dispatch(setReviewerIsPublic(reviewer.is_public))
+    // Ensure that the public status is passed correctly
     const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
     navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
     }

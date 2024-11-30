@@ -502,6 +502,16 @@ class PublicReviewerCategory(SlugField):
     public_reviewer = models.ForeignKey(
         PublicReviewer,
         on_delete=models.CASCADE,
+        default=None,
+        null=True,
+        blank=True,
+    )
+    reviewer = models.ForeignKey(
+        Reviewer,
+        on_delete=models.CASCADE,
+        default=None,
+        null=True,
+        blank=True,
     )
 
     reviewers = models.Manager()
