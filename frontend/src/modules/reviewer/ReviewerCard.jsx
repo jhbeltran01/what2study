@@ -6,6 +6,7 @@ import * as routes from '@root/routes/constants';
 import { useNavigate } from 'react-router-dom';
 import { apiRootURL } from '@root/globals';
 import axios from 'axios';
+
 function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT }) {
   const [showOptions, setShowOptions] = useState(false);
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function ReviewerCard({ reviewer, contentRoute = routes.VIEW_REVIEWER_CONTENT })
     // setShowOptions(false); // Close the menu
     // navigate(routes.EDIT_REVIEWER.replace(':slug', reviewer.slug));
     // navigate('/edit-reviewers');
+    dispatch(setReviewer(reviewer))
     navigate('/reviewers/edit-reviewer');
 
   };
