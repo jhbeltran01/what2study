@@ -125,6 +125,6 @@ class TodoItemAPIView(
         )
 
     def _set_todo(self, kwargs):
-        self.todo = Todo.todos.filter(slug=kwargs['todo']).first()
+        self.todo = Todo.todos.filter(slug=kwargs.get('todo', None)).first()
         if self.todo is None:
             raise NotFound('Todo is not found.')

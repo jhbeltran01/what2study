@@ -15,13 +15,11 @@ function Main() {
   };
 
   useEffect(() => {
-    console.log(reviewer)
-    if (!reviewer.is_public) return;
-
     // Add reviewer to recently viewed
     axios
       .post(
-        `${apiRootURL}/reviewers/public/recently-viewed/add/?reviewer=${reviewer.slug}`
+        `${apiRootURL}/reviewers/public/recently-viewed/add/`
+        + `?reviewer=${reviewer.slug}&is_public=${reviewer.is_public}`
       )
       .then((response) => {
         console.log(response.status);
@@ -32,12 +30,13 @@ function Main() {
   }, [reviewer]);
 
   useEffect(() => {
-    // Get the content of the reviewer
     axios
       .get(
-        `${apiRootURL}/reviewers/public/${reviewer.reviewer}/?is_get_content=True&is_partial=True`
+        `${apiRootURL}/reviewers/public/${reviewer.slug}/`
+        + `?is_get_content=True&is_partial=True&is_public=${reviewer.is_public}`
       )
       .then((response) => {
+        console.log(response.data)
         setTitles(response.data.titles);
       })
       .catch((err) => {
@@ -47,18 +46,24 @@ function Main() {
 
   return (
     <div className="content-preview">
-    <button className="back-reviewer-button" onClick={handleTitleClick}>
-    Back
-  </button>
-    <div className="reviewer-main-container">
+      <button className="back-reviewer-button" onClick={handleTitleClick}>
+        Back
+      </button>
 
-      {/* Render Titles */}
-      <ul>
-        {titles.map((title) => (
-          <Title title={title} key={title.slug} />
-        ))}
-      </ul>
-    </div>
+      <div className="reviewer-main-container">
+        {/* Render Titles */}
+        {
+          titles.length > 0
+          ? (
+              <ul>
+                {titles.map((title) => (
+                  <Title title={title} key={title.slug} />
+                ))}
+              </ul>
+            )
+          : <h1 className='text-center'>No available content.</h1>
+        }
+      </div>
     </div>
   );
 }

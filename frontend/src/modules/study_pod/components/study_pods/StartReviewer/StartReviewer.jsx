@@ -18,7 +18,7 @@ function StartReviewer({questions}) {
   }, [])
   
   if (questions == undefined || questions.length == 0) {
-    return <h1>Generating a question</h1>
+    return <h1 className='text-center'>Generating a question.</h1>
   }
 
   const question = questions[0]
