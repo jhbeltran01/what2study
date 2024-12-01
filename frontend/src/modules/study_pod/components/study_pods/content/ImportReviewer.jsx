@@ -21,14 +21,14 @@ function ImportReviewer({studypodReviewersState, setWillImportReviewer}) {
       })
   }, [])
 
-  const importReviewer = (reviewerSlug) => {
+  const importReviewer = (reviewerPassed) => {
     axios
       .post(
         `${apiRootURL}/studypods/${studypod.slug}/reviewers/`,
         {
           studypod: studypod.slug,
-          reviewer: reviewer.slug,
-          name: reviewer.name,
+          reviewer: reviewerPassed.slug,
+          name: reviewerPassed.name,
         }
       )
       .then(response => {
@@ -51,12 +51,12 @@ function ImportReviewer({studypodReviewersState, setWillImportReviewer}) {
               CLOSE
             </button>
           </div>
-          {reviewers.map(reviewer => (
-            <div key={reviewer.slug}>
+          {reviewers.map(innerReviewer => (
+            <div key={innerReviewer.slug}>
               <div className='flex justify-between items-center import-reviewer'>
-                <p>{reviewer.name}</p>
+                <p>{innerReviewer.name}</p>
                 <button
-                  onClick={() => importReviewer(reviewer.slug)}
+                  onClick={() => importReviewer(innerReviewer)}
                   className='import-btn'
                 >
                   Import

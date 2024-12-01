@@ -99,12 +99,13 @@ class StudypodReviewerSerializer(serializers.ModelSerializer):
 
             value = reviewer.name
 
-        slug = slugify('{}-{}'.format(
+        slug = slugify('{}-{}-{}-{}'.format(
             value,
             self.studypod_id,
             self.reviewer_id,
             self.owner.id,
         ))
+
         reviewer = StudypodReviewer.reviewers.filter(slug=slug).first()
         reviewer_exists = reviewer is not None
 

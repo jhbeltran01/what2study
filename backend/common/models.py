@@ -176,7 +176,7 @@ class StudypodReviewer(SlugField):
         return self.slug
 
     def save(self, **kwargs):
-        self.slug = slugify('{}-{}'.format(
+        self.slug = slugify('{}-{}-{}-{}'.format(
             self.name,
             self.studypod.id,
             self.reviewer.id,
