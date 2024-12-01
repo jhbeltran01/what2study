@@ -13,6 +13,7 @@ export const {
   setTodo,
   updateTodoItem,
   removeTodoItem,
+  addNewTodoItem,
 } = todoSlice.actions
 
 export default todoSlice.reducer

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTodo } from '@redux/todo'
-import { setTodos } from '@redux/todos'
+import { setTodo, addNewTodoItem } from '@redux/todo'
 import TodoItem from './TodoItem'
 import axios from 'axios'
 import { apiRootURL } from '@root/globals'
@@ -27,27 +26,13 @@ function Main() {
           { text: itemText }
         )
         .then(response => {
-          updateUIOnAddTodoItem(todo.slug, response.data)
+          dispatch(addNewTodoItem(response.data))
           setItemText('')
         })
         .catch(err => {
           console.log(err)
         })
     }
-  }
-
-  const updateUIOnAddTodoItem = (todoSlug, newItem) => {
-    const tempTodos = todos.map(todo => {
-      if (todo.slug != todoSlug) { return todo }
-
-      const tempTodo = { ...todo }
-      tempTodo.items = [newItem, ...todo.items]
-
-      dispatch(setTodo(tempTodo))
-
-      return tempTodo
-    })
-    dispatch(setTodos(tempTodos))
   }
 
   const handleKeyPress = (e) => {

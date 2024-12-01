@@ -14,5 +14,9 @@ export default {
     state.value.items = state.value.items.filter(
       item => item.slug != itemSlug
     )
+  },
+  addNewTodoItem: (state, action) => {
+    const newTodoItem = action.payload
+    state.value.items = [newTodoItem, ...state.value.items]
   }
 }
