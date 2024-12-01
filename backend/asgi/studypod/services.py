@@ -71,6 +71,12 @@ class GenerateQuestion:
         obj = self.studypod.available_types.filter(studypod=self.studypod).first()
         types = obj.available_question_types
 
+        if len(types) == 0:
+            return {
+                'action': 'ERROR',
+                'message': 'Reviewer has no available content.'
+            }
+
         if 'E' in types:
             types.remove('E')
         question = Question(
