@@ -11,7 +11,7 @@ from rest_framework import status
 from common.models import (
     Title,
     Definition,
-    EnumerationTitle, DefinitionIsCorrectlyAnswered
+    EnumerationTitle, DefinitionIsCorrectlyAnswered, ReviewerAvailableQuestionType
 )
 from common.services import generate_unique_id
 
@@ -263,11 +263,19 @@ class TitleAPIView(
 
     def _update_available_question_types(self, instance=None):
         reviewer = self.query_params.get('reviewer', None)
+        type_obj = reviewer.available_question_types.filter(owner=self.request.user).first()
+
+        if type_obj is None:
+            type_obj = ReviewerAvailableQuestionType.reviewers.create(
+                reviewer=reviewer,
+                owner=self.request.user,
+            )
+
         question_type = QuestionType(
             reviewer=reviewer,
-            owner={'owner': self.request.user._wrapped},
+            owner={'owner': self.request.user},
             for_enumeration=True,
             for_definition=True,
-            available_question_types_obj=reviewer.available_question_types.filter(owner=self.request.user).first()
+            available_question_types_obj=type_obj
         )
         question_type.update()

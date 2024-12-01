@@ -19,7 +19,7 @@ from common.models import (
     Reviewer,
     SubjectReviewer,
     SubjectNote,
-    Note
+    Note, ReviewerAvailableQuestionType
 )
 
 
@@ -120,7 +120,10 @@ class SubjectReviewerAPIView(
 
     def perform_create(self, serializer):
         reviewer = serializer.save(owner=self.request.user)
-
+        ReviewerAvailableQuestionType.reviewers.create(
+            reviewer=reviewer,
+            owner=self.request.user,
+        )
         SubjectReviewer.reviewers.create(
             owner=self.request.user,
             reviewer=reviewer,
