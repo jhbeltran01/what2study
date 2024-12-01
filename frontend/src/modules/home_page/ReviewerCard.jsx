@@ -62,7 +62,7 @@ function ReviewerCard({reviewer}) {
           <p className='home-reviewer-owner'>{owner.first_name} {owner.last_name}</p>
         </div> */}
 
-        <p className="home-reviewer-date">{reviewer.created_at}</p>
+        <p className="home-reviewer-date">{reviewer.created_at_format_1}</p>
 
         <button 
           onClick={redirectToSelectedReviewerContent} 

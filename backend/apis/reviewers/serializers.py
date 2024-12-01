@@ -21,6 +21,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
     is_public = serializers.SerializerMethodField(read_only=True)
     desc_1 = serializers.SerializerMethodField(read_only=True)
     is_bookmarked = serializers.SerializerMethodField(read_only=True)
+    created_at_format_1 = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Reviewer
@@ -33,6 +34,7 @@ class ReviewerSerializer(serializers.ModelSerializer):
             'is_public',
             'titles',
             'is_bookmarked',
+            'created_at_format_1',
             'created_at',
             'updated_at',
         ]
@@ -83,7 +85,10 @@ class ReviewerSerializer(serializers.ModelSerializer):
             return False
 
     def get_desc_1(self, instance):
-        return instance.description[:15]
+        desc = instance.description
+        if len(desc) > 30:
+            desc = desc[:30] + '...'
+        return desc
 
     def get_is_bookmarked(self, instance):
         bookmarked_reviewer = BookmarkedPublicReviewer.reviewers.filter(
@@ -92,6 +97,9 @@ class ReviewerSerializer(serializers.ModelSerializer):
             owner=self.owner,
         ).first()
         return bookmarked_reviewer is not None
+
+    def get_created_at_format_1(self, instance):
+        return instance.created_at.strftime("%b %d, %Y")
 
 
 class PublicizeReviewerQueryParamSerializer(serializers.Serializer):

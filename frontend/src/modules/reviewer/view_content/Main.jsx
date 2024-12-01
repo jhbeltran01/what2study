@@ -46,18 +46,24 @@ function Main() {
 
   return (
     <div className="content-preview">
-    <button className="back-reviewer-button" onClick={handleTitleClick}>
-    Back
-  </button>
-    <div className="reviewer-main-container">
+      <button className="back-reviewer-button" onClick={handleTitleClick}>
+        Back
+      </button>
 
-      {/* Render Titles */}
-      <ul>
-        {titles.map((title) => (
-          <Title title={title} key={title.slug} />
-        ))}
-      </ul>
-    </div>
+      <div className="reviewer-main-container">
+        {/* Render Titles */}
+        {
+          titles.length > 0
+          ? (
+              <ul>
+                {titles.map((title) => (
+                  <Title title={title} key={title.slug} />
+                ))}
+              </ul>
+            )
+          : <h1 className='text-center'>No available content.</h1>
+        }
+      </div>
     </div>
   );
 }

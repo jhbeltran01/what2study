@@ -134,6 +134,7 @@ class PublicizeReviewerAPIView(
         self.get_list = False
         self.is_public = True
         self.is_get_single_reviewer = False
+        self.is_create = False
 
     def dispatch(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug')
@@ -151,6 +152,7 @@ class PublicizeReviewerAPIView(
         return super().list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        self.is_create = True
         return super().create(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -164,22 +166,19 @@ class PublicizeReviewerAPIView(
     def get_queryset(self):
         if self.is_get_method:
             return get_public_reviewers(self.request.user, self.category)
-        # used in deleting a public reviewer
-        return PublicReviewer.reviewers.filter(reviewer__owner=self.request.user)
 
     def get_object(self):
-        print(self.is_get_single_reviewer, self.is_public)
         if self.is_get_single_reviewer and not self.is_public:
-            print('hello')
             return Reviewer.reviewers.filter(slug=self.slug).first()
 
-        return super().get_object()
+        return PublicReviewer.reviewers.filter(reviewer__slug=self.slug).first()
 
     def get_serializer_class(self):
+        if self.is_public and (self.is_get_content or self.is_create) :
+            return PublicReviewerSerializer
+
         if self.is_get_method:
             return ReviewerSerializer
-        return PublicReviewerSerializer
-
     def get_serializer_context(self):
         return {
             'owner': self.request.user,
