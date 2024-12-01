@@ -67,6 +67,7 @@
 
 .back-createrev-button {
   position: absolute;
+  border-radius: 999px;
   top: 0; /* Aligns with the top of the header */
   left: 0; /* Places it at the leftmost */
   margin: 1rem; /* Same margins as desired for the back button */
@@ -81,7 +82,7 @@
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: #000000;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -104,7 +105,7 @@
   background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: #000000;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -284,7 +285,7 @@
 /* Guide Content */
 .guide-content,
 .sample-content {
-  background: #ffffff;
+  // background: #ffffff;
   border-radius: 8px;
   padding: 1.5rem;
   max-width: 400px;
@@ -330,10 +331,10 @@
   right: 6rem; /* Place it to the left of the "Guide" button */
   margin: 1rem;
   padding: 0.5rem 1rem;
-  background-color: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
+  background: linear-gradient(90deg, #fea61f 0%, #fed65d 100%);
   color: #000000;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

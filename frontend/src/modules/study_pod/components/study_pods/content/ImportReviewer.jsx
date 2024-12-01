@@ -3,7 +3,7 @@ import axios from 'axios';
 import { apiRootURL } from '@root/globals';
 import { useSelector } from 'react-redux';
 
-function ImportReviewer({ studypodReviewersState }) {
+function ImportReviewer({ studypodReviewersState, setWillImportReviewer }) {
   const [studypodReviewers, setStudypodReviewers] = studypodReviewersState;
   const [reviewers, setReviewers] = useState([]);
   const studypod = useSelector((state) => state.studypod.value);
@@ -38,46 +38,35 @@ function ImportReviewer({ studypodReviewersState }) {
   }
 
   return (
-    <div className='overlay-1 flex justify-center items-center'>
-      <div className='max-w-[800px] w-[100%] max-h-[500px] overflow-scroll form-2 relative'>
-        <div>
-          <div className='text-right'>
+    <div className='overlay'>
+      <div className='form-container'>
+        <div className='reviewer-list'>
+          {reviewers.map(innerReviewer => (
+            <div key={innerReviewer.slug} className='reviewer-item'>
+              <p>{innerReviewer.name}</p>
+              <button
+                onClick={() => importReviewer(innerReviewer)}
+                className='import-btn'
+              >
+                Import
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {reviewers.length > 10 && (
+          <div className='close-button-container'>
             <button 
               onClick={() => setWillImportReviewer(false)}
-              className='btn-close-1 mb-[1rem]'
+              className='btn-close'
             >
               CLOSE
             </button>
           </div>
-          {reviewers.map(innerReviewer => (
-            <div key={innerReviewer.slug}>
-              <div className='flex justify-between items-center import-reviewer'>
-                <p>{innerReviewer.name}</p>
-                <button
-                  onClick={() => importReviewer(innerReviewer)}
-                  className='import-btn'
-                >
-                  Import
-                </button>
-              </div>
-            </div>
-          ))}
-          {
-            reviewers.length > 10
-            && <div className='text-right'>
-                <button 
-                  onClick={() => setWillImportReviewer(false)}
-                  className='btn-close-1 mb-[1rem]'
-                >
-                  CLOSE
-                </button>
-              </div>
-          }
-        </div>
+        )}
       </div>
     </div>
   );
 }
-
 
 export default ImportReviewer;
