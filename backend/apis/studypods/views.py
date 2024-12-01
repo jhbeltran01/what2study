@@ -26,7 +26,8 @@ from apis.studypods.services import (
 )
 
 from common.models import StudyPod, StudypodReviewer, ReviewerAvailableQuestionType, \
-    StudypodReviewerAvailableQuestionType, StudypodDefinitionIsAnsweredCorrectly, StudypodEnumerationIsCorrectlyAnswered
+    StudypodReviewerAvailableQuestionType, StudypodDefinitionIsAnsweredCorrectly, \
+    StudypodEnumerationIsCorrectlyAnswered, Reviewer
 
 
 class StudyPodAPIView(
@@ -133,6 +134,8 @@ class StudypodReviewersAPIView(
         super().__init__(*args, **kwargs)
         self.studypod_slug = None
         self.reviewer_slug = None
+        self.submitted_reviewer_slug = None
+        self.is_create = False
 
     def dispatch(self, request, *args, **kwargs):
         self.studypod_slug = kwargs.get('studypod_slug', None)
@@ -145,6 +148,8 @@ class StudypodReviewersAPIView(
         return super().list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        self.submitted_reviewer_slug = request.data.get('reviewer')
+        self.is_create = True
         if self.studypod_slug is None:
             raise exceptions.MethodNotAllowed('POST')
         return super().create(request, *args, **kwargs)
@@ -204,4 +209,10 @@ class StudypodReviewersAPIView(
         question_type.update()
 
     def get_serializer_context(self):
-        return {'owner': self.request.user}
+        if not self.is_create:
+            return {'owner': self.request.user}
+        return {
+            'owner': self.request.user,
+            'studypod': StudyPod.groups.filter(slug=self.studypod_slug).first().id,
+            'reviewer': Reviewer.reviewers.filter(slug=self.submitted_reviewer_slug).first().id
+        }

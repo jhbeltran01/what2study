@@ -19,38 +19,62 @@ function ImportReviewer({ studypodReviewersState }) {
       });
   }, []);
 
-  const handleReviewerClick = (reviewer) => {
-    const confirmImport = window.confirm(`Do you want to import ${reviewer.name}?`);
-    if (confirmImport) {
-      axios
-        .post(`${apiRootURL}/studypods/${studypod.slug}/reviewers/`, {
+  const importReviewer = (reviewerPassed) => {
+    axios
+      .post(
+        `${apiRootURL}/studypods/${studypod.slug}/reviewers/`,
+        {
           studypod: studypod.slug,
-          reviewer: reviewer.slug,
-          name: reviewer.name,
-        })
-        .then((response) => {
-          setStudypodReviewers((prev) => [...prev, response.data]);
-          console.log(`${reviewer.name} imported successfully!`);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+          reviewer: reviewerPassed.slug,
+          name: reviewerPassed.name,
+        }
+      )
+      .then(response => {
+        setStudypodReviewers([response.data, ...studypodReviewers])
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
   return (
-    <div className="reviewer-list-toggle">
-      <ul className="reviewer-list">
-        {reviewers.map((reviewer) => (
-          <li
-            key={reviewer.slug}
-            className="reviewer-item"
-            onClick={() => handleReviewerClick(reviewer)}
-          >
-            {reviewer.name}
-          </li>
-        ))}
-      </ul>
+    <div className='overlay-1 flex justify-center items-center'>
+      <div className='max-w-[800px] w-[100%] max-h-[500px] overflow-scroll form-2 relative'>
+        <div>
+          <div className='text-right'>
+            <button 
+              onClick={() => setWillImportReviewer(false)}
+              className='btn-close-1 mb-[1rem]'
+            >
+              CLOSE
+            </button>
+          </div>
+          {reviewers.map(innerReviewer => (
+            <div key={innerReviewer.slug}>
+              <div className='flex justify-between items-center import-reviewer'>
+                <p>{innerReviewer.name}</p>
+                <button
+                  onClick={() => importReviewer(innerReviewer)}
+                  className='import-btn'
+                >
+                  Import
+                </button>
+              </div>
+            </div>
+          ))}
+          {
+            reviewers.length > 10
+            && <div className='text-right'>
+                <button 
+                  onClick={() => setWillImportReviewer(false)}
+                  className='btn-close-1 mb-[1rem]'
+                >
+                  CLOSE
+                </button>
+              </div>
+          }
+        </div>
+      </div>
     </div>
   );
 }

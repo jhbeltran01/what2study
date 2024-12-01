@@ -14,6 +14,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
   const [answerText, setAnswerText] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [willShowCorrectAnswers, setWillShowCorrectAnswers] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
     generateQuestions()
     setCurrentQuestion(0)
     dispatch(setCheckedAnswers({}))
+    setWillShowCorrectAnswers(false)
   }
 
   const displaySubmittedAnswer = isSubmitted && answers.answers[currentQuestion].user_answers.length > 0
@@ -118,15 +120,22 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
                 </div>
             }
             {
-              displaySubmittedAnswer
+              displaySubmittedAnswer && !willShowCorrectAnswers
               && <div className={`user-answer ${isCorrect ? 'correct' : 'wrong'}`}>
                   {answers.answers[currentQuestion].user_answers[0].answer}
                 </div>
             }
             {
-              !displaySubmittedAnswer && isSubmitted
+              !displaySubmittedAnswer && isSubmitted && !willShowCorrectAnswers
               && <div className='user-answer wrong'>
                   No submitted answer
+                </div>
+            }
+
+            {
+              willShowCorrectAnswers
+              && <div className='user-answer correct'>
+                  {questions[currentQuestion].answer}
                 </div>
             }
           </div>
@@ -146,6 +155,7 @@ const StartReviewerIdentification = ({questions, generateQuestions}) => {
         answers={answers.answers ? answers.answers : []} 
         isSubmitted={isSubmitted}
         setCurrentQuestion={setCurrentQuestion}
+        willShowCorrectAnswersState={[willShowCorrectAnswers, setWillShowCorrectAnswers]}
       />
     </form>
   );

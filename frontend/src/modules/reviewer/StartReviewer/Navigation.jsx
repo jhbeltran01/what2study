@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react'
 
-function Navigation({currentQuestion, numberOfQuestions, answers, isSubmitted, setCurrentQuestion}) {
+function Navigation({currentQuestion, numberOfQuestions, answers, isSubmitted, setCurrentQuestion, willShowCorrectAnswersState}) {
+  const [willShowCorrectAnswers, setWillShowCorrectAnswers] = willShowCorrectAnswersState
   return (
     <div className="right-section">
       <div className="question-wrapper">
@@ -46,6 +47,27 @@ function Navigation({currentQuestion, numberOfQuestions, answers, isSubmitted, s
               </button>
             </div>
         }
+        {
+          isSubmitted && !willShowCorrectAnswers
+          && <button 
+              type='button' 
+              className="submit-button"
+              onClick={() => setWillShowCorrectAnswers(true)}
+            >
+              Show Correct Answers
+            </button>
+        }
+
+        {
+          isSubmitted && willShowCorrectAnswers
+          && <button 
+              type='button' 
+              className="submit-button"
+              onClick={() => setWillShowCorrectAnswers(false)}
+            >
+              Show My Answers
+            </button>
+        }
       </div>
     </div>
   )
@@ -57,6 +79,7 @@ Navigation.propTypes = {
   answers: PropTypes.array.isRequired,
   isSubmitted: PropTypes.bool.isRequired,
   setCurrentQuestion: PropTypes.func.isRequired,
+  willShowCorrectAnswersState: PropTypes.array.isRequired,
 }
 
 export default Navigation

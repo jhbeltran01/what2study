@@ -114,6 +114,7 @@ function Main() {
   const retrieveReviewerList = (reviewers) => {
     setReviewers(reviewers)
     setDisplayReviewers(true)
+    setQuestions([])
   }
 
   const startReviewing = () => {

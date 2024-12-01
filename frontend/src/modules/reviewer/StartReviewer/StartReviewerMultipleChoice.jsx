@@ -13,6 +13,7 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
   const answers = useSelector(state => state.answers.value)
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [willShowCorrectAnswers, setWillShowCorrectAnswers] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -95,7 +96,22 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
                 const selectedAnswer =  hasAnswer && userAnswer.answer
                 const isCorrect = isSubmitted && hasAnswer && userAnswer.is_correct
                 const isTheAnswer = selectedAnswer == optionText
-                console.log()
+                
+                const isTheCorrectAnswer = question.answer == optionText
+
+                if (willShowCorrectAnswers) {
+                  return (
+                    <button
+                      key={index}
+                      type='button'
+                      className={`option flex ${isTheCorrectAnswer && 'correct'}`}
+                    >
+                      <div className="option-circle">{option}</div>
+                      <span>{optionText}</span>
+                    </button>
+                  )
+                }
+                  
                 return (
                   <button
                     key={option}
@@ -129,6 +145,7 @@ const StartReviewerMultipleChoice = ({questions, generateQuestions}) => {
         answers={answers.answers ? answers.answers : []} 
         isSubmitted={isSubmitted}
         setCurrentQuestion={setCurrentQuestion}
+        willShowCorrectAnswersState={[willShowCorrectAnswers, setWillShowCorrectAnswers] }
       />
     </form>
   );

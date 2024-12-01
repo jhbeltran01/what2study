@@ -85,8 +85,11 @@ class StudypodReviewerSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.owner = self.context.get('owner', None)
+        self.studypod_id = self.context.get('studypod', None)
+        self.reviewer_id = self.context.get('reviewer', None)
 
     def validate_name(self, value):
+        print(value)
         if value == '' and self.instance is None:
             reviewer_slug = self.initial_data.get('reviewer')
             reviewer = Reviewer.reviewers.filter(slug=reviewer_slug).first()
@@ -96,7 +99,13 @@ class StudypodReviewerSerializer(serializers.ModelSerializer):
 
             value = reviewer.name
 
-        slug = slugify('{}-{}'.format(value, self.owner.id))
+        slug = slugify('{}-{}-{}-{}'.format(
+            value,
+            self.studypod_id,
+            self.reviewer_id,
+            self.owner.id,
+        ))
+
         reviewer = StudypodReviewer.reviewers.filter(slug=slug).first()
         reviewer_exists = reviewer is not None
 

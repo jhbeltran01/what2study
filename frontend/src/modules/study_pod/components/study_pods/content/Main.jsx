@@ -26,8 +26,8 @@ function Main() {
   };
 
   return (
-    <div className="container-1">
-      <div className="header">
+    <div className='container-2'>
+      <div>
         <button
           className="import-reviewer-button"
           onClick={toggleImportReviewer}
