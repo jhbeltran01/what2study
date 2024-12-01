@@ -22,22 +22,6 @@ function Main() {
   const [willAddContent, setWillAddContent] = useState(false)
   const navigate = useNavigate(); // Initialize useNavigate
 
-  useEffect(() => {
-    // Add reviewer to recently viewed
-    axios
-      .post(
-        `${apiRootURL}/reviewers/public/recently-viewed/add/`
-        + `?reviewer=${reviewer.slug}&is_public=${reviewer.is_public}`
-      )
-      .then((response) => {
-        console.log(response.status);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [reviewer]);
-
-
   const handleTitleClick = () => {
     navigate('/reviewers'); // Redirect to Reviewer page
   };

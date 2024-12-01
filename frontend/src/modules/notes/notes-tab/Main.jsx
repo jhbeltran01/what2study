@@ -91,7 +91,7 @@ function Main() {
           </div>
         );
       }
-
+  
       rows.push(
         <div key={rows.length} className="notes-row">
           {currentRow}

@@ -9,7 +9,7 @@ const initialReviewer = {
   files: []
 }
 
-const CreateReviewer = () => {
+const Main = () => {
   const [reviewer, setReviewer] = useState(initialReviewer);
   const subject = useSelector(state => state.subject.value)
 
@@ -61,29 +61,29 @@ const CreateReviewer = () => {
   };
 
   return (
-      <section className="create-section p-4 flex flex-col">
-        <div className="reviewer-content">
-        <form className="reviewer-form" onSubmit={handleSubmit}>
-          <div className="form-group reviewer-name-group">
+      <section className="subject-create-section p-4 flex flex-col">
+        <div className="-subject-reviewer-content">
+        <form className="subject-reviewer-form" onSubmit={handleSubmit}>
+          <div className="subject-form-group reviewer-name-group">
             <label htmlFor="reviewerName">Reviewer Name:</label>
             <input
               type="text"
               id="reviewerName"
               placeholder="Enter reviewer name"
-              className="input-field"
+              className="subject-input-field"
               name='name'
               value={reviewer.name}
               onChange={handleChange}
             />
           </div>
 
-            <div className="form-group">
+            <div className="subject-form-group">
               <label>Upload Content:</label>
-              <div className="upload-field">
+              <div className="subject-upload-field">
                 <input 
                   type="file" 
                   id="uploadFile" 
-                  className="input-field"
+                  className="subject-input-field"
                   onChange={handleFileUpload} 
                 />
                 <label htmlFor="uploadFile" className="upload-link">
@@ -91,13 +91,13 @@ const CreateReviewer = () => {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="subject-form-group">
               <label htmlFor="description">Description:</label>
               <input
                 type="text"
                 id="description"
                 placeholder="Enter description"
-                className="input-field"
+                className="subject-input-field"
                 value={reviewer.description}
                 name='description'
                 onChange={handleChange}
@@ -110,4 +110,4 @@ const CreateReviewer = () => {
       </section>
     );
   };
-  export default CreateReviewer;
+  export default Main;

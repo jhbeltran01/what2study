@@ -123,9 +123,16 @@ body, html {
 .home-bookmark {
   display: flex;
   justify-content: space-between;
-  // align-items: center;
+  align-items: center;
   width: 100%;
-  // margin-bottom: 0.5rem;
+}
+
+.bookmark-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 5px;
 }
 
 .bookmark-success-message {
@@ -145,9 +152,9 @@ body, html {
 }
 
 
-.bookmark-icon.bookmarked {
-  filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
-}
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
+// }
 
 .home-reviewer-title {
   font-weight: bold;
@@ -170,9 +177,13 @@ body, html {
   transition: all 0.3s ease;
 }
 
-.bookmark-icon.bookmarked {
-  filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
-}
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(47%) sepia(63%) saturate(525%) hue-rotate(10deg) brightness(91%) contrast(101%);
+// }
+
+// .bookmark-icon.bookmarked {
+//   filter: brightness(0) saturate(100%) invert(36%) sepia(86%) saturate(746%) hue-rotate(10deg) brightness(101%) contrast(102%);
+// }
 
 .home-reviewer-description {
   font-size: 1rem;
@@ -235,49 +246,3 @@ body, html {
 }
 
 
-// @media (min-width: 768px) {
-//   .sidebar-container {
-//     grid-column: span 3 / span 3;
-//     height: 100vh;
-//   }
-
-//   .navpage-container {
-//     grid-column: span 9 / span 9;
-//   }
-// }
-
-// @media (min-width: 1024px) {
-//   .sidebar-container {
-//     grid-column: span 2 / span 2;
-//   }
-
-//   .navpage-container {
-//     grid-column: span 10 / span 10;
-//   }
-// }
-
-// @media (min-width: 768px) {
-
-//   .header {
-//     flex-direction: row;
-//     align-items: center;
-//   }
-
-//   .header-buttons {
-//     flex-direction: row;
-//     gap: 1rem;
-//   }
-
-//   .header-buttons button {
-//     font-size: 1rem;
-//   }
-//   .content-container {
-//     gap: 1rem;
-//   }
-
-//   .content-box {
-//     width: calc(25% - 1.5rem);
-//     padding-bottom: calc(25% - 1.5rem);
-//   }
-
-// }
