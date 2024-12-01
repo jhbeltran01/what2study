@@ -54,10 +54,10 @@ class NotesAPIView(
         return Note.notes.filter(owner=self.request.user)
     
     def get_object(self):
-        return Note.notes.get(
+        return Note.notes.filter(
             slug=self.slug,
             owner=self.request.user
-        )
+        ).first()
     
     def get_serializer_context(self):
         return {'owner': self.request.user}

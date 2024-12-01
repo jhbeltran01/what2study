@@ -125,7 +125,7 @@ function Main() {
               </button>
               {isDeleteMode && (
                 <button 
-                  onClick={() => handleDelete(note.id)}  
+                  onClick={() => handleDelete(note.slug)}  
                   className="delete-note-icon"
                 >
                   🗑️ 
