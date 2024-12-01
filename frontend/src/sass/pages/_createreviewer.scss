@@ -1,13 +1,46 @@
 
 /* General Section Styling */
+// .create-reviewer-section {
+//   background-color: #ffffff;
+//   padding: 2rem;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   height: 100vh;
+//   font-family: 'Josefin Sans', sans-serif;
+// }
+
 .create-reviewer-section {
   background-color: #ffffff;
-  padding: 2rem;
+  padding: 1.3rem 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: 100vh;
+  justify-content: flex-start; /* Align content to the top */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Take full viewport height */
   font-family: 'Josefin Sans', sans-serif;
+  position: relative; /* To position the buttons independently */
+}
+
+.create-reviewer-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 1rem; /* Keep buttons at the top */
+  left: 0;
+  padding: 0 2rem; /* Add padding for alignment */
+}
+
+.create-reviewer-content {
+  background-color: #ffffff;
+  padding: 2rem 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: auto; /* Ensure it centers vertically */
+  margin-bottom: auto; /* Ensure it centers vertically */
 }
 
 /* Header Styling */
@@ -17,7 +50,7 @@
   align-items: center;
   position: relative;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .header-title {
@@ -89,15 +122,15 @@
 }
 
 /* Form Container */
-.create-reviewer-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 2rem 0;
-}
+// .create-reviewer-content {
+//   background-color: #ffffff;
+//   padding: 2rem 2rem;
+//   border-radius: 8px;
+//   width: 100%;
+//   max-width: 600px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   margin: 2rem 2rem;
+// }
 
 .create-reviewer-form {
   display: flex;
