@@ -1,3 +1,5 @@
+@use '../abstract/variables' as var;
+
 .studypod-container {
     background-color: white;
     display: flex;
@@ -112,3 +114,22 @@
     }
   }
   
+.import-reviewer {
+  padding: 0.5em 1em;
+  border: 1px solid var.$black-3;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.import-btn {
+  background-color: var.$green-1;
+  color: black;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+}
+
+.btn-close-1 {
+  background-color: var.$red-1;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+}

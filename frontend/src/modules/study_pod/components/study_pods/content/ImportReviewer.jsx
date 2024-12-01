@@ -41,23 +41,40 @@ function ImportReviewer({studypodReviewersState, setWillImportReviewer}) {
 
   return (
     <div className='overlay-1 flex justify-center items-center'>
-      <div className='max-w-[400px] w-[100%] form-2'>
+      <div className='max-w-[800px] w-[100%] max-h-[500px] overflow-scroll form-2 relative'>
         <div>
           <div className='text-right'>
-            <button onClick={() => setWillImportReviewer(false)}>Close</button>
+            <button 
+              onClick={() => setWillImportReviewer(false)}
+              className='btn-close-1 mb-[1rem]'
+            >
+              CLOSE
+            </button>
           </div>
           {reviewers.map(reviewer => (
             <div key={reviewer.slug}>
-              <div className='flex justify-between'>
+              <div className='flex justify-between items-center import-reviewer'>
                 <p>{reviewer.name}</p>
                 <button
                   onClick={() => importReviewer(reviewer.slug)}
+                  className='import-btn'
                 >
                   Import
                 </button>
               </div>
             </div>
           ))}
+          {
+            reviewers.length > 10
+            && <div className='text-right'>
+                <button 
+                  onClick={() => setWillImportReviewer(false)}
+                  className='btn-close-1 mb-[1rem]'
+                >
+                  CLOSE
+                </button>
+              </div>
+          }
         </div>
       </div>
     </div>

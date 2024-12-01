@@ -68,8 +68,9 @@ class GenerateQuestion:
         if self.number_of_questions < 1:
             return get_error_data(self.data, "Number of questions must be atleast 1.")
 
-        obj = self.studypod.available_types.filter(studypod=self.studypod).first()
+        obj = self.studypod.available_types.filter(reviewer=self.reviewer).first()
         types = obj.available_question_types
+        print(types)
 
         if len(types) == 0:
             return {

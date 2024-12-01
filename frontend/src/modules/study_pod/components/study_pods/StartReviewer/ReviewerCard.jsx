@@ -8,7 +8,7 @@ function ReviewerCard({reviewer}) {
   const startReviewing = () => {
     const message = JSON.stringify({
       action: actions.SELECT_REVIEWER,
-      reviewer_slug: reviewer.slug
+      reviewer_slug: reviewer.reviewer
     })
     socket.send(message)
   }
