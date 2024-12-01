@@ -11,6 +11,9 @@ export const todosSlice = createSlice({
 
 export const { 
   setTodos,
+  addTodoItem,
+  deleteTodoItem,
+  todosUpdateTodoItem,
 } = todosSlice.actions
 
 export default todosSlice.reducer

@@ -4,6 +4,7 @@ import { setTodo, addNewTodoItem } from '@redux/todo'
 import TodoItem from './TodoItem'
 import axios from 'axios'
 import { apiRootURL } from '@root/globals'
+import { addTodoItem } from '@redux/todos';
 
 function Main() {
   const todos = useSelector(state => state.todos.value)
@@ -18,7 +19,7 @@ function Main() {
     dispatch(setTodo(todo))
   }
 
-  const addTodoItem = () => {
+  const performAddTodoItem = () => {
     if (itemText.trim()) {
       axios
         .post(
@@ -27,6 +28,10 @@ function Main() {
         )
         .then(response => {
           dispatch(addNewTodoItem(response.data))
+          dispatch(addTodoItem({
+            todoSlug: todo.slug,
+            todoItem: response.data
+          }))
           setItemText('')
         })
         .catch(err => {
@@ -37,7 +42,7 @@ function Main() {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      addTodoItem()
+      performAddTodoItem()
     }
   }
 
@@ -66,7 +71,7 @@ function Main() {
         />
 
         <button
-          onClick={addTodoItem}
+          onClick={performAddTodoItem}
           className="btn-add3"
         >
           Add
