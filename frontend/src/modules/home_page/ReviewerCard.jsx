@@ -38,7 +38,7 @@ function ReviewerCard({reviewer}) {
     // Ensure that the public status is passed correctly
     const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
     navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
-    }
+  }
 
   return (
     <div className="home-reviewer-entry">
