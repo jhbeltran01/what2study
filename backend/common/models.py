@@ -482,6 +482,7 @@ class TodoItem(SlugField):
         related_name='items'
     )
     text = models.CharField(max_length=200)
+    is_done = models.BooleanField(default=False)
 
     items = models.Manager()
 

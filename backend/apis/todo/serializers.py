@@ -54,6 +54,7 @@ class TodoItemSerializer(serializers.ModelSerializer):
         model = TodoItem
         fields = [
             'text',
+            'is_done',
             'slug',
             'created_at',
             'updated_at',
