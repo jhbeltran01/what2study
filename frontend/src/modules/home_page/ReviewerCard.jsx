@@ -19,8 +19,9 @@ function ReviewerCard({ reviewer }) {
   const updatedBookmarkStatus = (is_bookmarked) => {
     axios
       .post(
-        `${apiRootURL}/reviewers/public/bookmark/` +
-        `?reviewer=${reviewer.slug}&is_bookmarked=${is_bookmarked}`
+        `${apiRootURL}/reviewers/public/bookmark/`
+        + `?reviewer=${reviewer.slug}&is_bookmarked=${is_bookmarked}`
+        + `&is_public=${reviewer.is_public}`
       )
       .then(() => {
         setIsBookmarked(is_bookmarked);
@@ -31,39 +32,46 @@ function ReviewerCard({ reviewer }) {
   };
 
   const redirectToSelectedReviewerContent = () => {
-    dispatch(setReviewer(reviewer));
-    dispatch(setReviewerIsPublic(true));
-    const isPublic = reviewer.is_public || false;
+    console.log(reviewer)
+    dispatch(setReviewer(reviewer))
+    dispatch(setReviewerIsPublic(reviewer.is_public))
+    // Ensure that the public status is passed correctly
+    const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
     navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
-  };
+  }
 
   return (
     <div className="home-reviewer-entry">
-      <div className="home-bookmark flex justify-between items-center">
-        <h2 className="home-reviewer-title">{reviewer.name}</h2>
-        <button
-          className="bookmark-button"
-          onClick={() => updatedBookmarkStatus(!isBookmarked)}
-        >
-          <img
-            className="bookmark-icon"
-            src={isBookmarked ? bookmarkedIcon : bookmarkIcon}
-            alt="bookmark icon"
+        <div className="home-bookmark  flex justify-between items-center">
+          <h2 className="home-reviewer-title">{reviewer.name}</h2> 
+          <button className='bookmark-button' onClick={() => updatedBookmarkStatus(!isBookmarked)}>
+            <img 
+              className={`bookmark-icon ${isBookmarked && 'bookmarked'}`}
+              src={bookmark} 
+              alt="bookmark icon" 
+            />
+          </button>
+        </div>
+        <p className='home-reviewer-description'>{reviewer.desc_1 ? reviewer.desc_1 : 'No description' }</p>
+        {/* <div className='home-icon flex gap-[10px]'>
+          <img 
+            className='icon-3'
+            src={owner.profile_picture ? owner.profile_picture : personIcon} 
+            alt="person icon" 
           />
+          <p className='home-reviewer-owner'>{owner.first_name} {owner.last_name}</p>
+        </div> */}
+
+        <p className="home-reviewer-date">{reviewer.created_at_format_1}</p>
+
+        <button 
+          onClick={redirectToSelectedReviewerContent} 
+          className='home-view-link'
+        >
+          View
         </button>
       </div>
-      <p className="home-reviewer-description">
-        {reviewer.desc_1 ? reviewer.desc_1 : 'No description'}
-      </p>
-      <p className="home-reviewer-date">{reviewer.created_at}</p>
-      <button
-        onClick={redirectToSelectedReviewerContent}
-        className="home-view-link"
-      >
-        View
-      </button>
-    </div>
-  );
+  )
 }
 
 ReviewerCard.propTypes = {

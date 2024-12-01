@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTodo } from '@redux/todo'
-import { setTodos } from '@redux/todos'
+import { setTodo, addNewTodoItem } from '@redux/todo'
 import TodoItem from './TodoItem'
 import axios from 'axios'
 import { apiRootURL } from '@root/globals'
+import { addTodoItem } from '@redux/todos';
 
 function Main() {
   const todos = useSelector(state => state.todos.value)
@@ -19,7 +19,7 @@ function Main() {
     dispatch(setTodo(todo))
   }
 
-  const addTodoItem = () => {
+  const performAddTodoItem = () => {
     if (itemText.trim()) {
       axios
         .post(
@@ -27,7 +27,11 @@ function Main() {
           { text: itemText }
         )
         .then(response => {
-          updateUIOnAddTodoItem(todo.slug, response.data)
+          dispatch(addNewTodoItem(response.data))
+          dispatch(addTodoItem({
+            todoSlug: todo.slug,
+            todoItem: response.data
+          }))
           setItemText('')
         })
         .catch(err => {
@@ -36,23 +40,9 @@ function Main() {
     }
   }
 
-  const updateUIOnAddTodoItem = (todoSlug, newItem) => {
-    const tempTodos = todos.map(todo => {
-      if (todo.slug != todoSlug) { return todo }
-
-      const tempTodo = { ...todo }
-      tempTodo.items = [newItem, ...todo.items]
-
-      dispatch(setTodo(tempTodo))
-
-      return tempTodo
-    })
-    dispatch(setTodos(tempTodos))
-  }
-
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      addTodoItem()
+      performAddTodoItem()
     }
   }
 
@@ -81,7 +71,7 @@ function Main() {
         />
 
         <button
-          onClick={addTodoItem}
+          onClick={performAddTodoItem}
           className="btn-add3"
         >
           Add

@@ -1,3 +1,5 @@
+@use '../abstract/variables' as var;
+
 .todo-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);  /* Adjust as needed, here 6 columns */
@@ -120,6 +122,10 @@ margin-top: 20px;
   font-size: 1rem;
   margin-bottom: 10px;
   position: relative; 
+
+  &:is(.done) {
+    background-color: var.$green-1;
+  }
 }
 
 .options-toggle {
@@ -159,4 +165,8 @@ margin-top: 20px;
 
 .options button:hover {
   background-color: #f0f0f0;
+}
+
+.todo-item-edit-field {
+  width: 100%;
 }
