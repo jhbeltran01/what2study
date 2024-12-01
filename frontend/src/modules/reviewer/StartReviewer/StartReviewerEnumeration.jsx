@@ -14,6 +14,7 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [placeholders, setPlaceholders] = useState(['']);
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [willShowCorrectAnswers, setWillShowCorrectAnswers] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -113,6 +114,7 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
     generateQuestions()
     setCurrentQuestion(0)
     dispatch(setCheckedAnswers({}))
+    setWillShowCorrectAnswers(false)
   }
 
   return (
@@ -136,37 +138,53 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
                 +
               </button>
             </div>
-            <div className="answer-container">
-              {answers.answers != undefined && placeholders.map((placeholder, index) => {
-                const userAnswer = answers.answers.length > 0 && answers.answers[currentQuestion].user_answers[index]
-                const isCorrect = isSubmitted && userAnswer && userAnswer.is_correct == true
+            {
+              !willShowCorrectAnswers
+              && <div className="answer-container">
+                  {answers.answers != undefined && placeholders.map((placeholder, index) => {
+                    const userAnswer = answers.answers.length > 0 && answers.answers[currentQuestion].user_answers[index]
+                    const isCorrect = isSubmitted && userAnswer && userAnswer.is_correct == true
 
-                return (
-                  <div key={index} className="answer-row mb-[0.5rem]">
-                    {
-                      !isSubmitted
-                      && <input
-                        className="answer-box"
-                        type='text'
-                        placeholder={`Answer ${index + 1}`}
-                        value={placeholder}
-                        aria-label={`Answer ${index + 1}`} // Accessibility improvement
-                        required="required" // Make the textarea required
-                        onChange={(e) => handleInputChange(e, index)}
-                        onBlur={() => updateUserAnswer(index)}
-                      />
-                    }
+                    return (
+                      <div key={index} className="answer-row mb-[0.5rem]">
+                        {
+                          !isSubmitted
+                          && <input
+                            className="answer-box"
+                            type='text'
+                            placeholder={`Answer ${index + 1}`}
+                            value={placeholder}
+                            aria-label={`Answer ${index + 1}`} // Accessibility improvement
+                            required="required" // Make the textarea required
+                            onChange={(e) => handleInputChange(e, index)}
+                            onBlur={() => updateUserAnswer(index)}
+                          />
+                        }
 
-                    {
-                      isSubmitted
-                      && <div className={`user-answer ${isCorrect ? 'correct' : 'wrong'}`}>
-                          {userAnswer ? userAnswer.answer : 'No submitted answer'}
-                        </div>
-                    }
-                  </div>
-                )
-              })}
-            </div>
+                        {
+                          isSubmitted
+                          && <div className={`user-answer ${isCorrect ? 'correct' : 'wrong'}`}>
+                              {userAnswer ? userAnswer.answer : 'No submitted answer'}
+                            </div>
+                        }
+                      </div>
+                    )
+                  })}
+                </div>
+            }
+
+            {
+              willShowCorrectAnswers
+              && <div className='answer-container'>
+                  {questions[currentQuestion].answers.map((answer, index) => (
+                    <div key={index} className="answer-row mb-[0.5rem]">
+                      <div className='user-answer correct'>
+                        {answer}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+            }
           </div>
         </div>
 
@@ -184,6 +202,7 @@ const StartReviewerEnumeration = ({questions, generateQuestions}) => {
         answers={answers.answers ? answers.answers : []} 
         isSubmitted={isSubmitted}
         setCurrentQuestion={setCurrentQuestion}
+        willShowCorrectAnswersState={[willShowCorrectAnswers, setWillShowCorrectAnswers]}
       />
     </form>
   );
