@@ -8,6 +8,7 @@ function Main() {
   const [subjects, setSubjects] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isDeleteMode, setIsDeleteMode] = useState(false)
 
   useEffect(() => {
     axios
@@ -24,11 +25,27 @@ function Main() {
     setSearchQuery(event.target.value)
   }
 
+  const handleDelete = async (subjectSlug) => {
+    const confirmed = window.confirm("Are you sure you want to delete this subject?")
+    if (confirmed) {
+      try {
+        await axios.delete(`${apiRootURL}/subjects/${subjectSlug}/`)
+        alert('Subject deleted successfully.')
+        const response = await axios.get(`${apiRootURL}/subjects`)
+        setSubjects(response.data.results)
+      } catch (error) {
+        console.error('Error deleting subject:', error)
+        alert('An error occurred while trying to delete the subject.')
+      }
+    }
+  }
+
   return (
     <div className='container-1'>
       <div>
         <header className='flex justify-between'>
           <h2 className='btn-4'>Subjects</h2>
+          
           <input
             type="text"
             value={searchQuery}
@@ -36,6 +53,7 @@ function Main() {
             placeholder="Search..."
             className="search-bar2"
           />
+  
           <button
             onClick={() => setShowForm(true)}
             className="btn-add"
@@ -43,18 +61,48 @@ function Main() {
             Add
           </button>
         </header>
+  
+        <div className="flex gap-2">
+          {!isDeleteMode && (
+            <button
+              onClick={() => setIsDeleteMode(true)}
+              className="btn-delete"
+            >
+              Delete
+            </button>
+          )}
+
+          {isDeleteMode && (
+            <button
+              onClick={() => setIsDeleteMode(false)}
+              className="btn-cancel"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
 
         <div className='mt-2rem grid grid-responsive-1'>
-          {subjects.map(subject => <Card subject={subject} key={subject.slug} />)}
+          {subjects.filter(subject =>
+            subject.name.toLowerCase().includes(searchQuery.toLowerCase())
+          ).map(subject => (
+            <div key={subject.slug} className="subject-card">
+              <Card 
+                subject={subject} 
+                isDeleteMode={isDeleteMode} 
+                handleDelete={handleDelete} 
+              />
+            </div>
+          ))}
         </div>
       </div>
 
-      {
-        showForm
-        && <Form
+      {showForm && (
+        <Form
           subjectsState={[subjects, setSubjects]}
           showFormState={[showForm, setShowForm]}
-        />}
+        />
+      )}
     </div>
   )
 }

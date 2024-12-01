@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { setSubject } from '@redux/subject';
 import { SUBJECT_CONTENT } from '@root/routes/constants';
 
-function Card({ subject }) {
+function Card({ subject, isDeleteMode, handleDelete }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,6 +27,18 @@ function Card({ subject }) {
         <span>&nbsp;•&nbsp;</span>
         <span className="subject-stat">{subject.number_of_notes} Notes</span>
       </div>
+
+      {isDeleteMode && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(subject.slug)
+          }}
+          className="subject-delete-icon"
+        >
+          🗑️
+        </button>
+      )}
     </button>
   );
 }
@@ -37,6 +49,8 @@ Card.propTypes = {
     number_of_reviewers: PropTypes.number.isRequired,
     number_of_notes: PropTypes.number.isRequired,
   }),
+  isDeleteMode: PropTypes.bool.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default Card;
