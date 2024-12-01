@@ -15,7 +15,7 @@ import Settings from '@modules/settings/Main'
 import CreateStudypod from '@modules/study_pod/components/study_pods/create_form/Main'
 import Subjects from '@modules/subjects/Main'
 import SubjectContent from '@modules/subjects/content/Main'
-import CreateSubjectReviewer from '@modules/subjects/create_reviewer/CreateReviewer'
+import CreateSubjectReviewer from '@modules/subjects/create_reviewer/Main'
 import StartReviewing from '@modules/reviewer/StartReviewer/Main.jsx'
 import StudypodStartReviewing from '@modules/study_pod/components/study_pods/StartReviewer/Main'
 import React from "react";

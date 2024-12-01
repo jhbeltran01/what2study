@@ -380,3 +380,45 @@
     opacity: 1;
   }
 }
+
+/* General Section Styling */
+.subject-create-section {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 7rem auto;
+  padding: 30px;
+  font-family: 'Josefin Sans', sans-serif;
+  height: 420px;
+}
+
+/* Form Styling */
+.subject-reviewer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.subject-form-group {
+  display: flex;
+  flex-direction: column; /* Stack label above the input */
+  align-items: flex-start; /* Align label to the left */
+  gap: 8px; /* Add space between label and input */
+}
+
+.subject-form-group label {
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: left; /* Ensure text is aligned to the left */
+  width: 100%; /* Make label span the full width */
+}
+
+.subject-input-field {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%; /* Ensure the input field spans the available width */
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
