@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import personIcon from '@assets/person.png'
 import bookmark from '@assets/bookmark.svg'
-import bookmarked from '@assets/bookmarked.svg'
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { apiRootURL } from '../../globals';
@@ -33,32 +32,25 @@ function ReviewerCard({reviewer}) {
 
   const redirectToSelectedReviewerContent = () => {
     dispatch(setReviewer(reviewer))
-    // dispatch(setReviewerIsPublic(true))
-    // navigate(routes.VIEW_CONTENT_WITHOUT_EDIT)
+    dispatch(setReviewerIsPublic(true))
       // Ensure that the public status is passed correctly
-  const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
-  dispatch(setReviewerIsPublic(isPublic)); // Update public status in Redux
-  
-  navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
-  }
+    const isPublic = reviewer.is_public || false; // Use reviewer’s actual public status
+    navigate(routes.VIEW_CONTENT_WITHOUT_EDIT);
+    }
 
   return (
     <div className="home-reviewer-entry">
         <div className="home-bookmark  flex justify-between items-center">
           <h2 className="home-reviewer-title">{reviewer.name}</h2> 
-
-          <button className="bookmark-button" onClick={() => updatedBookmarkStatus(!isBookmarked)}>
-  <img 
-    className={`bookmark-icon ${isBookmarked ? 'bookmarked' : ''}`}
-    src={isBookmarked ? bookmarked : bookmark} 
-    alt={isBookmarked ? "bookmarked icon" : "bookmark icon"} 
-  />
-</button>
-
-
-
+          <button className='bookmark-button' onClick={() => updatedBookmarkStatus(!isBookmarked)}>
+            <img 
+              className={`bookmark-icon ${isBookmarked && 'bookmarked'}`}
+              src={bookmark} 
+              alt="bookmark icon" 
+            />
+          </button>
         </div>
-        <p className='home-reviewer-description'>{reviewer.description ? reviewer.description : 'No description' }</p>
+        <p className='home-reviewer-description'>{reviewer.desc_1 ? reviewer.desc_1 : 'No description' }</p>
         {/* <div className='home-icon flex gap-[10px]'>
           <img 
             className='icon-3'
