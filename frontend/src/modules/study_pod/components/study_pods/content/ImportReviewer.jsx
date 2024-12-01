@@ -1,72 +1,59 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { apiRootURL } from '@root/globals'
-import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiRootURL } from '@root/globals';
+import { useSelector } from 'react-redux';
 
-function ImportReviewer({studypodReviewersState, setWillImportReviewer}) {
-  const reviewer = useSelector(state => state.reviewer.value)
-  const studypod = useSelector(state => state.studypod.value)
-  const [reviewers, setReviewers] = useState([])
-  const [studypodReviewers, setStudypodReviewers] = studypodReviewersState
+function ImportReviewer({ studypodReviewersState }) {
+  const [studypodReviewers, setStudypodReviewers] = studypodReviewersState;
+  const [reviewers, setReviewers] = useState([]);
+  const studypod = useSelector((state) => state.studypod.value);
 
   useEffect(() => {
     axios
       .get(`${apiRootURL}/reviewers/`)
-      .then(response => {
-        setReviewers(response.data.results)
+      .then((response) => {
+        setReviewers(response.data.results);
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  const importReviewer = (reviewerSlug) => {
-    axios
-      .post(
-        `${apiRootURL}/studypods/${studypod.slug}/reviewers/`,
-        {
+  const handleReviewerClick = (reviewer) => {
+    const confirmImport = window.confirm(`Do you want to import ${reviewer.name}?`);
+    if (confirmImport) {
+      axios
+        .post(`${apiRootURL}/studypods/${studypod.slug}/reviewers/`, {
           studypod: studypod.slug,
           reviewer: reviewer.slug,
           name: reviewer.name,
-        }
-      )
-      .then(response => {
-        setStudypodReviewers([response.data, ...studypodReviewers])
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+        })
+        .then((response) => {
+          setStudypodReviewers((prev) => [...prev, response.data]);
+          console.log(`${reviewer.name} imported successfully!`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
-    <div className='overlay-1 flex justify-center items-center'>
-      <div className='max-w-[400px] w-[100%] form-2'>
-        <div>
-          <div className='text-right'>
-            <button onClick={() => setWillImportReviewer(false)}>Close</button>
-          </div>
-          {reviewers.map(reviewer => (
-            <div key={reviewer.slug}>
-              <div className='flex justify-between'>
-                <p>{reviewer.name}</p>
-                <button
-                  onClick={() => importReviewer(reviewer.slug)}
-                >
-                  Import
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="reviewer-list-toggle">
+      <ul className="reviewer-list">
+        {reviewers.map((reviewer) => (
+          <li
+            key={reviewer.slug}
+            className="reviewer-item"
+            onClick={() => handleReviewerClick(reviewer)}
+          >
+            {reviewer.name}
+          </li>
+        ))}
+      </ul>
     </div>
-  )
+  );
 }
 
-ImportReviewer.propTypes = {
-  studypodReviewersState: PropTypes.array.isRequired,
-  setWillImportReviewer: PropTypes.func.isRequired,
-}
 
-export default ImportReviewer
+export default ImportReviewer;

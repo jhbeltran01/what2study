@@ -1,0 +1,70 @@
+/* Import Reviewer Button */
+.import-reviewer-container {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+  
+  .import-reviewer-button {
+    background-color: #fea61f;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin-top: 2rem;
+    margin-left: 5px;
+    font-size: 1rem;
+    border-radius: 8px;
+    font-family: 'Josefin Sans', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .import-reviewer-button:hover {
+    background-color: #fea61f;
+    transform: scale(1.05);
+  }
+  
+  
+  /* Reviewer List Rectangle */
+  .reviewer-list-toggle {
+    position: fixed;
+    top: 80px; /* Adjusted to add space between button and list */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    width: 80%;
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    z-index: 999;
+    max-height: 200px; /* Constrain height */
+    overflow-y: auto; /* Make scrollable if content overflows */
+    margin-top: 2rem; /* Space between the button and list */
+  }
+  
+  /* Reviewer List Items */
+  .reviewer-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .reviewer-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .reviewer-item:last-child {
+    border-bottom: none;
+  }
+  
+  .reviewer-item:hover {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
