@@ -37,8 +37,8 @@ const CreateReviewer = () => {
     formData.append('name', reviewer.name);
     formData.append('description', reviewer.description);
 
-    Array.from(reviewer.files).forEach((file, index) => {
-      formData.append(`files[${index}]`, file);
+    Array.from(reviewer.files).forEach((file) => {
+      formData.append('files', file);
     });
 
     axios

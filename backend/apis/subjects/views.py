@@ -13,6 +13,7 @@ from rest_framework import status
 
 from apis.notes.serializers import NotesSerializer
 from apis.reviewers.serializers import ReviewerSerializer
+from apis.reviewers.services import Document
 from apis.subjects.serializers import SubjectSerializer
 from common.models import (
     Subject,
@@ -89,6 +90,7 @@ class SubjectReviewerAPIView(
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.subject = None
+        self.files = None
 
     def dispatch(self, request, *args, **kwargs):
         kwargs['slug'] = kwargs.get('reviewer', None)
@@ -105,6 +107,7 @@ class SubjectReviewerAPIView(
         if self.subject is None:
             raise NotFound('Subject not found')
 
+        self.files = request.FILES.getlist('files')
         return super().create(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -119,15 +122,26 @@ class SubjectReviewerAPIView(
         instance.delete()
 
     def perform_create(self, serializer):
-        reviewer = serializer.save(owner=self.request.user)
+        document = Document(
+            files=self.files,
+            owner=self.request.user,
+        )
+        reviewer = serializer.save(
+            owner=self.request.user,
+            content=document.generate_text(),
+        )
+        print(reviewer.content)
+        print(self.files)
+        document.convert_text_to_content(reviewer)
         ReviewerAvailableQuestionType.reviewers.create(
             reviewer=reviewer,
             owner=self.request.user,
+            available_question_types=document.question_types,
         )
         SubjectReviewer.reviewers.create(
             owner=self.request.user,
             reviewer=reviewer,
-            subject=self.subject
+            subject=self.subject,
         )
 
     def get_serializer_context(self):
