@@ -31,9 +31,9 @@ config = Config(RepositoryEnv(ENV_FILE))
 SECRET_KEY = 'django-insecure-_-j4m$tqsqm5l89^mlt6iai7t3*zdl4w%@ce%eqjs6w*lkt0ig'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'studyhive.pythonanywhere.com']
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -199,6 +199,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../frontend/public'),
     os.path.join(BASE_DIR, '../frontend/src/assets/'),
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
