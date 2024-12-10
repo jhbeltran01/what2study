@@ -10,7 +10,7 @@ from apps.custom_auth.services import redirect_to_app
 
 
 class LandingPageView(TemplateView):
-    template_name = 'authentication/login.html'
+    template_name = 'pages/landing-page.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

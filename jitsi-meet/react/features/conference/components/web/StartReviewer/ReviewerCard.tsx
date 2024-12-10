@@ -1,45 +1,59 @@
-import React, { useContext } from 'react'
-import { SocketContext } from './Main'
-import { actions } from './constants'
+import React, { useContext } from 'react';
+import { SocketContext } from './Main';
+import { actions } from './constants';
 
 interface Reviewer {
-  [key: string]: any; // Keys are strings, and values are strings.
+  reviewer: string;
+  name: string;
+  created_at?: string;
+  reviewer_info: {
+    owner: {
+      username: string;
+    };
+  };
 }
 
-interface MyComponentProps {
+interface ReviewerCardProps {
   reviewer: Reviewer;
 }
 
-
-const ReviewerCard:  React.FC<MyComponentProps> = ({reviewer}) => {
-  const socket = useContext(SocketContext)
+const ReviewerCard: React.FC<ReviewerCardProps> = ({ reviewer }) => {
+  const socket = useContext(SocketContext);
 
   const startReviewing = () => {
-    const message = JSON.stringify({
-      action: actions.SELECT_REVIEWER,
-      reviewer_slug: reviewer.slug
-    })
-    socket?.send(message)
-  }
+    if (socket?.readyState === WebSocket.OPEN) {
+      const message = JSON.stringify({
+        action: actions.SELECT_REVIEWER,
+        reviewer_slug: reviewer.reviewer,
+      });
+      socket.send(message);
+    } else {
+      console.error('WebSocket is not open');
+    }
+  };
 
   return (
     <div className="reviewer-entry">
       <div className="reviewer-header">
-        <h2 className="reviewer-title black">{reviewer.name}</h2>
+        <h2 className="reviewer-title">{reviewer.name}</h2>
         <div className="reviewer-info">
-          <span className="reviewer-date black">2024-09-15</span>
+          <span className="reviewer-date">
+            {reviewer.created_at ? new Date(reviewer.created_at).toLocaleDateString() : 'Unknown Date'}
+          </span>
         </div>
-        <button className="more-options">⋮</button>
+        <button className="more-options" aria-label="More options">⋮</button>
       </div>
-      <p className="reviewer-created-by black">Created by: {reviewer.reviewer_info.owner.username}</p>
+      <p className="reviewer-created-by">
+        Created by: {reviewer?.reviewer_info?.owner?.username || 'Unknown'}
+      </p>
       <button 
-        className="view-link black"
+        className="view-link"
         onClick={startReviewing}
       >
         View
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default ReviewerCard
+export default ReviewerCard;

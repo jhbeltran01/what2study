@@ -196,7 +196,12 @@ class RecentViewedReviewerAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         reviewer_slug = serializer.data.get('reviewer')
-        reviewer = get_category_reviewer(reviewer_slug, RecentViewedPublicReviewer)
+        reviewer = get_category_reviewer(
+            reviewer_slug,
+            RecentViewedPublicReviewer,
+            self.request.user
+        )
+        print(reviewer)
         has_been_viewed = reviewer is not None
         is_public = serializer.data.get('is_public')
 
@@ -227,7 +232,11 @@ class BookmarkedReviewerAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         reviewer_slug = serializer.data.get('reviewer')
-        reviewer = get_category_reviewer(reviewer_slug, BookmarkedPublicReviewer)
+        reviewer = get_category_reviewer(
+            reviewer_slug,
+            BookmarkedPublicReviewer,
+            self.request.user
+        )
         has_been_bookmarked = reviewer is not None
         is_bookmarked = serializer.data.get('is_bookmarked')
         is_public = serializer.data.get('is_public')

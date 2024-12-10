@@ -680,6 +680,10 @@ video {
   flex-direction: column;
 }
 
+.items-end {
+  align-items: flex-end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -735,6 +739,14 @@ video {
 
 .pb-\[1rem\] {
   padding-bottom: 1rem;
+}
+
+.pr-\[3em\] {
+  padding-right: 3em;
+}
+
+.pr-\[2em\] {
+  padding-right: 2em;
 }
 
 .text-center {

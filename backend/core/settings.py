@@ -31,7 +31,7 @@ config = Config(RepositoryEnv(ENV_FILE))
 SECRET_KEY = 'django-insecure-_-j4m$tqsqm5l89^mlt6iai7t3*zdl4w%@ce%eqjs6w*lkt0ig'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'studyhive.pythonanywhere.com']
 

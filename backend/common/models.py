@@ -527,7 +527,9 @@ class PublicReviewerCategory(SlugField):
         abstract = True
 
     def __str__(self):
-        return str(self.public_reviewer.slug)
+        if self.public_reviewer is not None:
+            return str(self.public_reviewer.slug)
+        return str(self.reviewer.slug)
 
     def save(self, *args, **kwargs):
         if self.slug is None:

@@ -1,9 +1,161 @@
 {% extends '../layouts/base.html' %}
+{% load static %}
+
+{% block styles %}
+<style>
+  /* General Reset */
+  body {
+    position: relative; /* Ensures child elements are placed relative to this */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+  background: url("{% static 'auth.png' %}") no-repeat center center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  }
+  .container_landing {
+    background-color: white;
+    border-radius: 40px;
+    text-align: center;
+    margin: auto;
+    position: relative; /* For bees to float around */
+    z-index: 2;
+    position: relative;
+    width: 100%; /* Full width */
+    height: 70%; /* Full height */
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers the container */
+    max-width: 800px; /* Optional for layout control */
+  }
+  .logo_bee-section {
+    position: relative;
+top: 20px; /* Adjust distance from the top */
+left: 50%;
+transform: translateX(-10%);
+  }
+  .logo_bee {
+    width: 150px; /* Adjust to match your logo size */
+  }
+  .content h1 {
+    margin-top: 20px;
+    font-size: 2.5rem;
+    color: #f57c00; /* Dark honey color */
+  }
+  .content p {
+    font-size: 1.2rem;
+    margin: 20px 0;
+    color: #555;
+  }
+  .cta-button {
+    background-color: #ffa726; /* Bright honey color */
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 40px;
+  }
+  .cta-button:hover {
+    background-color: #fb8c00;
+  }
+  .footer {
+    position: absolute;
+bottom: 20px; /* Adjust distance from the bottom */
+left: 50%;
+transform: translateX(-50%);
+font-size: 0.9rem;
+color: #888;
+  }
+  /* Floating Bees */
+  .bee {
+    position: absolute;
+    width: 45px; /* Adjust the size */
+    height: 45px; /* Adjust the size */
+    background: no-repeat center center;
+    background-size: contain;
+    animation: float 4s infinite ease-in-out;
+  }
+  .bee1 {
+    top: 10%; /* Adjusted position */
+    left: 5%;
+    animation-delay: 0s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  .bee2 {
+    top: 30%;
+    left: 85%;
+    animation-delay: 2.5s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  .bee3 {
+    top: 70%;
+    left: 25%;
+    animation-delay: 1.5s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  .bee4 {
+    top: 85%;
+    left: 75%;
+    animation-delay: 2s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  .bee5 {
+    top: 15%;
+    left: 30%;
+    animation-delay: 1s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  .bee6 {
+    top: 20%;
+    left: 65%;
+    animation-delay: 1.5s;
+    background-image: url("{% static 'bees.png' %}");
+  }
+  /* Bee Animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(15deg);
+    }
+  }
+</style>
+{% endblock styles %}
 
 {% block main-content %}
-  <h1>Landing Page</h1>
-
-  <div>
-    <a href="{% url 'custom_auth:login' %}">Login</a>
+  <div class="container_landing">
+  
+    <!-- Floating Bees -->
+    <div class="bee bee1"></div>
+    <div class="bee bee2"></div>
+    <div class="bee bee3"></div>
+    <div class="bee bee4"></div>
+    <div class="bee bee5"></div>
+    <div class="bee bee6"></div>
+    
+    <!-- Logo Section -->
+    <header class="logo_bee-section">
+      <img src="{% static 'logo.png' %}" alt="StudyHive" class="logo_bee">
+    </header>
+    <!-- Content Section -->
+    <div class="content">
+      <h1>Welcome to StudyHive</h1>
+      <p>Your one-stop solution to organize your notes, create reviewers, and collaborate with friends!</p>
+      <a href="{% url 'custom_auth:login' %}">
+        <button class="cta-button">Get Started</button>
+      </a>
+    </div>
   </div>
+
+  <footer class="footer">
+    <p>© 2024 StudyHive. All Rights Reserved.</p>
+  </footer>
 {% endblock main-content %}

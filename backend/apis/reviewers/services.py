@@ -223,7 +223,7 @@ def get_public_reviewers(user, category: str):
         case _:
             category_reviewers = PublicReviewer.reviewers.all()
             is_public_category = True
-
+    print(category_reviewers)
     public_reviewers_ids = []
 
     if is_public_category:
@@ -234,15 +234,16 @@ def get_public_reviewers(user, category: str):
                 public_reviewers_ids.append(category.public_reviewer.reviewer.id)
                 continue
             public_reviewers_ids.append(category.reviewer.id)
-
+    print(public_reviewers_ids)
     order = Case(*[When(id=pk, then=pos) for pos, pk in enumerate(public_reviewers_ids)])
     return Reviewer.reviewers.filter(id__in=public_reviewers_ids).order_by(order)
 
 
-def get_category_reviewer(slug, model):
+def get_category_reviewer(slug, model, owner):
     return model.reviewers.filter(
         Q(public_reviewer__reviewer__slug=slug)
-        | Q(reviewer__slug=slug)
+        | Q(reviewer__slug=slug),
+        owner=owner,
     ).first()
 
 
