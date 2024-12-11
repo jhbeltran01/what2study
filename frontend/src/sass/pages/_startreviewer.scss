@@ -6,12 +6,10 @@
     height: auto; /* Allow height to adjust based on content */
     width: 70rem; /* Set width to 100% to utilize the full width of the parent */
     flex-wrap: wrap; /* Allow items to wrap to the next line */
-    min-height: 1400px; /* Maintain a minimum height for layout consistency */
     min-width: 600px; /* Maintain a minimum width */
     overflow: hidden; /* Prevent scrolling */
     max-width: 1400px;
     margin: 10%;
-    margin-top: 10%;
 }
 
 /* Main question box styling */

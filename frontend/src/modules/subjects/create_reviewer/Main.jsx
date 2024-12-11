@@ -61,24 +61,24 @@ const CreateReviewer = () => {
   };
 
   return (
-      <section className="create-section p-4 flex flex-col">
+      <section className="subject-create-reviewer-container p-[2em]">
         <div className="reviewer-content">
-        <form className="reviewer-form" onSubmit={handleSubmit}>
-          <div className="form-group reviewer-name-group">
-            <label htmlFor="reviewerName">Reviewer Name:</label>
-            <input
-              type="text"
-              id="reviewerName"
-              placeholder="Enter reviewer name"
-              className="input-field"
-              name='name'
-              value={reviewer.name}
-              onChange={handleChange}
-            />
-          </div>
+          <form className="reviewer-form" onSubmit={handleSubmit}>
+            <div className="reviewer-name-group mb-[1rem]">
+              <label htmlFor="reviewerName">Reviewer Name</label>
+              <input
+                type="text"
+                id="reviewerName"
+                placeholder="Type here..."
+                className="input-field"
+                name='name'
+                value={reviewer.name}
+                onChange={handleChange}
+              />
+            </div>
 
-            <div className="form-group">
-              <label>Upload Content:</label>
+            <div className="mb-[1rem]">
+              <label>Upload Content</label>
               <div className="upload-field">
                 <input 
                   type="file" 
@@ -91,12 +91,12 @@ const CreateReviewer = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="description">Description:</label>
+            <div className="mb-[1rem]">
+              <label htmlFor="description">Description</label>
               <input
                 type="text"
                 id="description"
-                placeholder="Enter description"
+                placeholder="Type here..."
                 className="input-field"
                 value={reviewer.description}
                 name='description'

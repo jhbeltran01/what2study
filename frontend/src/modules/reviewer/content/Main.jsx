@@ -15,7 +15,7 @@ export const TitleContext = createContext()
 export const EnumTitleContext = createContext()
 export const WillAddAContentContext = createContext()
 
-function Main() {
+function Main({backUrl='/reviewers'}) {
   const reviewer = useSelector(state => state.reviewer.value)
   const [titles, setTitles] = useState([])
   const [text, setText] = useState({isUpdated: false, slug: '', text: ''})
@@ -39,7 +39,7 @@ function Main() {
 
 
   const handleTitleClick = () => {
-    navigate('/reviewers'); // Redirect to Reviewer page
+    navigate(backUrl); // Redirect to Reviewer page
   };
 
   useEffect(() => {

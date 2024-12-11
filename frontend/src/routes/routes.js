@@ -115,7 +115,7 @@ const pagesData = [
       },
       {
         path: routes.ROUTES.SUBJECT_REVIEWER,
-        element:  <ReviewerContent />,
+        element:  <ReviewerContent backUrl={routes.SUBJECT_CONTENT} />,
         title: routes.SUBJECT_REVIEWER
       },
       {

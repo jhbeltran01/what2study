@@ -67,18 +67,16 @@ function Main() {
       for (let j = 0; j < rowCount && noteIndex < filteredNotes.length; j++, noteIndex++) {
         const note = filteredNotes[noteIndex];
         currentRow.push(
-          <div 
+          <button
             key={noteIndex} 
             id={`note-${note.id}`}  
-            className={`note-card-container ${isDeleteMode ? 'wiggle' : ''}`} 
+            className={`note-card-container cursor-pointer ${isDeleteMode ? 'wiggle' : ''}`} 
+            onClick={() => redirectToNoteContent(note)}
           >
-            <div className="note-card">
-              <button
-                className="note-card-button"
-                onClick={() => redirectToNoteContent(note)} 
-              >
+            <div className="note-card cursor-pointer">
+              <div className="note-card-button">
                 <h3>{note.name}</h3>  {/* Display title */}
-              </button>
+              </div>
               {isDeleteMode && (
                 <button 
                   onClick={() => handleDeleteNote(note.slug)}  // Using note.slug to delete
@@ -88,7 +86,7 @@ function Main() {
                 </button>
               )}
             </div>
-          </div>
+          </button>
         );
       }
 

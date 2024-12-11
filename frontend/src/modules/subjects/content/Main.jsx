@@ -158,7 +158,7 @@ function Main() {
       </div>
 
       <div className='notes-list'>
-      {notes.length > 0 ? renderRows() : <p>Hey there! Looks like you don't have any notes yet. Start adding some!</p>}
+      {notes.length > 0 ? renderRows() : <p className='text-center'>Hey there! Looks like you don't have any notes yet. Start adding some!</p>}
       </div>
 
       {showForm && <CreateNoteForm setShowForm={setShowForm} />}
@@ -187,7 +187,7 @@ function Main() {
 
       <div>
         {tabNames.map((tab, index) => (
-          <button onClick={() => setActiveTab(index)} key={index} className="btn-4">
+          <button onClick={() => setActiveTab(index)} key={index} className={`btn-4 ${activeTab == index && 'active'}`}>
             {tab}
           </button>
         ))}

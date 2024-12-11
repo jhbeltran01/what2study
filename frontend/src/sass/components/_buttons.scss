@@ -25,6 +25,10 @@
 
 .btn-4 {
   width: 100px;
+
+  &:is(.active) {
+    color: #FEA61F;
+  }
 }
 
 .btn-options {

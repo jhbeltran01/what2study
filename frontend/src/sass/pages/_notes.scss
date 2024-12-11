@@ -84,7 +84,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: default;
+  cursor: pointer;
   margin-bottom: -40px;
   transition: transform 0.3s ease;
 
@@ -178,5 +178,3 @@ html, body {
 .wiggle {
   animation: subtleWiggle 1s ease-in-out infinite;  
 }
-
-
