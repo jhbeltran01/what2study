@@ -10,10 +10,10 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 30px;
   position: relative;
+  transition: 250ms all ease-in-out;
   
   &:hover {
     transform: translateY(-5px); 
